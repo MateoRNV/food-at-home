@@ -17,6 +17,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'type',
+        'foto_url',
         'name',
         'email',
         'password',
@@ -28,9 +30,24 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
+
+    public function typeToStrType()
+    {
+        switch ($this->type) {
+            case 'C':
+                return 'Customer';
+            case 'EC':
+                return 'Cooker';
+            case 'ED':
+                return 'Deliveryman';
+            case 'EM': 
+                return 'Manager';
+        }
+
+        return 'Unknown';
+    }
 
     /**
      * The attributes that should be cast to native types.

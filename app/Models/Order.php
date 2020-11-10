@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'status', 'note', 'total_price', 'date', 'prepared_by', 'delivered_by', 'opened_at', 'closed_at', 'current_status_at', 'preparation_time', 'delivery_time', 'total_time'
+        'notes'
     ];
 
     public function statusToStr(){

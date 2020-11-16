@@ -11,6 +11,8 @@
     <title>Hello, world!</title>
   </head>
   <body>
+    <div id = "app">
+    <!-- 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-4">
       <div class="container-xl">
         <a class="navbar-brand" href="#">Food@Home</a>
@@ -42,7 +44,11 @@
       <h1>Hello, world!</h1>
     </div>
 
+    -->
+
     <!-- Optional JavaScript; choose one of the two! -->
+    <script src="{{ asset('/js/app.js') }}"></script>
+
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -53,5 +59,6 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
     -->
+    </div>
   </body>
 </html>

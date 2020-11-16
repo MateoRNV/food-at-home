@@ -21,17 +21,16 @@
 
 <script>
 export default {
-
+  data: function () {
+    return {
+      products: [],
+    };
+  },
   mounted() {
-    if (this.$root.products.length === 0) {
-      axios.get('api/products')
-        .then(response => {
-          this.$root.products = response.data.data
-          this.products = this.$root.products
-        })
-    } else {
-      this.products = this.$root.products
-    }
+    axios.get("api/products").then((response) => {
+      this.$root.products = response.data.data;
+      this.products = this.$root.products;
+    });
   },
 };
 </script>

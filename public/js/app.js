@@ -2027,17 +2027,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      products: []
+    };
+  },
   mounted: function mounted() {
     var _this = this;
 
-    if (this.$root.products.length === 0) {
-      axios.get('api/products').then(function (response) {
-        _this.$root.products = response.data.data;
-        _this.products = _this.$root.products;
-      });
-    } else {
-      this.products = this.$root.products;
-    }
+    axios.get("api/products").then(function (response) {
+      _this.$root.products = response.data.data;
+      _this.products = _this.$root.products;
+    });
   }
 });
 

@@ -6,11 +6,9 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 import ProductComponent from './components/products'
-import IndexComponent from './components/index'
 
 const routes = [
-    { path: '/', redirect: '/index' },
-    { path: 'index', component: IndexComponent },
+    { path: '/', redirect: '/products' },
     { path: '/products', component: ProductComponent }
 ]
 

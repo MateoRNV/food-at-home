@@ -1,7 +1,5 @@
 <template>
   <div>
-
-    <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-4">
       <div class="container-xl">
         <a class="navbar-brand" href="#">Food@Home</a>
@@ -45,24 +43,21 @@
         </div>
       </div>
     </nav>
-    <div class="container">
-      <h1>Hello, world!</h1>
-    </div>
-</div>  
-
     <index></index>
-    
-    <router-link to="/products">Products</router-link>
+
+    <router-link to="/login">Login</router-link>
 
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import ProductComponent from './components/products'
+import ProductComponent from "./components/products";
+import LoginComponent from "./components/login";
 export default {
   components: {
-    'product': ProductComponent,
-  }
-}
+    product: ProductComponent,
+    login: LoginComponent,
+  },
+};
 </script>

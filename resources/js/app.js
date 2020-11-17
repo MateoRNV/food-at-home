@@ -2,14 +2,13 @@ require('./bootstrap');
 
 window.Vue = require('vue')
 
-import Vuetify from 'vuetify'
-Vue.use(Vuetify);
-
+import vuetify from './vuetify.js'
 import VueRouter from 'vue-router';
-Vue.use(VueRouter);
-
 import ProductComponent from './components/products'
 import LoginComponent from './components/login'
+import App from './App.vue'
+
+Vue.use(VueRouter);
 
 const routes = [
     { path: '/', redirect: '/products' },
@@ -21,10 +20,8 @@ const router = new VueRouter({
     routes: routes
 })
 
-import App from './App.vue'
-
 const app = new Vue({
     render: h => h(App),
-    vuetify: new Vuetify(),
-    router
+    vuetify,
+    router,
 }).$mount('#app')

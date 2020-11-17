@@ -1962,13 +1962,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     product: _components_products__WEBPACK_IMPORTED_MODULE_0__["default"],
     login: _components_login__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      drawer: false,
+      group: null
+    };
   }
 });
 
@@ -2000,17 +2005,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      show: false,
+      password: 'Password',
+      rules: {
+        required: function required(value) {
+          return !!value || 'Required';
+        }
+      }
+    };
+  }
+});
 
 /***/ }),
 
@@ -2044,9 +2051,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      loading: false,
       products: []
     };
   },
@@ -19711,121 +19730,51 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "v-app",
     [
-      _vm._m(0),
+      _c(
+        "v-system-bar",
+        {
+          staticClass: "justify-center p-4 white--text",
+          attrs: { dark: "", color: "green darken-1" }
+        },
+        [
+          _c("div", { staticClass: "text-h6" }, [
+            _vm._v("\n      Your order is on the way\n    ")
+          ])
+        ]
+      ),
       _vm._v(" "),
-      _c("index"),
+      _c(
+        "v-app-bar",
+        { attrs: { color: "deep-purple", dark: "", dense: "" } },
+        [
+          _c(
+            "v-tabs",
+            { staticClass: "m1-n9", attrs: { centered: "" } },
+            [
+              _c("v-tab", { attrs: { to: "/" } }, [_vm._v("Home")]),
+              _vm._v(" "),
+              _c("v-tab", { attrs: { to: "/login" } }, [_vm._v("Login")])
+            ],
+            1
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("router-link", { attrs: { to: "/login" } }, [_vm._v("Login")]),
+      _c(
+        "v-main",
+        [_c("v-container", { attrs: { fluid: "" } }, [_c("router-view")], 1)],
+        1
+      ),
       _vm._v(" "),
-      _c("router-view")
+      _c("v-footer", { attrs: { app: "" } })
     ],
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "nav",
-      { staticClass: "navbar navbar-expand-lg navbar-dark bg-dark py-4" },
-      [
-        _c("div", { staticClass: "container-xl" }, [
-          _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-            _vm._v("Food@Home")
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "navbar-toggler",
-              attrs: {
-                type: "button",
-                "data-toggle": "collapse",
-                "data-target": "#navbarsExample07XL",
-                "aria-controls": "navbarsExample07XL",
-                "aria-expanded": "false",
-                "aria-label": "Toggle navigation"
-              }
-            },
-            [_c("span", { staticClass: "navbar-toggler-icon" })]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "collapse navbar-collapse",
-              attrs: { id: "navbarsExample07XL" }
-            },
-            [
-              _c("ul", { staticClass: "navbar-nav ml-auto" }, [
-                _c("li", { staticClass: "nav-item active" }, [
-                  _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-                    _vm._v("Home "),
-                    _c("span", { staticClass: "sr-only" }, [
-                      _vm._v("(current)")
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("li", { staticClass: "nav-item" }, [
-                  _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-                    _vm._v("Menu")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("li", { staticClass: "nav-item dropdown" }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "nav-link dropdown-toggle",
-                      attrs: {
-                        href: "#",
-                        id: "dropdown07XL",
-                        "data-toggle": "dropdown"
-                      }
-                    },
-                    [_vm._v("Jose")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "dropdown-menu",
-                      attrs: { "aria-labelledby": "dropdown07XL" }
-                    },
-                    [
-                      _c(
-                        "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
-                        [_vm._v("Orders")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
-                        [_vm._v("Account")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
-                        [_vm._v("Logout")]
-                      )
-                    ]
-                  )
-                ])
-              ])
-            ]
-          )
-        ])
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -19848,92 +19797,31 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-content",
+    "v-form",
     [
-      _c("v-card", { attrs: { color: "green", dark: "" } }),
+      _c("v-text-field", { attrs: { label: "Email" } }),
       _vm._v(" "),
-      _c(
-        "v-container",
-        { staticClass: "fill-height", attrs: { fluid: "" } },
-        [
-          _c(
-            "v-row",
-            { attrs: { align: "center", justify: "center" } },
-            [
-              _c(
-                "v-col",
-                { attrs: { cols: "12", sm: "8", md: "4" } },
-                [
-                  _c(
-                    "v-card",
-                    { staticClass: "elevation-12" },
-                    [
-                      _c(
-                        "v-toolbar",
-                        { attrs: { color: "green", dark: "", flat: "" } },
-                        [_c("v-toolbar-title", [_vm._v("Login ")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-text",
-                        [
-                          _c(
-                            "v-form",
-                            [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Email",
-                                  name: "login",
-                                  "prepend-icon": "mdi-account",
-                                  type: "text"
-                                },
-                                model: {
-                                  value: _vm.email,
-                                  callback: function($$v) {
-                                    _vm.email = $$v
-                                  },
-                                  expression: "email"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("v-text-field", {
-                                attrs: {
-                                  id: "password",
-                                  label: "Password",
-                                  name: "password",
-                                  "prepend-icon": "mdi-lock",
-                                  type: "password"
-                                },
-                                model: {
-                                  value: _vm.password,
-                                  callback: function($$v) {
-                                    _vm.password = $$v
-                                  },
-                                  expression: "password"
-                                }
-                              }),
-                              _vm._v(
-                                "\n                                Do not you have an account yet ?\n                            "
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
+      _c("v-text-field", {
+        attrs: {
+          "append-icon": _vm.show ? "mdi-eye" : "mdi-eye-off",
+          rules: [_vm.rules.required],
+          type: _vm.show ? "text" : "password",
+          name: "input-10-1",
+          label: "Password"
+        },
+        on: {
+          "click:append": function($event) {
+            _vm.show = !_vm.show
+          }
+        },
+        model: {
+          value: _vm.password,
+          callback: function($$v) {
+            _vm.password = $$v
+          },
+          expression: "password"
+        }
+      })
     ],
     1
   )
@@ -19960,44 +19848,87 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("table", { staticClass: "table table-striped" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c(
-      "tbody",
-      _vm._l(_vm.products, function(product) {
-        return _c("tr", { key: product.id }, [
-          _c("td", [_vm._v(_vm._s(product.name))]),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(product.tyoe))]),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(product.description))]),
-          _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(product.price))])
-        ])
-      }),
-      0
-    )
-  ])
+  return _c(
+    "v-row",
+    { attrs: { dense: "" } },
+    _vm._l(_vm.products, function(product) {
+      return _c(
+        "v-col",
+        { key: product.id },
+        [
+          _c(
+            "v-card",
+            {
+              staticClass: "my-12",
+              attrs: { loading: _vm.loading, "max-width": "300" }
+            },
+            [
+              _c(
+                "template",
+                { slot: "progress" },
+                [
+                  _c("v-progress-linear", {
+                    attrs: {
+                      color: "deep-purple",
+                      height: "10",
+                      indeterminate: ""
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-img", {
+                attrs: {
+                  height: "250",
+                  src: "https://cdn.vuetifyjs.com/images/cards/cooking.png"
+                }
+              }),
+              _vm._v(" "),
+              _c("v-card-title", [_vm._v(_vm._s(product.name))]),
+              _vm._v(" "),
+              _c("v-card-text", [
+                _c("div", { staticClass: "grey--text ml-4" }, [
+                  _vm._v(_vm._s(product.price) + "€ • " + _vm._s(product.type))
+                ]),
+                _vm._v(" "),
+                _c("div", [_vm._v(_vm._s(product.description))])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "text-center" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mb-4 white--text",
+                      attrs: { color: "grey darken-4" }
+                    },
+                    [
+                      _c(
+                        "v-icon",
+                        { staticClass: "mr-5", attrs: { left: "" } },
+                        [_vm._v("mdi-cart-minus")]
+                      ),
+                      _vm._v("\n            Add to cart\n          ")
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            2
+          )
+        ],
+        1
+      )
+    }),
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Type")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Description")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("price")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -79063,17 +78994,6 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/css/app.css":
-/*!*******************************!*\
-  !*** ./resources/css/app.css ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ "./resources/js/App.vue":
 /*!******************************!*\
   !*** ./resources/js/App.vue ***!
@@ -79152,8 +79072,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuetify */ "./node_modules/vuetify/dist/vuetify.js");
-/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _vuetify_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./vuetify.js */ "./resources/js/vuetify.js");
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _components_products__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/products */ "./resources/js/components/products.vue");
 /* harmony import */ var _components_login__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/login */ "./resources/js/components/login.vue");
@@ -79162,11 +79081,11 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
-Vue.use(vuetify__WEBPACK_IMPORTED_MODULE_0___default.a);
+
+
+
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
-
-
 var routes = [{
   path: '/',
   redirect: '/products'
@@ -79180,12 +79099,11 @@ var routes = [{
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: routes
 });
-
 var app = new Vue({
   render: function render(h) {
     return h(_App_vue__WEBPACK_IMPORTED_MODULE_4__["default"]);
   },
-  vuetify: new vuetify__WEBPACK_IMPORTED_MODULE_0___default.a(),
+  vuetify: _vuetify_js__WEBPACK_IMPORTED_MODULE_0__["default"],
   router: router
 }).$mount('#app');
 
@@ -79361,15 +79279,48 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/vuetify.js":
+/*!*********************************!*\
+  !*** ./resources/js/vuetify.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuetify */ "./node_modules/vuetify/dist/vuetify.js");
+/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_1__);
+
+ //import 'vuetify/dist/vuetify.min.css'
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuetify__WEBPACK_IMPORTED_MODULE_1___default.a);
+var opts = {};
+/* harmony default export */ __webpack_exports__["default"] = (new vuetify__WEBPACK_IMPORTED_MODULE_1___default.a(opts));
+
+/***/ }),
+
+/***/ "./resources/sass/app.scss":
+/*!*********************************!*\
+  !*** ./resources/sass/app.scss ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ 0:
-/*!***********************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/css/app.css ***!
-  \***********************************************************/
+/*!*************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/sass/app.scss ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/vagrant/code/food-at-home/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/vagrant/code/food-at-home/resources/css/app.css */"./resources/css/app.css");
+__webpack_require__(/*! C:\Users\DIEWHILELIVE\Desktop\food-at-home\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\DIEWHILELIVE\Desktop\food-at-home\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

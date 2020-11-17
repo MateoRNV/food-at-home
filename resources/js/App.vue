@@ -1,54 +1,53 @@
 <template>
-  <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-4">
-      <div class="container-xl">
-        <a class="navbar-brand" href="#">Food@Home</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarsExample07XL"
-          aria-controls="navbarsExample07XL"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarsExample07XL">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#"
-                >Home <span class="sr-only">(current)</span></a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Menu</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="dropdown07XL"
-                data-toggle="dropdown"
-                >Jose</a
-              >
-              <div class="dropdown-menu" aria-labelledby="dropdown07XL">
-                <a class="dropdown-item" href="#">Orders</a>
-                <a class="dropdown-item" href="#">Account</a>
-                <a class="dropdown-item" href="#">Logout</a>
-              </div>
-            </li>
-          </ul>
-        </div>
+  <v-app>
+    <v-system-bar dark color="green darken-1" class="justify-center p-4 white--text">
+      <div class="text-h6">
+        Your order is on the way
       </div>
-    </nav>
-    <index></index>
+    </v-system-bar>
 
-    <router-link to="/login">Login</router-link>
+    <!-- <v-navigation-drawer v-model="drawer" absolute temporary>
+      <v-list nav dense>
+        <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+          <router-link to="/">
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-home</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Home</v-list-item-title>
+            </v-list-item>
+          </router-link>
+          <router-link to="/login">
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-login</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>
+                Login
+              </v-list-item-title>
+            </v-list-item>
+          </router-link>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer> -->
 
-    <router-view></router-view>
-  </div>
+    <v-app-bar color="deep-purple" dark dense>
+      <!-- <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-toolbar-title>Food@Home</v-toolbar-title> -->
+      <v-tabs centered class="m1-n9">
+        <v-tab to="/">Home</v-tab>
+        <v-tab to="/login">Login</v-tab>
+      </v-tabs>
+    </v-app-bar>
+    
+    <v-main>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+
+    <v-footer app></v-footer>
+  </v-app>
 </template>
 
 <script>
@@ -59,5 +58,9 @@ export default {
     product: ProductComponent,
     login: LoginComponent,
   },
+  data: () => ({
+    drawer: false,
+    group: null,
+  })
 };
 </script>

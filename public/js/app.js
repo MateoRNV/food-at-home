@@ -1960,6 +1960,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2087,11 +2088,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      loading: false,
       products: []
     };
   },
@@ -2102,7 +2101,8 @@ __webpack_require__.r(__webpack_exports__);
       _this.$root.products = response.data.data;
       _this.products = _this.$root.products;
     });
-  }
+  },
+  methods: {}
 });
 
 /***/ }),
@@ -19847,7 +19847,11 @@ var render = function() {
           _c(
             "v-btn",
             { attrs: { icon: "" } },
-            [_c("v-icon", [_vm._v("mdi-cart-minus")])],
+            [
+              _c("v-icon", [_vm._v("mdi-cart-minus")]),
+              _vm._v(" "),
+              _c("v-badge", { attrs: { content: "6" } })
+            ],
             1
           ),
           _vm._v(" "),
@@ -19943,7 +19947,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-main",
-        { staticClass: "grey lighten-4 " },
+        { staticClass: "grey lighten-4" },
         [_c("v-container", { attrs: { fluid: "" } }, [_c("router-view")], 1)],
         1
       )
@@ -20086,7 +20090,7 @@ var render = function() {
           {
             key: product.id,
             staticClass: "my-12",
-            attrs: { loading: _vm.loading, "max-width": "300" }
+            attrs: { "max-width": "300" }
           },
           [
             _c(

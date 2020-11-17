@@ -3,7 +3,6 @@
     <div class="text-h2 text-center font-weight-bold">Our menu</div>
     <div class="d-flex flex-wrap justify-space-around products">
       <v-card
-        :loading="loading"
         class="my-12"
         max-width="300"
         v-for="product in products"
@@ -51,7 +50,6 @@
 <script>
 export default {
   data: () => ({
-    loading: false,
     products: [],
   }),
   mounted() {
@@ -60,5 +58,8 @@ export default {
       this.products = this.$root.products;
     });
   },
+  methods: {
+
+  }
 };
 </script>

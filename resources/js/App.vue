@@ -6,13 +6,14 @@
         <v-tab to="/products">Menu</v-tab>
         <v-tab to="/login">Login</v-tab>
       </v-tabs>
-      
+
       <v-btn icon>
         <v-icon>mdi-cart-minus</v-icon>
+        <v-badge content="6"></v-badge>
       </v-btn>
 
       <v-menu offset-y>
-        <template v-slot:activator="{on, attrs}">
+        <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-account</v-icon>
           </v-btn>
@@ -40,7 +41,7 @@
       ></v-avatar> -->
     </v-app-bar>
 
-    <v-main class="grey lighten-4 ">
+    <v-main class="grey lighten-4">
       <v-container fluid>
         <router-view></router-view>
       </v-container>
@@ -59,6 +60,6 @@ export default {
   data: () => ({
     drawer: false,
     group: null,
-  })
+  }),
 };
 </script>

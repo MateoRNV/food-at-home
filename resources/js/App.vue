@@ -1,52 +1,50 @@
 <template>
   <v-app>
-    <v-system-bar dark color="green darken-1" class="justify-center p-4 white--text">
-      <div class="text-h6">
-        Your order is on the way
-      </div>
-    </v-system-bar>
-
-    <!-- <v-navigation-drawer v-model="drawer" absolute temporary>
-      <v-list nav dense>
-        <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
-          <router-link to="/">
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-home</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Home</v-list-item-title>
-            </v-list-item>
-          </router-link>
-          <router-link to="/login">
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-login</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>
-                Login
-              </v-list-item-title>
-            </v-list-item>
-          </router-link>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer> -->
-
-    <v-app-bar color="deep-purple" dark dense>
-      <!-- <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <v-toolbar-title>Food@Home</v-toolbar-title> -->
+    <v-app-bar color="deep-purple" app dark dense>
       <v-tabs centered class="m1-n9">
         <v-tab to="/">Home</v-tab>
+        <v-tab to="/products">Menu</v-tab>
         <v-tab to="/login">Login</v-tab>
       </v-tabs>
+      
+      <v-btn icon>
+        <v-icon>mdi-cart-minus</v-icon>
+      </v-btn>
+
+      <v-menu offset-y>
+        <template v-slot:activator="{on, attrs}">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list dense>
+          <v-list-item to="/login">
+            <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
+            <v-list-item-title>Orders</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/login">
+            <v-list-item-icon><v-icon>mdi-settings</v-icon></v-list-item-icon>
+            <v-list-item-title>Settings</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/login">
+            <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <!-- <v-avatar
+        class="hidden-sm-and-down"
+        color="grey darken-1 shrink"
+        size="32"
+      ></v-avatar> -->
     </v-app-bar>
-    
-    <v-main>
+
+    <v-main class="grey lighten-4 ">
       <v-container fluid>
         <router-view></router-view>
       </v-container>
     </v-main>
-
-    <v-footer app></v-footer>
   </v-app>
 </template>
 

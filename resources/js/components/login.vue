@@ -1,28 +1,38 @@
 <template>
+  <v-main>
+    <v-row class="justify-center">
+      <v-col md="auto" class="white rounded-lg p-5">
+        <div class="text-h4 text-center mb-4 font-weight-bold">
+          Ready to order?
+        </div>
         <v-form>
-                <v-text-field label="Email"
-
-                ></v-text-field>
-                <v-text-field 
-                        v-model="password"
-                        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                        :rules="[rules.required]"
-                        :type="show ? 'text' : 'password'"
-                        name="input-10-1"
-                        label="Password"
-                        @click:append="show = !show"
-                ></v-text-field>
+          <v-text-field label="Email"></v-text-field>
+          <v-text-field
+            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+            :rules="[rules.required]"
+            :type="show ? 'text' : 'password'"
+            name="input-10-1"
+            label="Password"
+            @click:append="show = !show"
+          ></v-text-field>
+          <v-btn color="grey darken-4 white--text mt-4" block>Login</v-btn>
+          <div class="text-subtitle-2 font-weight-regular mt-5 text-center">
+            Don't have an account yet?
+            <router-link to="/register">Register</router-link>
+          </div>
         </v-form>
+      </v-col>
+    </v-row>
+  </v-main>
 </template>
 
 <script>
 export default {
   data: () => ({
     show: false,
-    password: 'Password',
     rules: {
-        required: value => !!value || 'Required',
-    }
-  })
+      required: (value) => !!value || "Required",
+    },
+  }),
 };
 </script>

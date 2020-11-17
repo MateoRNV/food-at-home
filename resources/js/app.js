@@ -6,6 +6,7 @@ import vuetify from './vuetify.js'
 import VueRouter from 'vue-router';
 import ProductComponent from './components/products'
 import LoginComponent from './components/login'
+import RegisterComponent from './components/register'
 import App from './App.vue'
 
 Vue.use(VueRouter);
@@ -13,11 +14,13 @@ Vue.use(VueRouter);
 const routes = [
     { path: '/', redirect: '/products' },
     { path: '/login', component: LoginComponent },
-    { path: '/products', component: ProductComponent }
+    { path: '/register', component: RegisterComponent },
+    { path: '/products', component: ProductComponent },
 ]
 
 const router = new VueRouter({
-    routes: routes
+    // mode: 'history', // Remove #
+    routes
 })
 
 const app = new Vue({

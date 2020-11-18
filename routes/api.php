@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\UserController;
 
 
 /*
@@ -24,4 +25,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('orders',            [OrderController::class, 'index']);
 Route::get('products',            [ProductController::class, 'index']);
+Route::get('users',            [UserController::class, 'index']);
+Route::get('user/{userid}',            [UserController::class, 'info']);
+
 

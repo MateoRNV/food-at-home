@@ -8,8 +8,8 @@
         <v-form>
           <div class="d-flex flex-wrap flex-row justify-space-between">
             <div>
-              <v-text-field label="Fullname"></v-text-field>
-              <v-text-field label="Email"></v-text-field>
+              <v-text-field label="Fullname" v-model="form.name"></v-text-field>
+              <v-text-field label="Email" v-model="form.email"></v-text-field>
               <v-text-field
                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[rules.required]"
@@ -17,12 +17,16 @@
                 name="input-10-1"
                 label="Password"
                 @click:append="show = !show"
+                v-model="form.password"
               ></v-text-field>
             </div>
             <div>
-              <v-text-field label="Address"></v-text-field>
-              <v-text-field label="Phone"></v-text-field>
-              <v-text-field label="NIF"></v-text-field>
+              <v-text-field
+                label="Address"
+                v-model="form.address"
+              ></v-text-field>
+              <v-text-field label="Phone" v-model="form.phone"></v-text-field>
+              <v-text-field label="NIF" v-model="form.nif"></v-text-field>
             </div>
           </div>
           <v-file-input
@@ -30,10 +34,12 @@
             prepend-icon="mdi-camera"
             label="Profile photo"
           ></v-file-input>
-          <v-row align="center" justify="center"
-            >
+          <v-row align="center" justify="center">
             <v-btn color="error" class="mr-4">Reset form</v-btn>
-            <v-btn color="grey darken-4 white--text" class="mr-4"
+            <v-btn
+              color="grey darken-4 white--text"
+              class="mr-4"
+              @click.prevent="registerAccount"
               >Create account</v-btn
             >
           </v-row>
@@ -45,11 +51,33 @@
 
 <script>
 export default {
-  data: () => ({
-    show: false,
-    rules: {
-      required: (value) => !!value || "Required",
+  data() {
+    return {
+      show: false,
+      form: {
+        name: "",
+        email: "",
+        password: "",
+        address: "",
+        phone: "",
+        nif: "",
+      },
+      rules: {
+        required: (value) => !!value || "Required",
+      },
+      errors: [],
+    };
+  },
+  methods: {
+    registerAccount() {
+      axios.post('/api/register', this.form).then(() => {
+        console.log("Registered!");
+      }).catch((e) => {
+        console.log("Oh oh!");
+        console.log(e.response.data.errors)
+        this.errors = e.response.data.errors;
+      })
     },
-  }),
+  },
 };
 </script>

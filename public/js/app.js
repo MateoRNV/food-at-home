@@ -1961,6 +1961,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1973,6 +1977,13 @@ __webpack_require__.r(__webpack_exports__);
       drawer: false,
       group: null
     };
+  },
+  mounted: function mounted() {// axios.get('api/user').then((res) => {
+    //   this.user = res.data
+    //   console.log(this.user)
+    // }).catch((e) => {
+    //   console.log(e.data)
+    // })
   }
 });
 
@@ -2015,16 +2026,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       show: false,
+      form: {
+        email: '',
+        password: ''
+      },
       rules: {
         required: function required(value) {
           return !!value || "Required";
         }
-      }
+      },
+      errors: []
     };
+  },
+  methods: {
+    attemptLogin: function attemptLogin() {
+      var _this = this;
+
+      axios.post('/api/login', this.form).then(function () {
+        console.log("Login!");
+      })["catch"](function (e) {
+        _this.errors = e.response.data.errros;
+      });
+    }
   }
 });
 
@@ -2091,7 +2119,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      products: []
+      products: [],
+      user: null
     };
   },
   mounted: function mounted() {
@@ -2100,6 +2129,9 @@ __webpack_require__.r(__webpack_exports__);
     axios.get("api/products").then(function (response) {
       _this.$root.products = response.data.data;
       _this.products = _this.$root.products;
+    });
+    axios.get('api/user').then(function (res) {
+      _this.user = res.data;
     });
   },
   methods: {}
@@ -2161,16 +2193,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       show: false,
+      form: {
+        name: "",
+        email: "",
+        password: "",
+        address: "",
+        phone: "",
+        nif: ""
+      },
       rules: {
         required: function required(value) {
           return !!value || "Required";
         }
-      }
+      },
+      errors: []
     };
+  },
+  methods: {
+    registerAccount: function registerAccount() {
+      var _this = this;
+
+      axios.post('/api/register', this.form).then(function () {
+        console.log("Registered!");
+      })["catch"](function (e) {
+        console.log("Oh oh!");
+        console.log(e.response.data.errors);
+        _this.errors = e.response.data.errors;
+      });
+    }
   }
 });
 
@@ -19901,6 +19961,21 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("user")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { to: "/login" } },
+                    [
+                      _c(
+                        "v-list-item-icon",
+                        [_c("v-icon", [_vm._v("mdi-bookmark")])],
+                        1
+                      ),
+                      _vm._v(" "),
                       _c("v-list-item-title", [_vm._v("Orders")])
                     ],
                     1
@@ -19997,7 +20072,16 @@ var render = function() {
               _c(
                 "v-form",
                 [
-                  _c("v-text-field", { attrs: { label: "Email" } }),
+                  _c("v-text-field", {
+                    attrs: { label: "Email" },
+                    model: {
+                      value: _vm.form.email,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "email", $$v)
+                      },
+                      expression: "form.email"
+                    }
+                  }),
                   _vm._v(" "),
                   _c("v-text-field", {
                     attrs: {
@@ -20011,6 +20095,13 @@ var render = function() {
                       "click:append": function($event) {
                         _vm.show = !_vm.show
                       }
+                    },
+                    model: {
+                      value: _vm.form.password,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "password", $$v)
+                      },
+                      expression: "form.password"
                     }
                   }),
                   _vm._v(" "),
@@ -20020,6 +20111,12 @@ var render = function() {
                       attrs: {
                         color: "grey darken-4 white--text mt-4",
                         block: ""
+                      },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.attemptLogin($event)
+                        }
                       }
                     },
                     [_vm._v("Login")]
@@ -20242,9 +20339,27 @@ var render = function() {
                       _c(
                         "div",
                         [
-                          _c("v-text-field", { attrs: { label: "Fullname" } }),
+                          _c("v-text-field", {
+                            attrs: { label: "Fullname" },
+                            model: {
+                              value: _vm.form.name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "name", $$v)
+                              },
+                              expression: "form.name"
+                            }
+                          }),
                           _vm._v(" "),
-                          _c("v-text-field", { attrs: { label: "Email" } }),
+                          _c("v-text-field", {
+                            attrs: { label: "Email" },
+                            model: {
+                              value: _vm.form.email,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "email", $$v)
+                              },
+                              expression: "form.email"
+                            }
+                          }),
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
@@ -20260,6 +20375,13 @@ var render = function() {
                               "click:append": function($event) {
                                 _vm.show = !_vm.show
                               }
+                            },
+                            model: {
+                              value: _vm.form.password,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "password", $$v)
+                              },
+                              expression: "form.password"
                             }
                           })
                         ],
@@ -20269,11 +20391,38 @@ var render = function() {
                       _c(
                         "div",
                         [
-                          _c("v-text-field", { attrs: { label: "Address" } }),
+                          _c("v-text-field", {
+                            attrs: { label: "Address" },
+                            model: {
+                              value: _vm.form.address,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "address", $$v)
+                              },
+                              expression: "form.address"
+                            }
+                          }),
                           _vm._v(" "),
-                          _c("v-text-field", { attrs: { label: "Phone" } }),
+                          _c("v-text-field", {
+                            attrs: { label: "Phone" },
+                            model: {
+                              value: _vm.form.phone,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "phone", $$v)
+                              },
+                              expression: "form.phone"
+                            }
+                          }),
                           _vm._v(" "),
-                          _c("v-text-field", { attrs: { label: "NIF" } })
+                          _c("v-text-field", {
+                            attrs: { label: "NIF" },
+                            model: {
+                              value: _vm.form.nif,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "nif", $$v)
+                              },
+                              expression: "form.nif"
+                            }
+                          })
                         ],
                         1
                       )
@@ -20302,7 +20451,13 @@ var render = function() {
                         "v-btn",
                         {
                           staticClass: "mr-4",
-                          attrs: { color: "grey darken-4 white--text" }
+                          attrs: { color: "grey darken-4 white--text" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.registerAccount($event)
+                            }
+                          }
                         },
                         [_vm._v("Create account")]
                       )
@@ -79496,7 +79651,8 @@ var routes = [{
   component: _components_products__WEBPACK_IMPORTED_MODULE_2__["default"]
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
-  // mode: 'history', // Remove #
+  // mode: 'history',
+  // base: process.env.BASE_URL,
   routes: routes
 });
 var app = new Vue({

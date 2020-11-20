@@ -51,15 +51,20 @@
 export default {
   data: () => ({
     products: [],
+    user: null,
   }),
   mounted() {
     axios.get("api/products").then((response) => {
       this.$root.products = response.data.data;
       this.products = this.$root.products;
     });
+
+    axios.get('api/user').then((res) => {
+      this.user = res.data
+    })
   },
   methods: {
-
+    
   }
 };
 </script>

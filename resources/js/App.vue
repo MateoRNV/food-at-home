@@ -22,6 +22,10 @@
         <v-list dense>
           <v-list-item to="/login">
             <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
+            <v-list-item-title>user</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/login">
+            <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
             <v-list-item-title>Orders</v-list-item-title>
           </v-list-item>
           <v-list-item to="/login">
@@ -57,9 +61,19 @@ export default {
     product: ProductComponent,
     login: LoginComponent,
   },
-  data: () => ({
-    drawer: false,
-    group: null,
-  }),
+  data(){
+    return{
+      drawer: false,
+      group: null,
+    }
+  },
+  mounted(){
+    // axios.get('api/user').then((res) => {
+    //   this.user = res.data
+    //   console.log(this.user)
+    // }).catch((e) => {
+    //   console.log(e.data)
+    // })
+  }
 };
 </script>

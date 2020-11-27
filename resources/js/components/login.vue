@@ -6,17 +6,9 @@
           Ready to order?
         </div>
         <v-form>
-          <v-text-field label="Email" v-model="form.email"></v-text-field>
-          <v-text-field
-            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-            :rules="[rules.required]"
-            :type="show ? 'text' : 'password'"
-            name="input-10-1"
-            label="Password"
-            @click:append="show = !show"
-            v-model="form.password"
-          ></v-text-field>
-          <v-btn color="grey darken-4 white--text mt-4" block @click.prevent="attemptLogin">Login</v-btn>
+          <v-text-field label="Email" v-model="credentials.email"></v-text-field>
+          <v-text-field label="Password" v-model="credentials.password"></v-text-field>
+          <v-btn color="grey darken-4 white--text mt-4" block @click.prevent="login">Login</v-btn>
           <div class="text-subtitle-2 font-weight-regular mt-5 text-center">
             Don't have an account yet?
             <router-link to="/register">Register</router-link>
@@ -32,7 +24,7 @@ export default {
   data() {
     return {
       show: false,
-      form: {
+      credentials: {
         email: '',
         password: ''
       },
@@ -42,12 +34,15 @@ export default {
       errors: []
     };
   },
-  methods: {  
-    attemptLogin(){
-      axios.post('/api/login', this.form).then(() => {
-        console.log("Login!");
-      }).catch((e) => {
-        this.errors = e.response.data.errros
+  methods: {
+    login(){
+      axios.get('/sanctum/csrf-cookie').then(res => {
+        axios.post('/api/login', this.credentials).then( res => {
+          console.log("Login!");
+          console.dir(res.data)
+        }).catch((e) => {
+          console.log('Invalid auth')
+        })
       })
     }
   },

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\LoginController;
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RegisterController;
 
 
@@ -26,9 +26,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('login',            [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'index']);
+Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'index']);
 Route::post('register',         [RegisterController::class, 'register']);
-Route::post('login',            [LoginController::class, 'login']);
-Route::post('logout',            [LoginController::class, 'logout']);
+
+// Protect a route so it's only accessible to authenticated users
+//Route::middleware('auth:sanctum')->get('orders', [OrderController::class, 'index']);
 
 Route::get('orders',            [OrderController::class, 'index']);
 Route::get('products',          [ProductController::class, 'index']);

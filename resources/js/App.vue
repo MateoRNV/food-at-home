@@ -67,6 +67,15 @@ export default {
       group: null,
     }
   },
+  methods: {
+    logout(){
+      axios.post('/api/logout').then(res => {
+        console.log('User has logged out')
+      }).catch(error => {
+        console.log('invalid request')
+      })
+    }
+  },
   mounted(){
     // axios.get('api/user').then((res) => {
     //   this.user = res.data

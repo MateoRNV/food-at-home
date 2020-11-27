@@ -20,4 +20,8 @@ class UserController extends Controller
 
         return $user;
     }
+
+    public function me(Request $request){
+        return request()->user();
+    }
 }

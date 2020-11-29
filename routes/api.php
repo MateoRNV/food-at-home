@@ -8,6 +8,7 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\CustomerController;
 
 
 
@@ -38,5 +39,6 @@ Route::get('orders',            [OrderController::class, 'index']);
 Route::get('products',          [ProductController::class, 'index']);
 Route::get('users',             [UserController::class, 'index']);
 Route::get('user/{id}',         [UserController::class, 'info']);
+Route::get('customers',         [CustomerController::class, 'index']);
 
 

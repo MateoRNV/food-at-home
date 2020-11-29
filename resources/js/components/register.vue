@@ -1,51 +1,59 @@
 <template>
-  <v-main>
-    <v-row class="justify-center">
-      <v-col md="6" class="white rounded-lg p-5">
-        <div class="text-h5 text-center mb-4 font-weight-bold">
-          Create an account
-        </div>
-        <v-form>
-          <div class="d-flex flex-wrap flex-row justify-space-between">
-            <div>
-              <v-text-field label="Fullname" v-model="form.name"></v-text-field>
-              <v-text-field label="Email" v-model="form.email"></v-text-field>
-              <v-text-field
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required]"
-                :type="show ? 'text' : 'password'"
-                name="input-10-1"
-                label="Password"
-                @click:append="show = !show"
-                v-model="form.password"
-              ></v-text-field>
+  <v-main class="grey lighten-4">
+    <v-container fluid>
+      <v-main>
+        <v-row class="justify-center">
+          <v-col md="6" class="white rounded-lg p-5">
+            <div class="text-h5 text-center mb-4 font-weight-bold">
+              Create an account
             </div>
-            <div>
-              <v-text-field
-                label="Address"
-                v-model="form.address"
-              ></v-text-field>
-              <v-text-field label="Phone" v-model="form.phone"></v-text-field>
-              <v-text-field label="NIF" v-model="form.nif"></v-text-field>
-            </div>
-          </div>
-          <v-file-input
-            show-size
-            prepend-icon="mdi-camera"
-            label="Profile photo"
-          ></v-file-input>
-          <v-row align="center" justify="center">
-            <v-btn color="error" class="mr-4">Reset form</v-btn>
-            <v-btn
-              color="grey darken-4 white--text"
-              class="mr-4"
-              @click.prevent="registerAccount"
-              >Create account</v-btn
-            >
-          </v-row>
-        </v-form>
-      </v-col>
-    </v-row>
+            <v-form>
+              <div class="d-flex flex-wrap flex-row justify-space-between">
+                <div>
+                  <v-text-field label="Fullname" v-model="form.name"></v-text-field>
+                  <v-text-field label="Email" v-model="form.email"></v-text-field>
+                  <v-text-field
+                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="[rules.required]"
+                    :type="show ? 'text' : 'password'"
+                    name="input-10-1"
+                    label="Password"
+                    @click:append="show = !show"
+                    v-model="form.password"
+                  ></v-text-field>
+                </div>
+                <div>
+                  <v-text-field
+                    label="Address"
+                    v-model="form.address"
+                  ></v-text-field>
+                  <v-text-field label="Phone" v-model="form.phone"></v-text-field>
+                  <v-text-field label="NIF" v-model="form.nif"></v-text-field>
+                </div>
+              </div>
+              <v-file-input
+                show-size
+                prepend-icon="mdi-camera"
+                label="Profile photo"
+              ></v-file-input>
+              <v-row align="center" justify="center">
+                <v-btn color="error" class="mr-4">Reset form</v-btn>
+                <v-btn
+                  color="grey darken-4 white--text"
+                  class="mr-4"
+                  @click.prevent="registerAccount"
+                  >Create account</v-btn
+                >
+              </v-row>
+            </v-form>
+          </v-col>
+        </v-row>
+        <div class="text-subtitle-2 font-weight-regular mt-5 text-center">
+                Already have an account?
+                <router-link to="/login">Login</router-link>
+              </div>
+      </v-main>
+    </v-container>
   </v-main>
 </template>
 

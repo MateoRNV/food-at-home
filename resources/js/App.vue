@@ -38,18 +38,11 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <!-- <v-avatar
-        class="hidden-sm-and-down"
-        color="grey darken-1 shrink"
-        size="32"
-      ></v-avatar> -->
     </v-app-bar>
 
-    <v-main class="grey lighten-4">
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
-    </v-main>
+    
+    <router-view></router-view>
+      
   </v-app>
 </template>
 
@@ -76,13 +69,5 @@ export default {
       })
     }
   },
-  mounted(){
-    // axios.get('api/user').then((res) => {
-    //   this.user = res.data
-    //   console.log(this.user)
-    // }).catch((e) => {
-    //   console.log(e.data)
-    // })
-  }
 };
 </script>

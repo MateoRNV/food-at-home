@@ -6,3 +6,49 @@
 
 // Bootstrap
 //@import '~/bootstrap/scss/bootstrap';
+
+#instructions-section{
+    background: #673AB7;
+}
+
+.shape-divider-bottom {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.shape-divider-bottom svg {
+    position: relative;
+    display: block;
+    width: calc(195% + 1.3px);
+    height: 163px;
+}
+
+.shape-divider-bottom .shape-fill {
+    fill: #673AB7;
+}
+
+.shape-divider-top {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.shape-divider-top svg {
+    position: relative;
+    display: block;
+    width: calc(195% + 1.3px);
+    height: 163px;
+}
+
+.shape-divider-top .shape-fill {
+    fill: #673AB7;
+}

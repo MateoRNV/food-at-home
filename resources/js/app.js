@@ -9,6 +9,7 @@ import HomepageComponent from './components/homepage'
 import ProductComponent from './components/products'
 import LoginComponent from './components/login'
 import RegisterComponent from './components/register'
+import UserComponent from './components/users'
 import App from './App.vue'
 
 Vue.use(VueRouter);
@@ -19,6 +20,7 @@ const routes = [
     { path: '/login', component: LoginComponent },
     { path: '/register', component: RegisterComponent },
     { path: '/products', component: ProductComponent },
+    { path: '/users', component: UserComponent },
 ]
 
 const router = new VueRouter({

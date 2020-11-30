@@ -4,6 +4,7 @@
       <v-tabs centered class="m1-n9">
         <v-tab to="/">Home</v-tab>
         <v-tab to="/products">Menu</v-tab>
+        <v-tab to="/users">Users</v-tab>
         <v-tab to="/login">Login</v-tab>
       </v-tabs>
 
@@ -49,10 +50,13 @@
 <script>
 import ProductComponent from "./components/products";
 import LoginComponent from "./components/login";
+import UserComponent from "./components/users"
+
 export default {
   components: {
     product: ProductComponent,
     login: LoginComponent,
+    user: UserComponent
   },
   data(){
     return{

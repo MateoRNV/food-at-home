@@ -1,16 +1,26 @@
+
 <template>
   <v-main class="grey lighten-4">
-    <br />
-    <!--<div class="title2">User List</div> -->
-
+    <br >
     <v-container fluid>
       <div class="white rounded-lg px-5 py-5 my-5">
         <div class="text-h2 font-weight-bold">
           Users List
           <div class="float-right">
-          <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-            New User
-          </v-btn>
+              <v-dialog v-model="dialog" max-width="500px">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="primary"
+                  dark
+                  class="mb-2"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  Add User
+                </v-btn>
+              </template>
+              <user-edit></user-edit>
+            </v-dialog>
           </div>
         </div>
         <br />
@@ -53,10 +63,15 @@
 </template>
 
 <script>
+import UserEditComponent from "./userEdit";
 export default {
+  components: {
+    "user-edit": UserEditComponent,
+  },
   props: ["users"],
   data: function () {
     return {
+      dialog: false,
       search: "",
       headers: [
         {
@@ -70,6 +85,9 @@ export default {
         { text: "Email", value: "email", groupable: false },
         { text: "Type", value: "type" },
       ],
+      editedItem: {
+        name: "",
+      },
     };
   },
   methods: {

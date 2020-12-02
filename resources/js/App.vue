@@ -67,7 +67,8 @@ export default {
   methods: {
     logout(){
       axios.post('/api/logout').then(res => {
-        console.log('User has logged out')
+        this.$toasted.show('User has logget out', {type: 'warning'})
+        this.$store.commit('clearUser')
       }).catch(error => {
         console.log('invalid request')
       })

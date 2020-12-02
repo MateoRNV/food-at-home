@@ -6,7 +6,7 @@
         
         <v-row align="center" justify="center">
           <v-col>
-            <v-text-field label="Search"></v-text-field>
+            <v-text-field label="Search" v-model="search"></v-text-field>
           </v-col>
           <v-col>
             <v-btn-toggle tile group>
@@ -26,6 +26,7 @@
             max-width="300"
             v-for="product in products"
             :key="product.id"
+            :search="search"
           >
             <template slot="progress">
               <v-progress-linear
@@ -76,6 +77,7 @@ export default {
   data() {
     return {
       products: [],
+      search: '',
       user: null,
       pagination: {
         currentPage: 1,

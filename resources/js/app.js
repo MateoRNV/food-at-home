@@ -4,7 +4,9 @@ window.Vue = require('vue')
 
 import Vue from 'vue'
 import vuetify from './vuetify.js'
-import VueRouter from 'vue-router';
+import VueRouter from 'vue-router'
+import Toasted from 'vue-toasted'
+import store from './stores/global-store'
 import HomepageComponent from './components/homepage'
 import ProductComponent from './components/products'
 import LoginComponent from './components/login'
@@ -12,6 +14,7 @@ import RegisterComponent from './components/register'
 import UserComponent from './components/users'
 import App from './App.vue'
 
+Vue.use(Toasted)
 Vue.use(VueRouter);
 
 const routes = [
@@ -33,4 +36,6 @@ const app = new Vue({
     render: h => h(App),
     vuetify,
     router,
+    store,
 }).$mount('#app')
+ 

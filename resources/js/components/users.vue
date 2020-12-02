@@ -23,20 +23,15 @@
             </v-dialog>
           </div>
         </div>
-        <br />
-        <v-card>
-          <v-card-title>
-            <v-spacer></v-spacer>
-            <v-spacer></v-spacer>
-            <v-spacer></v-spacer>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
-          </v-card-title>
+        <v-main>
+
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
           <v-data-table
             :headers="headers"
             :items="users"
@@ -48,15 +43,13 @@
             <template v-slot:item.photo_url="{ item }">
               <v-img
                 class="border-card"
-                :src="`/storage/fotos/${item.photo_url}`"
-                max-height="90"
+                :src="`${item.photo_url != null ? '/storage/fotos/' + item.photo_url : '/storage/static/user/default_user_photo.png'}`"
                 max-width="80"
                 position="center"
-                sizes=""
               ></v-img>
             </template>
           </v-data-table>
-        </v-card>
+        </v-main>
       </div>
     </v-container>
   </v-main>

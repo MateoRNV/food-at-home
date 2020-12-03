@@ -14,8 +14,13 @@ import RegisterComponent from './components/register'
 import UserComponent from './components/users'
 import App from './App.vue'
 
-Vue.use(Toasted)
 Vue.use(VueRouter);
+Vue.use(Toasted, {
+    position: 'bottom-right',
+    duration: 5000,
+    type: 'info'
+})
+
 
 const routes = [
     // { path: '/', redirect: '/products' },
@@ -37,5 +42,20 @@ const app = new Vue({
     vuetify,
     router,
     store,
+    created(){
+        this.$store.dispatch('loadUserLogged')
+        this.$store.dispatch('loadUsers')
+    }
 }).$mount('#app')
  
+router.beforeEach((to, from, next) => {
+    console.log(to)
+    if(!store.state.user){
+        if((to.path === '/users')){
+            console.log("Não tem permissoes")
+            next(false)
+            return
+        }
+    }
+    next()
+})

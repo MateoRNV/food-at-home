@@ -33,22 +33,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function typeToStrType()
-    {
-        switch ($this->type) {
-            case 'C':
-                return 'Customer';
-            case 'EC':
-                return 'Cooker';
-            case 'ED':
-                return 'Deliveryman';
-            case 'EM': 
-                return 'Manager';
-        }
-
-        return 'Unknown';
-    }
-
     /**
      * The attributes that should be cast to native types.
      *

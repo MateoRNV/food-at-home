@@ -28,8 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('login',            [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'index']);
-Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'index']);
+Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 Route::post('register',         [RegisterController::class, 'register']);
 
 // Protect a route so it's only accessible to authenticated users
@@ -37,8 +36,11 @@ Route::post('register',         [RegisterController::class, 'register']);
 
 Route::get('orders',            [OrderController::class, 'index']);
 Route::get('products',          [ProductController::class, 'index']);
+
 Route::get('users',             [UserController::class, 'index']);
+Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']);
 Route::get('user/{id}',         [UserController::class, 'info']);
+
 Route::get('customers',         [CustomerController::class, 'index']);
 
 

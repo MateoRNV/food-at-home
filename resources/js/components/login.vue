@@ -44,10 +44,9 @@ export default {
       axios.get('/sanctum/csrf-cookie').then(res => {
         axios.post('/api/login', this.credentials).then( res => {
           this.$store.commit('setUser', res.data)
-          this.$toasted.show('User is authenticated', {type: 'success', position: 'bottom-right', duration: 5000})
-          console.dir(res.data)
+          this.$toasted.show('User is authenticated', {type: 'success'})
         }).catch(e => {
-          this.$toasted.show('Invalid auth', {type: 'error', position: 'bottom-right', duration: 5000})
+          this.$toasted.show('Invalid auth', {type: 'error'})
         })
       })
     }

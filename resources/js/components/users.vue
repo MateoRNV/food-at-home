@@ -34,7 +34,7 @@
           ></v-text-field>
           <v-data-table
             :headers="headers"
-            :items="users"
+            :items="$store.state.users"
             :search="search"
             show-group-by
             multi-sort
@@ -61,7 +61,6 @@ export default {
   components: {
     "user-edit": UserEditComponent,
   },
-  props: ["users"],
   data: function () {
     return {
       dialog: false,
@@ -84,15 +83,9 @@ export default {
     };
   },
   methods: {
-    getUsers() {
-      axios.get("api/users").then((response) => {
-        this.$root.users = response.data.data;
-        this.users = this.$root.users;
-      });
-    },
   },
   mounted() {
-    this.getUsers();
+
   },
 };
 </script>

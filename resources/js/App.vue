@@ -4,8 +4,13 @@
       <v-tabs centered class="m1-n9">
         <v-tab to="/">Home</v-tab>
         <v-tab to="/products">Menu</v-tab>
-        <v-tab to="/users">Users</v-tab>
-        <v-tab to="/login">Login</v-tab>
+        <template v-if="$store.state.user">
+          <v-tab to="/users">Users</v-tab>
+          <v-tab @click.prevent="logout">Logout</v-tab>
+        </template>
+        <template v-if="!$store.state.user">
+          <v-tab to="/login">Login</v-tab>
+        </template>
       </v-tabs>
 
       <v-btn icon>
@@ -23,9 +28,9 @@
         <v-list dense>
           <v-list-item to="/login">
             <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
-            <v-list-item-title>user</v-list-item-title>
+            <!-- <v-list-item-title>{{$store.state.user.name}}</v-list-item-title> -->
           </v-list-item>
-          <v-list-item to="/login">
+          <v-list-item @click.prevent="myself">
             <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
             <v-list-item-title>Orders</v-list-item-title>
           </v-list-item>
@@ -71,6 +76,20 @@ export default {
         this.$store.commit('clearUser')
       }).catch(error => {
         console.log('invalid request')
+      })
+    },
+    myself(){
+      this.$store.dispatch('loadUserLogged')
+      .then(() => {
+        if(this.$store.state.user){
+          this.$toasted.show('User currently logged: ' +
+            this.$store.state.user.name + '<br>' +
+            this.$store.state.user.email, {type: 'info'}
+          )
+          console.log(this.$store.state.user)
+        }else{
+          this.$toasted.show('No user logged in', {type: 'warning'})
+        }
       })
     }
   },

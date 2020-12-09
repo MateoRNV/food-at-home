@@ -16,7 +16,8 @@
             </v-btn-toggle>
           </v-col>
           <v-col>
-            <v-select label="Type" outlined dense></v-select>
+            <v-select label="Type" :items="types" v-model="type_sort" outlined dense>
+            </v-select>
           </v-col>
         </v-row>
         
@@ -24,7 +25,7 @@
           <v-card
             class="my-12"
             max-width="300"
-            v-for="product in products"
+            v-for="product in filteredList"
             :key="product.id"
             :search="search"
           >
@@ -78,7 +79,8 @@ export default {
     return {
       products: [],
       search: '',
-      user: null,
+      types: ['hot dish', 'cold dish', 'dessert', 'drink'],
+      type_sort: 'drink',
       pagination: {
         currentPage: 1,
         previousPage: null,
@@ -93,18 +95,29 @@ export default {
         this.$root.products = response.data.data;
         this.products = this.$root.products;
         // Pagination
-        console.log(response.data)
         this.pagination.currentPage = response.data.meta.current_page;
-        console.log(this.pagination.currentPage)
         this.pagination.totalPages = response.data.meta.last_page;
       });
     },
     handlePagination(){
       this.getProducts();
+    },
+    orderedItems(items){ 
+      console.log(name)
+      return items.filter(items => {
+        if(item[this.type_sort]) return item;
+      })
     }
   },
   mounted() {
     this.getProducts();
-  }  
+  },
+  computed:{
+    filteredList(){
+      return this.products.filter(product => {
+        return product.name.toLowerCase().includes(this.search.toLowerCase()) || product.type.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
+  }
 };
 </script>

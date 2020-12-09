@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Resources\User as UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\CreateUserRequest;
+use App\Http\Resources\User as UserResource;
 
 class UserController extends Controller
 {
@@ -23,5 +25,18 @@ class UserController extends Controller
 
     public function me(Request $request){
         return $request->user();
+    }
+
+    public function create(CreateUserRequest $request){
+
+        $user = new User;
+        $validated = $request->validated();
+
+        $user->fill($validated);
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        return response()->json(['user' => $user], 201);
     }
 }

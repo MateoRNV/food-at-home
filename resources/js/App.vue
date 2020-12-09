@@ -25,10 +25,10 @@
           </v-btn>
         </template>
 
-        <v-list dense>
-          <v-list-item to="/login">
+        <v-list>
+          <v-list-item to="/login" v-if="$store.state.user && $store.state.user.type === 'EM'">
             <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
-            <!-- <v-list-item-title>{{$store.state.user.name}}</v-list-item-title> -->
+            <v-list-item-title>{{$store.state.user.name}}</v-list-item-title>
           </v-list-item>
           <v-list-item @click.prevent="myself">
             <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
@@ -74,6 +74,7 @@ export default {
       axios.post('/api/logout').then(res => {
         this.$toasted.show('User has logget out', {type: 'warning'})
         this.$store.commit('clearUser')
+        this.$router.push('/login')
       }).catch(error => {
         console.log('invalid request')
       })

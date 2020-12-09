@@ -17,11 +17,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'type',
-        'foto_url',
         'name',
         'email',
         'password',
+        'type',
+        'photo_url',
     ];
 
     /**
@@ -43,6 +43,6 @@ class User extends Authenticatable
     ];
 
     public function customer(){
-        return $this->hasOne('App\Models\Customer');
+        return $this->hasOne('App\Models\Customer', 'id');
     }
 }

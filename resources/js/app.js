@@ -33,7 +33,7 @@ const routes = [
 
 const router = new VueRouter({
     // mode: 'history',
-    // base: process.env.BASE_URL,
+    // base: process.env.APP_URL,
     routes
 })
 
@@ -52,10 +52,17 @@ router.beforeEach((to, from, next) => {
     console.log(to)
     if(!store.state.user){
         if((to.path === '/users')){
-            console.log("Não tem permissoes")
-            next(false)
+            Vue.toasted.show('You must login first', {type: 'error'})
+            next('/login')
+            return
+        }
+    }else{
+        if((to.path === '/login')){
+            console.log('User already logged in')
+            next('/products')
             return
         }
     }
+
     next()
 })

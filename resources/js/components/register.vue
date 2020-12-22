@@ -11,11 +11,11 @@
               elevation="2"
               v-if="errors"
             >
-              <v-list-item v-for="err in error">
+             <!-- <v-list-item v-for="err in error">
                 <v-list-item-content >
                   <v-list-item-title>{{ err }}</v-list-item-title>
                 </v-list-item-content>
-              </v-list-item>
+              </v-list-item>-->
             </v-alert>
           </div>
           <v-col md="6" class="white rounded-lg p-5">

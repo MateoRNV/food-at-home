@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CreateUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +13,7 @@ class CreateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -29,12 +28,6 @@ class CreateUserRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users'],
             'type' => ['required', Rule::in(['EM', 'EC', 'ED', 'C'])],
             'password' => ['required', 'min:3'] 
-        ];
-    }
-
-    public function messages(){
-        return [
-            'name.required' => "You have to provide your name"
         ];
     }
 }

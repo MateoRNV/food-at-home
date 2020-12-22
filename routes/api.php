@@ -40,6 +40,9 @@ Route::get('products',          [ProductController::class, 'index']);
 Route::get('users',             [UserController::class, 'index']);
 Route::get('user/{id}',         [UserController::class, 'info']);
 Route::post('users',            [UserController::class, 'create']); // create user
+Route::put('users/{user}',      [UserController::class, 'update']); //edit user
+Route::delete('users/{user}',   [UserController::class, 'destroy']);//delete user
+
 Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']);
 
 Route::get('customers',         [CustomerController::class, 'index']);

@@ -64,3 +64,8 @@ input[type=number] {
   -moz-appearance: textfield;
   text-align: center;
 }
+
+
+.v-btn--router, .v-list-item--link{
+    text-decoration: none!important;
+}

@@ -58,7 +58,11 @@
             </v-card-text>
 
             <div class="text-center">
-              <v-btn class="mb-4 white--text" color="grey darken-4" @click.prevent="addToCart(product)">
+              <v-btn class="mb-4 white--text" color="grey darken-4" @click.prevent="addToCart(product)" v-if="$store.state.user">
+                <v-icon left class="mr-5">mdi-cart-minus</v-icon>
+                Add to cart
+              </v-btn>
+              <v-btn class="mb-4 white--text" color="grey darken-4" to="/login" v-else>
                 <v-icon left class="mr-5">mdi-cart-minus</v-icon>
                 Add to cart
               </v-btn>

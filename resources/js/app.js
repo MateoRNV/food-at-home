@@ -13,6 +13,7 @@ import LoginComponent from './components/login'
 import RegisterComponent from './components/register'
 import UserComponent from './components/users'
 import CartComponent from './components/cart'
+import DeliveryDashboardComponent from './components/delivery-dashboard'
 import App from './App.vue'
 
 Vue.use(VueRouter);
@@ -25,6 +26,7 @@ const routes = [
     { path: '/products', component: ProductComponent },
     { path: '/users', component: UserComponent },
     { path: '/cart', component: CartComponent },
+    { path: '/delivery/dashboard', component: DeliveryDashboardComponent },
 ]
 
 const router = new VueRouter({
@@ -55,9 +57,8 @@ const app = new Vue({
 }).$mount('#app')
  
 router.beforeEach((to, from, next) => {
-    // console.log(to)
     if(!store.state.user){
-        if((to.path === '/users')){
+        if((to.path === '/users') || (to.path === '/cart')){
             Vue.toasted.show('You must login first', {type: 'error'})
             next('/login')
             return

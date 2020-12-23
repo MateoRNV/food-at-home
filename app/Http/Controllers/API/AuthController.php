@@ -13,8 +13,12 @@ class AuthController extends Controller
 
         if(Auth::attempt($credentials)){
             if(Auth::user()->blocked){
-                return response()->json(['message' => 'User account is blocked. Please contact the administrators of the site'], 403);
+                return response()->json(['message' => 'User account is blocked. Please contact us'], 403);
             }
+
+            // Register the time at which the user logged
+            Auth::user()->logged_at = now();
+            Auth::user()->save();
 
             return Auth::user();
         }else{
@@ -23,6 +27,11 @@ class AuthController extends Controller
     }
 
     public function logout(){
+        // Clean user logged at (meaning it's not currently active)
+        $user = Auth::guard('web')->user();
+        $user->logged_at = null;
+        $user->save();
+
         Auth::guard('web')->logout();
         return response()->json(['message' => 'User session closed'], 200);
     }

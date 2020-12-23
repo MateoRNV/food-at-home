@@ -1,40 +1,24 @@
 <template>
   <v-app>
 
-    <v-app-bar app dark dense>
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+    <v-app-bar app dark>
+      <v-app-bar-nav-icon @click="drawer = true" v-if="$store.state.user && $store.state.user.type === 'EM'"></v-app-bar-nav-icon>
       <v-toolbar-title>Food@Home</v-toolbar-title>
 
       <v-spacer></v-spacer>
       
-      <v-btn to="/">Home</v-btn>
-      <v-btn to="/products">Menu</v-btn>
+      <v-btn to="/" text>Home</v-btn>
+      <v-btn to="/products" text>Menu</v-btn>
       <template v-if="$store.state.user">
-        <v-btn to="/users">Users</v-btn>
-        <v-btn @click.prevent="logout">Logout</v-btn>
+        <v-btn @click.prevent="logout" text>Logout</v-btn>
       </template>
       <template v-if="!$store.state.user">
-        <v-btn to="/login">Login</v-btn>
+        <v-btn to="/login" text>Login</v-btn>
       </template>
       
       <v-spacer></v-spacer>
       
-
-
-
-      <!-- <v-tabs centered class="m1-n9">
-        <v-tab to="/">Home</v-tab>
-        <v-tab to="/products">Menu</v-tab>
-        <template v-if="$store.state.user">
-          <v-tab to="/users">Users</v-tab>
-          <v-tab @click.prevent="logout">Logout</v-tab>
-        </template>
-        <template v-if="!$store.state.user">
-          <v-tab to="/login">Login</v-tab>
-        </template>
-      </v-tabs> -->
-
-      <v-btn icon to="/cart">
+      <v-btn icon to="/cart" v-if="$store.state.user">
         <v-icon>mdi-cart-minus</v-icon>
         <v-badge v-if="$store.state.cartCount > 0" :content="$store.state.cartCount"></v-badge>
         
@@ -49,7 +33,7 @@
 
         <v-list>
           <v-list-item to="/login" v-if="$store.state.user && $store.state.user.type === 'EM'">
-            <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
+            <v-list-item-icon><v-icon>mdi-account</v-icon></v-list-item-icon>
             <v-list-item-title>{{$store.state.user.name}}</v-list-item-title>
           </v-list-item>
           <v-list-item @click.prevent="myself">
@@ -60,7 +44,7 @@
             <v-list-item-icon><v-icon>mdi-settings</v-icon></v-list-item-icon>
             <v-list-item-title>Settings</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/login">
+          <v-list-item @click.prevent="logout">
             <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
             <v-list-item-title>Logout</v-list-item-title>
           </v-list-item>
@@ -75,11 +59,27 @@
     >
       <v-list nav dense>
         <v-list-item-group>
-          <v-list-item>
+          <v-subheader>MANAGEMENT</v-subheader>
+          <v-list-item to="/users">
             <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
+              <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Home</v-list-item-title>
+            <v-list-item-title>Users</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/orders">
+            <v-list-item-icon>
+              <v-icon>mdi-receipt</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Orders</v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+        <v-list-item-group>
+          <v-subheader>DELIVERY</v-subheader>
+          <v-list-item to="/delivery/dashboard">
+            <v-list-item-icon>
+              <v-icon>mdi-view-dashboard</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Dashboard</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -113,6 +113,7 @@ export default {
       axios.post('/api/logout').then(res => {
         this.$toasted.show('User has logget out', {type: 'warning'})
         this.$store.commit('clearUser')
+        this.$store.commit('clearCart')
         this.$router.push('/login')
       }).catch(error => {
         console.log('invalid request')

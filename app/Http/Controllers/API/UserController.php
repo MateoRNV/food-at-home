@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\User as UserResource;
 
 class UserController extends Controller
@@ -38,5 +39,18 @@ class UserController extends Controller
         $user->save();
 
         return response()->json(['user' => $user], 201);
+    }
+
+    public function update(UpdateUserRequest $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->update($request->validated());
+        return new UserResource($user);
+    }
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+        return response()->json(null, 204);
     }
 }

@@ -12,15 +12,10 @@ import ProductComponent from './components/products'
 import LoginComponent from './components/login'
 import RegisterComponent from './components/register'
 import UserComponent from './components/users'
+import CartComponent from './components/cart'
 import App from './App.vue'
 
 Vue.use(VueRouter);
-Vue.use(Toasted, {
-    position: 'bottom-right',
-    duration: 5000,
-    type: 'info'
-})
-
 
 const routes = [
     // { path: '/', redirect: '/products' },
@@ -29,12 +24,22 @@ const routes = [
     { path: '/register', component: RegisterComponent },
     { path: '/products', component: ProductComponent },
     { path: '/users', component: UserComponent },
+    { path: '/cart', component: CartComponent },
 ]
 
 const router = new VueRouter({
     // mode: 'history',
     // base: process.env.APP_URL,
     routes
+})
+
+Vue.use(Toasted, {
+    position: 'bottom-right',
+    duration: 3000,
+    type: 'info',
+    singleton: true,
+    theme: 'outline',
+    router
 })
 
 const app = new Vue({
@@ -45,11 +50,12 @@ const app = new Vue({
     created(){
         this.$store.dispatch('loadUserLogged')
         this.$store.dispatch('loadUsers')
+        //this.$store.dispatch('rebuildCartFromStorage')
     }
 }).$mount('#app')
  
 router.beforeEach((to, from, next) => {
-    console.log(to)
+    // console.log(to)
     if(!store.state.user){
         if((to.path === '/users')){
             Vue.toasted.show('You must login first', {type: 'error'})

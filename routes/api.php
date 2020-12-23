@@ -45,4 +45,5 @@ Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']
 Route::get('customers',         [CustomerController::class, 'index']);
 Route::post('customers',         [CustomerController::class, 'create']); // create customer
 
+Route::post('photos',            [CustomerController::class, 'savePhoto']);
 

@@ -20,7 +20,7 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        return $user;
+        return response()->json($user);
     }
 
     public function me(Request $request){

@@ -59,15 +59,21 @@ export default {
           this.$toasted.show('Welcome back', {type: 'success'})
           this.$router.push('/products')
         }).catch(e => {
-          this.$toasted.show('There was a problem, please try again', {type: 'error'})
+          console.log(e.response)
+
+          if(e.response.status === 403){ // If user is blocked, notify
+            this.$toasted.show(e.response.data.message, {type: 'error'})
+          }else{
+            this.$toasted.show('There was a problem, please try again', {type: 'error'})
+          }
           
           if(this.credentials.email === '')
-            this.emailErrors = "Wrong email"
+            this.emailErrors = "Invalid email"
 
           if(this.credentials.password === '')
-            this.passwordErrors = "Wrong password"
+            this.passwordErrors = "Invalid password"
 
-          
+
         })
       })
     }

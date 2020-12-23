@@ -1,7 +1,28 @@
 <template>
   <v-app>
-    <v-app-bar color="deep-purple" app dark dense>
-      <v-tabs centered class="m1-n9">
+
+    <v-app-bar app dark dense>
+      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-toolbar-title>Food@Home</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+      
+      <v-btn to="/">Home</v-btn>
+      <v-btn to="/products">Menu</v-btn>
+      <template v-if="$store.state.user">
+        <v-btn to="/users">Users</v-btn>
+        <v-btn @click.prevent="logout">Logout</v-btn>
+      </template>
+      <template v-if="!$store.state.user">
+        <v-btn to="/login">Login</v-btn>
+      </template>
+      
+      <v-spacer></v-spacer>
+      
+
+
+
+      <!-- <v-tabs centered class="m1-n9">
         <v-tab to="/">Home</v-tab>
         <v-tab to="/products">Menu</v-tab>
         <template v-if="$store.state.user">
@@ -11,11 +32,12 @@
         <template v-if="!$store.state.user">
           <v-tab to="/login">Login</v-tab>
         </template>
-      </v-tabs>
+      </v-tabs> -->
 
-      <v-btn icon>
+      <v-btn icon to="/cart">
         <v-icon>mdi-cart-minus</v-icon>
-        <v-badge content="6"></v-badge>
+        <v-badge v-if="$store.state.cartCount > 0" :content="$store.state.cartCount"></v-badge>
+        
       </v-btn>
 
       <v-menu offset-y>
@@ -45,6 +67,23 @@
         </v-list>
       </v-menu>
     </v-app-bar>
+
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      temporary
+    >
+      <v-list nav dense>
+        <v-list-item-group>
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-home</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
 
     
     <router-view></router-view>

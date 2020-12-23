@@ -58,7 +58,7 @@
             </v-card-text>
 
             <div class="text-center">
-              <v-btn class="mb-4 white--text" color="grey darken-4">
+              <v-btn class="mb-4 white--text" color="grey darken-4" @click.prevent="addToCart(product)">
                 <v-icon left class="mr-5">mdi-cart-minus</v-icon>
                 Add to cart
               </v-btn>
@@ -107,6 +107,10 @@ export default {
       return items.filter(items => {
         if(item[this.type_sort]) return item;
       })
+    },
+    addToCart(product){
+      this.$store.commit('addToCart', product)
+      this.$toasted.show(product.name + ' added to cart', {type: 'success', action: { text: 'View cart', push : {path: 'cart'}}})
     }
   },
   mounted() {

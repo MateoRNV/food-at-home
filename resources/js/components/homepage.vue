@@ -5,9 +5,9 @@
                 <div class="text-h3 font-weight-medium">Hungry? No problem, we can fix that for you</div>
                 <p class="text-h6 font-weight-normal my-3">Start ordering with Food@Home and get your favorite food delivered in minutes!</p>
                 <div class="d-flex flex-row align-center">
-                    <router-link class="btn btn-primary btn-lg text-white" to="/products">Order now</router-link>
+                    <router-link class="btn btn-primary btn-lg text-white" to="/login">Order now</router-link>
                     <span class="mx-5">or</span>
-                    <router-link class="text-h6 text-dark" to="/products">Create an account</router-link>
+                    <router-link class="text-h6 text-dark" to="/register">Create an account</router-link>
                 </div>
             </div>
             <div class="col-sm-4 p-5">

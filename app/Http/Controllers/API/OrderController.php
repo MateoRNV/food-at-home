@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Resources\Order as OrderResource;
 use App\Models\Order;
+use App\Models\Customer;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Order as OrderResource;
 
 class OrderController extends Controller
 {
@@ -16,7 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return OrderResource::collection(Order::paginate(10));
+        return OrderResource::collection(Order::paginate(5));
     }
 
     /**
@@ -63,4 +64,5 @@ class OrderController extends Controller
     {
         //
     }
+
 }

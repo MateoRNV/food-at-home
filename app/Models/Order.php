@@ -29,4 +29,8 @@ class Order extends Model
 
         return 'Unknown';
     }
+
+    public function customer(){
+        return $this->belongsTo('App\Models\Customer');
+    }
 }

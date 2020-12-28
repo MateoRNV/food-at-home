@@ -6,24 +6,37 @@
                 <v-card-title>Ongoing order</v-card-title>
                 <v-card-subtitle>Remember to complete this order once you're done delivering it</v-card-subtitle>
                 <v-card-actions>
-                    <v-btn color="primary" @click.prevent="getOrders" text>Complete</v-btn>
+                    <v-btn color="primary" class="px-5" @click.prevent="markAsDelivered">Mark as delivered</v-btn>
                 </v-card-actions>
             </v-card>
-            <v-data-table
-                :headers="headers"
-            >
-            </v-data-table>
+            <v-simple-table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Ready at</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="order in orders" :key="order.id">
+                        <th>{{ order.id }}</th>
+                        <th>{{ order.customer_name }}</th>
+                        <th>{{ order.current_status_at }}</th>
+                        <th class="text-right"><v-btn color="primary">Deliver</v-btn></th>
+                    </tr>
+                </tbody>
+            </v-simple-table>
         </v-container>
     </v-main>
 </template>
 
 <script>
 export default {
-    data: {
-        headers: [
-            {text: 'Order ID'},
-        ],
-        orders: []
+    data(){
+        return {
+            orders:[],
+        }
     },
     methods: {
         getOrders(){
@@ -31,7 +44,13 @@ export default {
                 this.orders = res.data.data
                 console.log(this.orders)
             })
+        },
+        markAsDelivered(){
+            this.$toasted.show('Order delivered :D', {type: 'success'})
         }
+    },
+    mounted(){
+        this.getOrders()
     }
 }
 </script>

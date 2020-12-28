@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Throwable;
 use App\Models\User;
-use App\Models\Customer;
+use App\Models\Order;
 use Faker\Provider\Image;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -48,4 +48,5 @@ class CustomerController extends Controller
 
         return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()]);
     }
+
 }

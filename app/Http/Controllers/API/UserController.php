@@ -48,6 +48,7 @@ class UserController extends Controller
         $user->update($request->validated());
         return new UserResource($user);
     }
+    
     public function destroy($id)
     {
         $user = User::findOrFail($id);

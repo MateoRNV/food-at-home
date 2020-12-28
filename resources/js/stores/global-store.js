@@ -11,7 +11,9 @@ export default new Vuex.Store({
         user: null,
         users: [],
         cart: cart ? JSON.parse(cart) : [],
-        cartCount: cartCount ? parseInt(cartCount) : 0
+        cartCount: cartCount ? parseInt(cartCount) : 0,
+
+        isDelivering: false,
     },
     mutations: {
         clearUser (state){

@@ -23,7 +23,7 @@
                         <th>{{ order.id }}</th>
                         <th>{{ order.customer_name }}</th>
                         <th>{{ order.current_status_at }}</th>
-                        <th class="text-right"><v-btn color="primary">Deliver</v-btn></th>
+                        <th class="text-right"><v-btn color="primary" :disabled="$store.state.isDelivering">Deliver</v-btn></th>
                     </tr>
                 </tbody>
             </v-simple-table>
@@ -36,17 +36,23 @@ export default {
     data(){
         return {
             orders:[],
+            currentOrder: {}
         }
     },
     methods: {
         getOrders(){
-            axios.get('api/orders').then(res => {
+            axios.get('api/orders/status/R').then(res => {
                 this.orders = res.data.data
                 console.log(this.orders)
             })
         },
         markAsDelivered(){
             this.$toasted.show('Order delivered :D', {type: 'success'})
+            console.log(this.$store.state.user)
+        },
+        deliver(order){
+            this.currentOrder = order
+            // this.$store.state.
         }
     },
     mounted(){

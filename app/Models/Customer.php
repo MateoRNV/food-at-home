@@ -16,10 +16,10 @@ class Customer extends Model
     ];
 
     public function user(){
-        return $this->belongsTo('App\Models\User', 'id');
+        return $this->belongsTo('App\Models\User', 'id')->withTrashed();
     }
 
     public function order(){
-        return $this->hasMany('App\Models\Order');
+        return $this->hasMany('App\Models\Order', 'customer_id')->withTrashed();
     }
 }

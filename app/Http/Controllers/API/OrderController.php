@@ -17,7 +17,21 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return OrderResource::collection(Order::paginate(5));
+        return OrderResource::collection(Order::all());
+    }
+
+    public function getStatus($status){
+        switch(strtoupper($status)){
+            case 'H':
+            case 'P':
+            case 'R':
+            case 'T':
+            case 'D':
+            case 'C':
+                return OrderResource::collection(Order::where('status', '=', $status)->get());
+        }
+        
+        return response()->json(['message' => 'The status ' . strtoupper($status) . ' does not exist'], 404);
     }
 
     /**

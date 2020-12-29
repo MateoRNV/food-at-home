@@ -137,13 +137,8 @@ export default {
       this.userEdit = item;
       this.dialogAdd = true;
     },
-    fecharDialog(isSucced) {
+    fecharDialog(isSuccess) {
       this.dialogAdd = false;
-      console.log("users vue "+isSucced)
-      /*if (isSucced) {
-      } else {
-        
-      }*/
     },
     deleteDialog(item) {
       (this.dialogDelete = true),

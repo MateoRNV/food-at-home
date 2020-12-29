@@ -45,7 +45,9 @@
             label="Profile photo"
           ></v-file-input>
           <v-row align="center" justify="center">
-            <v-btn color="error" class="mr-4">Reset</v-btn>
+            <v-btn color="error" @click.prevent="cancel" class="mr-4"
+              >Cancel</v-btn
+            >
             <v-btn
               v-if="isNew"
               color="grey darken-4 white--text"
@@ -75,7 +77,6 @@ export default {
     return {
       userTypes: ["EC", "ED", "EM"],
       show: false,
-      success: false,
       rules: {
         required: (value) => !!value || "Required",
       },
@@ -93,7 +94,6 @@ export default {
         .post("/api/users", this.user)
         .then(() => {
           console.log("Registered!");
-          this.success = true;
           this.$toasted.show("Created succed", {
             type: "success",
             duration: 3000,
@@ -108,7 +108,7 @@ export default {
             duration: 3000,
           });
         });
-      this.$emit("dialog", this.success);
+      this.$emit("dialog", true);
     },
     updateAccount() {
       console.log(this.user.id);
@@ -132,7 +132,10 @@ export default {
           });
         });
 
-      this.$emit("dialog", this.success);
+      this.$emit("dialog", false);
+    },
+    cancel() {
+      this.$emit("dialog", false);
     },
   },
 };

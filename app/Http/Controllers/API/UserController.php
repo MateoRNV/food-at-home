@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\User as UserResource;
-use App\Http\Resources\Order as OrderResource;
-use App\Models\Order;
 
 class UserController extends Controller
 {
@@ -43,7 +41,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(201);
+        return response()->json(['User created successfully. ' . $user, 201]);
     }
 
 
@@ -55,12 +53,12 @@ class UserController extends Controller
         $user->save();
 
 
-        return response()->json(null, 204);
+        return response()->json(['User updated successfully. ' . $user, 201]);
     }
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return response()->json(null, 204);
+        return response()->json(['User deleted successfully. ' . $user, 201]);
     }
 }

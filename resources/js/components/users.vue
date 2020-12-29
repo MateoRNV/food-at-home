@@ -1,4 +1,3 @@
-
 <template>
   <v-main class="grey lighten-4">
     <br />
@@ -22,7 +21,7 @@
               </template>
               <user-addEdit
                 :formTitle="title"
-                @registered="fecharDialog"
+                @dialog="fecharDialog"
                 :user="userEdit"
                 :isNew="isNew"
               ></user-addEdit>
@@ -125,8 +124,10 @@ export default {
   },
   methods: {
     addUser() {
-      (this.title = "Add new Employee"), (this.dialogAdd = false);
-      this.isNew = true
+      (this.userEdit = { name: "", email: "", password: "", type: "" }),
+        (this.title = "Add new Employee"),
+        (this.dialogAdd = false);
+      this.isNew = true;
     },
     editItemDialog(item) {
       /*this.editedIndex = this.desserts.indexOf(item);
@@ -136,8 +137,13 @@ export default {
       this.userEdit = item;
       this.dialogAdd = true;
     },
-    fecharDialog(isFechado) {
-      this.dialogAdd = isFechado;
+    fecharDialog(isSucced) {
+      this.dialogAdd = false;
+      console.log("users vue "+isSucced)
+      /*if (isSucced) {
+      } else {
+        
+      }*/
     },
     deleteDialog(item) {
       (this.dialogDelete = true),

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,10 +25,10 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', ],
-            'email' => ['required', 'email', 'unique:users'],
-            'type' => ['required', Rule::in(['EM', 'EC', 'ED', 'C'])],
-            'password' => ['required', 'min:3'] 
+            'name' => ['required','alpha'],
+            'email' => ['required', 'email'],
+            'password' => ['nullable'],
+            'type' => ['required', Rule::in(['EM', 'EC', 'ED', 'C'])]
         ];
     }
 }

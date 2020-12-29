@@ -76,7 +76,6 @@ export default {
       userTypes: ["EC", "ED", "EM"],
       show: false,
       success: false,
-
       rules: {
         required: (value) => !!value || "Required",
       },
@@ -90,36 +89,50 @@ export default {
   },
   methods: {
     registerAccount() {
-      console.log(this.user);
       axios
         .post("/api/users", this.user)
         .then(() => {
           console.log("Registered!");
-          this.$toast.success("User created successfully!").goAway(3000);
           this.success = true;
+          this.$toasted.show("Created succed", {
+            type: "success",
+            duration: 3000,
+          });
         })
         .catch((e) => {
           console.log("Oh oh!");
           console.log(e.response.data.errors);
           this.errors = e.response.data.errors;
-          this.$toasted
-            .show("There was a problem, please try again", { type: "error" })
-            .goAway(3000);
+          this.$toasted.show("Created failed", {
+            type: "error",
+            duration: 3000,
+          });
         });
-      this.$emit("registered", this.success);
+      this.$emit("dialog", this.success);
     },
     updateAccount() {
-        console.log(this.user.id)
-        axios
-          .put("/api/users/" + this.user.id, this.user)
-          .then(() => {
-            console.log("Updated!");
-          })
-          .catch((e) => {
-            console.log("Oh oh!");
-            console.log(e.response.data.errors);
-            this.errors = e.response.data.errors;
+      console.log(this.user.id);
+      axios
+        .put("/api/users/" + this.user.id, this.user)
+        .then(() => {
+          console.log("Updated!");
+          console.log(this.user);
+          this.$toasted.show("Updated succed", {
+            type: "success",
+            duration: 3000,
           });
+        })
+        .catch((e) => {
+          console.log("Oh oh!");
+          console.log(e.response.data.errors);
+          this.errors = e.response.data.errors;
+          this.$toasted.show("Updated failed", {
+            type: "error",
+            duration: 3000,
+          });
+        });
+
+      this.$emit("dialog", this.success);
     },
   },
 };

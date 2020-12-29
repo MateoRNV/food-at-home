@@ -76,7 +76,6 @@ export default {
       userTypes: ["EC", "ED", "EM"],
       show: false,
       success: false,
-
       rules: {
         required: (value) => !!value || "Required",
       },
@@ -90,22 +89,22 @@ export default {
   },
   methods: {
     registerAccount() {
-      console.log(this.user);
       axios
         .post("/api/users", this.user)
         .then(() => {
           console.log("Registered!");
-          this.$toast.success("User created successfully!").goAway(3000);
           this.success = true;
+        this.$toast.show("User created successfully!");
         })
         .catch((e) => {
           console.log("Oh oh!");
           console.log(e.response.data.errors);
           this.errors = e.response.data.errors;
           this.$toasted
-            .show("There was a problem, please try again", { type: "error" })
-            .goAway(3000);
+          .show("There was a problem, please try again")
+          this.success = false
         });
+        console.log("user add edit "+this.success)
       this.$emit("registered", this.success);
     },
     updateAccount() {
@@ -114,6 +113,7 @@ export default {
           .put("/api/users/" + this.user.id, this.user)
           .then(() => {
             console.log("Updated!");
+            console.log(this.user)
           })
           .catch((e) => {
             console.log("Oh oh!");

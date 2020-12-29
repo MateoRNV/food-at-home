@@ -13,6 +13,7 @@ import ProductComponent from './components/products'
 import AdminProductComponent from './components/manager/products'
 import LoginComponent from './components/login'
 import RegisterComponent from './components/register'
+import CookComponent from './components/cook'
 import UserComponent from './components/users'
 import CartComponent from './components/cart'
 import DeliveryDashboardComponent from './components/delivery-dashboard'
@@ -27,6 +28,7 @@ const routes = [
     { path: '/register', component: RegisterComponent },
     { path: '/products', component: ProductComponent },
     { path: '/users', component: UserComponent },
+    { path: '/cook', component: CookComponent },
     { path: '/cart', component: CartComponent },
     { path: '/delivery/dashboard', component: DeliveryDashboardComponent },
     { path: '/manager/products', component: AdminProductComponent },

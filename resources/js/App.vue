@@ -66,6 +66,14 @@
             </v-list-item-icon>
             <v-list-item-title>Users</v-list-item-title>
           </v-list-item>
+
+          <v-list-item to="/cook">
+            <v-list-item-icon>
+              <v-icon>mdi-receipt</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Cook</v-list-item-title>
+          </v-list-item>
+
           <v-list-item to="/manager/products">
             <v-list-item-icon>
               <v-icon>mdi-receipt</v-icon>
@@ -101,12 +109,14 @@
 import ProductComponent from "./components/products";
 import LoginComponent from "./components/login";
 import UserComponent from "./components/users"
+import CookComponent from "./components/cook"
 
 export default {
   components: {
     product: ProductComponent,
     login: LoginComponent,
-    user: UserComponent
+    user: UserComponent,
+    cook: CookComponent
   },
   data(){
     return{

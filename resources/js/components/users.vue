@@ -21,7 +21,7 @@
               </template>
               <user-addEdit
                 :formTitle="title"
-                @registered="fecharDialog"
+                @dialog="fecharDialog"
                 :user="userEdit"
                 :isNew="isNew"
               ></user-addEdit>

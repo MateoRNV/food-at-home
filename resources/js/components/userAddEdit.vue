@@ -94,32 +94,45 @@ export default {
         .then(() => {
           console.log("Registered!");
           this.success = true;
-        this.$toast.show("User created successfully!");
+          this.$toasted.show("Created succed", {
+            type: "success",
+            duration: 3000,
+          });
         })
         .catch((e) => {
           console.log("Oh oh!");
           console.log(e.response.data.errors);
           this.errors = e.response.data.errors;
-          this.$toasted
-          .show("There was a problem, please try again")
-          this.success = false
+          this.$toasted.show("Created failed", {
+            type: "error",
+            duration: 3000,
+          });
         });
-        console.log("user add edit "+this.success)
-      this.$emit("registered", this.success);
+      this.$emit("dialog", this.success);
     },
     updateAccount() {
-        console.log(this.user.id)
-        axios
-          .put("/api/users/" + this.user.id, this.user)
-          .then(() => {
-            console.log("Updated!");
-            console.log(this.user)
-          })
-          .catch((e) => {
-            console.log("Oh oh!");
-            console.log(e.response.data.errors);
-            this.errors = e.response.data.errors;
+      console.log(this.user.id);
+      axios
+        .put("/api/users/" + this.user.id, this.user)
+        .then(() => {
+          console.log("Updated!");
+          console.log(this.user);
+          this.$toasted.show("Updated succed", {
+            type: "success",
+            duration: 3000,
           });
+        })
+        .catch((e) => {
+          console.log("Oh oh!");
+          console.log(e.response.data.errors);
+          this.errors = e.response.data.errors;
+          this.$toasted.show("Updated failed", {
+            type: "error",
+            duration: 3000,
+          });
+        });
+
+      this.$emit("dialog", this.success);
     },
   },
 };

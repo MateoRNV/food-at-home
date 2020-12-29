@@ -12,6 +12,7 @@
               :search="search"
               :multi-sort="true"
               hide-default-footer
+              class="w-100"
             >
               <!-- Toolbar -->
               <template v-slot:header>
@@ -71,7 +72,7 @@
                   <v-col
                     v-for="product in props.items"
                     :key="product.id"
-                    
+                    class="p-2"
                   >
                     <v-card
                       class="my-12"

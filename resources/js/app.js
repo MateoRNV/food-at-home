@@ -10,6 +10,7 @@ import Toasted from 'vue-toasted'
 import store from './stores/global-store'
 import HomepageComponent from './components/homepage'
 import ProductComponent from './components/products'
+import AdminProductComponent from './components/manager/products'
 import LoginComponent from './components/login'
 import RegisterComponent from './components/register'
 import UserComponent from './components/users'
@@ -28,6 +29,7 @@ const routes = [
     { path: '/users', component: UserComponent },
     { path: '/cart', component: CartComponent },
     { path: '/delivery/dashboard', component: DeliveryDashboardComponent },
+    { path: '/manager/products', component: AdminProductComponent },
 ]
 
 const router = new VueRouter({

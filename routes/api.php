@@ -36,7 +36,12 @@ Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logou
 Route::get('orders',            [OrderController::class, 'index']);
 Route::get('orders/status/{status}',            [OrderController::class, 'getStatus']);
 
-Route::get('products',          [ProductController::class, 'index']);
+Route::get('products',                       [ProductController::class, 'index']);
+Route::post('products',                      [ProductController::class, 'create']);
+Route::put('products/{id}',                  [ProductController::class, 'update']);
+Route::delete('products/{product}',          [ProductController::class, 'delete']);
+
+
 Route::get('cook/{id}',         [UserController::class, 'getOrdersByCook']);
 
 Route::get('users',             [UserController::class, 'index']);

@@ -5,6 +5,7 @@ window.Vue = require('vue')
 import Vue from 'vue'
 import vuetify from './vuetify.js'
 import VueRouter from 'vue-router'
+import VueSocketIO from 'vue-socket.io'
 import Toasted from 'vue-toasted'
 import store from './stores/global-store'
 import HomepageComponent from './components/homepage'
@@ -35,6 +36,11 @@ const router = new VueRouter({
     routes
 })
 
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: 'http://127.0.0.1:8080'
+}))
+
 Vue.use(Toasted, {
     position: 'bottom-right',
     duration: 3000,
@@ -55,7 +61,7 @@ const app = new Vue({
         //this.$store.dispatch('rebuildCartFromStorage')
     }
 }).$mount('#app')
- 
+
 router.beforeEach((to, from, next) => {
     if(!store.state.user){
         if((to.path === '/users') || (to.path === '/cart')){

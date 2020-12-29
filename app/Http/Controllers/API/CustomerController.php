@@ -41,12 +41,12 @@ class CustomerController extends Controller
         return response()->json(['user' => $user, 'customer' => $customer]);
     }
 
-    public function savePhoto(Request $request){
+    public function uploadPhoto(Request $request){
         $request->validate(['photo_file' => 'nullable|image|mimes:jpeg,png,jpg']);
 
         $path = Storage::putFile('public/fotos', $request->file('photo_file'));
 
-        return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()]);
+        return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()], 201);
     }
 
 }

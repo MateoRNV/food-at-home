@@ -38,6 +38,7 @@ Route::get('orders/status/{status}',            [OrderController::class, 'getSta
 
 Route::get('products',                       [ProductController::class, 'index']);
 Route::post('products',                      [ProductController::class, 'create']);
+Route::post('products/photos',                [ProductController::class, 'uploadPhoto']);
 Route::put('products/{id}',                  [ProductController::class, 'update']);
 Route::delete('products/{product}',          [ProductController::class, 'delete']);
 
@@ -54,6 +55,6 @@ Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']
 
 Route::get('customers',         [CustomerController::class, 'index']);
 Route::post('customers',         [CustomerController::class, 'create']); // create customer
+Route::post('customer/photos',            [CustomerController::class, 'uploadPhoto']);
 
-Route::post('photos',            [CustomerController::class, 'savePhoto']);
 

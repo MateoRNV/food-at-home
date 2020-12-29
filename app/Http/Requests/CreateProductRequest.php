@@ -36,7 +36,7 @@ class CreateProductRequest extends FormRequest
     public function messages(){
         return [
             'name.required' => "The name is required",
-            'name.required' => "The name must be unique",
+            'name.regex' => "The name must be unique",
 
             'type.required' => "The product type is required",
 

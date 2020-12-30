@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'notes'
+        'notes', 'customer_id', 'total_price'
     ];
 
     public function statusToStr(){
@@ -32,5 +32,9 @@ class Order extends Model
 
     public function customer(){
         return $this->belongsTo('App\Models\Customer')->withTrashed();
+    }
+
+    public function orderItem(){
+        return $this->hasMany('App\Models\OrderItem', 'order_id')->withTrashed();
     }
 }

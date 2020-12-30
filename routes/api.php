@@ -33,9 +33,10 @@ Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logou
 // Protect a route so it's only accessible to authenticated users
 //Route::middleware('auth:sanctum')->get('orders', [OrderController::class, 'index']);
 
-Route::get('orders',            [OrderController::class, 'index']);
-Route::get('orders/status/{status}',            [OrderController::class, 'getStatus']);
+Route::get('orders',                       [OrderController::class, 'index']);
+Route::get('orders/status/{status}',       [OrderController::class, 'getStatus']);
 Route::get('orders/{id}/{status}',         [OrderController::class, 'getOrdersByCook']);
+Route::post('orders',                      [OrderController::class, 'create']); // create order
 
 Route::get('products',                       [ProductController::class, 'index']);
 Route::post('products',                      [ProductController::class, 'create']);
@@ -43,7 +44,6 @@ Route::post('products/photos',               [ProductController::class, 'uploadP
 Route::post('products/photos/{id}',          [ProductController::class, 'updatePhoto']);
 Route::put('products/{id}',                  [ProductController::class, 'update']);
 Route::delete('products/{id}',               [ProductController::class, 'delete']);
-
 
 
 Route::get('users',             [UserController::class, 'index']);

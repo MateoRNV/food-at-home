@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\OrderItem;
 use App\Models\Order;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Order as OrderResource;
+use App\Http\Requests\CreateOrderRequest;
 
 class OrderController extends Controller
 {
@@ -49,6 +51,26 @@ class OrderController extends Controller
         
         return response()->json(['message' => 'The id of the cook ' . $id. ' or the status '. strtoupper($status) . 
                                                 ' does not exist'], 404);
+    }
+
+    public function create(CreateOrderRequest $request){
+
+        $orderItem = new OrderItem;
+        $order = new Order;
+        
+        $order->fill($request->validated());
+
+        $order->save();
+
+        try{
+            $orderItem->fill($request->validated());
+            $orderItem->order_id = $order->id;
+            $orderItem->save();
+        }catch(Throwable $error){
+            $order->delete();
+        }
+        
+        return response()->json(200);
     }
 
     /**

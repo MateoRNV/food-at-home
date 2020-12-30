@@ -8,6 +8,7 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Order as OrderResource;
+use App\Http\Resources\SingleOrder as SingleOrderResource;
 use App\Http\Requests\CreateOrderRequest;
 
 class OrderController extends Controller
@@ -30,7 +31,7 @@ class OrderController extends Controller
             case 'T':
             case 'D':
             case 'C':
-                return OrderResource::collection(Order::where('status', '=', $status)->get());
+                return OrderResource::collection(Order::where('status', '=', $status)->get())->sortBy('current_status_at')->values()->all();
         }
         
         return response()->json(['message' => 'The status ' . strtoupper($status) . ' does not exist'], 404);
@@ -45,12 +46,14 @@ class OrderController extends Controller
             case 'D':
             case 'C':
 
-                return OrderResource::collection(Order::where('status', '=', $status)
-                                                        ->where('prepared_by','=',$id)->get());
+                return OrderResource::collection(Order::where('status', '=', $status)->where('prepared_by','=',$id)->get());
         }
         
-        return response()->json(['message' => 'The id of the cook ' . $id. ' or the status '. strtoupper($status) . 
-                                                ' does not exist'], 404);
+        return response()->json(['message' => 'The id of the cook ' . $id. ' or the status '. strtoupper($status) . ' does not exist'], 404);
+    }
+
+    public function getOrderById($id){
+        return SingleOrderResource::collection(Order::where('id', '=', $id)->get());
     }
 
     public function create(CreateOrderRequest $request){

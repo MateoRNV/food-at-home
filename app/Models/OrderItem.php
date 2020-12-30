@@ -15,4 +15,8 @@ class OrderItem extends Model
     public function order(){
         return $this->belongsTo('App\Models\Order')->withTrashed();
     }
+
+    public function product(){
+        return $this->hasOne('App\Models\Product');
+    }
 }

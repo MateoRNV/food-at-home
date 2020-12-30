@@ -35,6 +35,6 @@ class Order extends Model
     }
 
     public function orderItem(){
-        return $this->hasMany('App\Models\OrderItem', 'order_id')->withTrashed();
+        return $this->hasMany('App\Models\OrderItem', 'order_id');
     }
 }

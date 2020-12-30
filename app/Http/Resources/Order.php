@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use Carbon\Carbon;
 class Order extends JsonResource
 {
     /**
@@ -24,12 +24,12 @@ class Order extends JsonResource
             'date' => $this->date,
             'prepared_by' => $this->prepared_by,
             'delivered_by' => $this->delivered_by,
-            'opened_at' => $this->opened_at,
-            'closed_at' => $this->closed_at,
+            'opened_at' => Carbon::parse($this->opened_at)->toTimeString(),
+            'closed_at' => Carbon::parse($this->closed_at)->toTimeString(),
             'preparation_time' => $this->preparation_time,
             'delivery_time' => $this->delivery_time,
             'total_time' => $this->total_time,
-            'current_status_at' => $this->current_status_at,
+            'current_status_at' => Carbon::parse($this->current_status_at)->toTimeString(),
         ];
     }
 }

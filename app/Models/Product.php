@@ -18,4 +18,8 @@ class Product extends Model
         'price'
     ];
 
+    public function orderItem(){
+        return $this->belongsTo('App\Models\OrderItem');
+    }
+
 }

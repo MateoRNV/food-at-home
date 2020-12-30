@@ -16,6 +16,7 @@ import RegisterComponent from './components/register'
 import CookComponent from './components/cook'
 import UserComponent from './components/users'
 import CartComponent from './components/cart'
+import EditProfileComponent from './components/editProfile'
 import DeliveryDashboardComponent from './components/delivery-dashboard'
 import App from './App.vue'
 
@@ -32,6 +33,7 @@ const routes = [
     { path: '/cart', component: CartComponent },
     { path: '/delivery/dashboard', component: DeliveryDashboardComponent },
     { path: '/manager/products', component: AdminProductComponent },
+    { path: '/me/edit', component: EditProfileComponent },
 ]
 
 const router = new VueRouter({

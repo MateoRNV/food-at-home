@@ -40,7 +40,7 @@
             <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
             <v-list-item-title>Orders</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/login">
+          <v-list-item to="/me/edit">
             <v-list-item-icon><v-icon>mdi-settings</v-icon></v-list-item-icon>
             <v-list-item-title>Settings</v-list-item-title>
           </v-list-item>
@@ -110,13 +110,15 @@ import ProductComponent from "./components/products";
 import LoginComponent from "./components/login";
 import UserComponent from "./components/users"
 import CookComponent from "./components/cook"
+import EditProfileComponent from "./components/editProfile"
 
 export default {
   components: {
     product: ProductComponent,
     login: LoginComponent,
     user: UserComponent,
-    cook: CookComponent
+    cook: CookComponent,
+    edit: EditProfileComponent,
   },
   data(){
     return{

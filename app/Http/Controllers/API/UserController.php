@@ -50,11 +50,14 @@ class UserController extends Controller
         $validated = $request->validated();
         $user = User::findOrFail($id);
         $user->fill($validated);
+        $user->password = Hash::make($request->password);
+
         $user->save();
 
 
         return response()->json(['User updated successfully. ' . $user, 201]);
     }
+    
     public function destroy($id)
     {
         $user = User::findOrFail($id);

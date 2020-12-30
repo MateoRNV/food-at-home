@@ -56,8 +56,10 @@ Route::delete('users/{user}',   [UserController::class, 'destroy']);//delete use
 
 Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']);
 
-Route::get('customers',         [CustomerController::class, 'index']);
-Route::post('customers',         [CustomerController::class, 'create']); // create customer
-Route::post('customer/photos',            [CustomerController::class, 'uploadPhoto']);
+Route::get('customers',              [CustomerController::class, 'index']);
+Route::get('customers/{id}',         [CustomerController::class, 'me']);
+Route::post('customers',             [CustomerController::class, 'create']); // create customer
+Route::put('customers/{id}',         [CustomerController::class, 'update']);    //edit customer
+Route::post('customer/photos',       [CustomerController::class, 'uploadPhoto']);
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Throwable;
 use App\Models\User;
+use App\Models\Customer;
 use App\Models\Order;
 use Faker\Provider\Image;
 use Illuminate\Support\Str;
@@ -12,12 +13,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CreateCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\Customer as CustomerResource;
 
 class CustomerController extends Controller
 {
     public function index(){
         return CustomerResource::collection(Customer::all());
+    }
+
+    public function me($id){
+
+        $customer = new Customer;
+        $customer = Customer::findOrFail($id);
+
+        return response()->json($customer);
     }
 
     public function create(CreateCustomerRequest $request){
@@ -39,6 +49,36 @@ class CustomerController extends Controller
         }
         
         return response()->json(['user' => $user, 'customer' => $customer]);
+    }
+
+    public function update(UpdateCustomerRequest $request, $id)
+    {
+
+        $user = new User;
+        $customer = new Customer;
+
+        $user = User::findOrFail($id);
+        $customer = Customer::findOrFail($id);
+
+        $user->type = 'C';
+
+        $user->fill($request->validated());
+        $user->password = Hash::make($request->password);
+        //$user->save();
+
+
+        try{
+            $customer->fill($request->validated());
+
+            $customer->save();
+
+        }catch(Throwable $error){
+            $user->getOriginal();
+        }
+        
+        $user->save();
+
+        return response()->json(['User updated successfully. ' . $user, 201]);
     }
 
     public function uploadPhoto(Request $request){

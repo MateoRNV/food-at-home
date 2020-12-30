@@ -20,8 +20,8 @@ class SingleOrder extends JsonResource
         $orderItems = $this->orderItem;
 
         foreach($orderItems as $item){
-            $productName = Product::where('id', $item->product_id)->pluck('name')->first();
-            $productPhoto = Product::where('id', $item->product_id)->pluck('photo_url')->first();
+            $productName = Product::withTrashed()->where('id', $item->product_id)->pluck('name')->first();
+            $productPhoto = Product::withTrashed()->where('id', $item->product_id)->pluck('photo_url')->first();
             $item->setAttribute('product_name', $productName);
             $item->setAttribute('product_photo', $productPhoto);
         }

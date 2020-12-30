@@ -19,7 +19,7 @@ class Product extends Model
     ];
 
     public function orderItem(){
-        return $this->belongsTo('App\Models\OrderItem');
+        return $this->belongsTo('App\Models\OrderItem')->withTrashed();
     }
 
 }

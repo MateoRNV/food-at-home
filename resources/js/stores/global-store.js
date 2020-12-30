@@ -14,20 +14,19 @@ export default new Vuex.Store({
         cartCount: cartCount ? parseInt(cartCount) : 0,
 
         isDelivering: false,
+        orderBeingDelivered: ''
     },
     mutations: {
-        clearUser (state){
+        CLEAR_USER (state){
             state.user = null
         },
-        setUser (state, user){
+        SET_USER (state, user){
             state.user = user
         },
-        setUsers(state, users){
+        SET_USER_LIST(state, users){
             state.users = users
         },
-        addToCart(state, item){
-            console.log(`${item.name} added to cart`)
-
+        ADD_ITEM_TO_CART(state, item){
             let found = state.cart.find(product => product.id == item.id)
 
             if(found){
@@ -81,18 +80,25 @@ export default new Vuex.Store({
     actions: {
         loadUserLogged(context){
             axios.get('api/users/me').then(res => {
-                context.commit('setUser', res.data)
+                context.commit('SET_USER', res.data)
             })
             .catch(e => {
-                context.commit('clearUser')
+                context.commit('CLEAR_USER')
             })
         },
         loadUsers(context){
             axios.get('api/users').then(res => {
-                context.commit('setUsers', res.data.data)
+                context.commit('SET_USER_LIST', res.data.data)
             }).catch(e => {
-                context.commit('setUsers', null)
+                context.commit('SET_USER_LIST', null)
             })
         },
+        addToCart(context){
+            console.log(`${item.name} added to cart`)
+            context.commit('ADD_ITEM_TO_CART')
+        }
+    },
+    getters: {
+
     }
 })

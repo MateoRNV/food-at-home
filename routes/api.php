@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logou
 Route::get('orders',                       [OrderController::class, 'index']);
 Route::get('orders/status/{status}',       [OrderController::class, 'getStatus']);
 Route::get('orders/{id}/{status}',         [OrderController::class, 'getOrdersByCook']);
+Route::post('orders/{id}/status/{status}',        [OrderController::class, 'setOrderStatus']);
 Route::get('orders/{id}',                  [OrderController::class, 'getOrderById']);
 Route::post('orders',                      [OrderController::class, 'create']); // create order
 

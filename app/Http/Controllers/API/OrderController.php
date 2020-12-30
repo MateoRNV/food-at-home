@@ -56,6 +56,27 @@ class OrderController extends Controller
         return SingleOrderResource::collection(Order::where('id', '=', $id)->get());
     }
 
+    public function setOrderStatus($id, $status){
+        $order = Order::findOrFail($id);
+
+        switch($status){
+            case 'H':
+            case 'P':
+            case 'R':
+            case 'T':
+            case 'D':
+            case 'C':
+                $oldStatus = $order->status;
+                $status = strtoupper($status);
+                $order->status = $status;
+                $order->save();
+                return response()->json(['Order status updated. Order went from '. $oldStatus . ' to ' . $order->status, $order], 200);
+        }
+
+        return response()->json('Status ' . $status . ' doesn\'t exist', 404);
+        
+    }
+
     public function create(CreateOrderRequest $request){
 
         $orderItem = new OrderItem;

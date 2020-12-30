@@ -68,7 +68,7 @@
           </v-list-item>
           <v-list-item to="/manager/products">
             <v-list-item-icon>
-              <v-icon>mdi-receipt</v-icon>
+              <v-icon>mdi-cart-arrow-down</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Products</v-list-item-title>
           </v-list-item>

@@ -38,9 +38,10 @@ Route::get('orders/status/{status}',            [OrderController::class, 'getSta
 
 Route::get('products',                       [ProductController::class, 'index']);
 Route::post('products',                      [ProductController::class, 'create']);
-Route::post('products/photos',                [ProductController::class, 'uploadPhoto']);
+Route::post('products/photos',               [ProductController::class, 'uploadPhoto']);
+Route::post('products/photos/{id}',          [ProductController::class, 'updatePhoto']);
 Route::put('products/{id}',                  [ProductController::class, 'update']);
-Route::delete('products/{product}',          [ProductController::class, 'delete']);
+Route::delete('products/{id}',               [ProductController::class, 'delete']);
 
 
 Route::get('cook/{id}',         [UserController::class, 'getOrdersByCook']);

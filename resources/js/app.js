@@ -64,6 +64,7 @@ const app = new Vue({
     created(){
         this.$store.dispatch('loadUserLogged')
         this.$store.dispatch('loadUsers')
+        this.$store.dispatch('loadProducts')
         //this.$store.dispatch('rebuildCartFromStorage')
     }
 }).$mount('#app')

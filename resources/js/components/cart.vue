@@ -95,7 +95,7 @@
             </div>
           </v-col>
           <v-col class="text-right">
-            <v-btn color="error" @click.prevent="$store.commit('clearCart')"
+            <v-btn color="error" @click.prevent="$store.commit('CLEAR_CART')"
               >Clear cart</v-btn
             >
             <v-btn @click="openDialog" color="primary">Checkout</v-btn>
@@ -117,17 +117,17 @@ export default {
 
   methods: {
     removeFromCart(item) {
-      this.$store.commit("removeFromCart", item);
+      this.$store.commit("REMOVE_ITEM_FROM_CART", item);
     },
     incrementProductQuantity(item) {
-      this.$store.commit("addToCart", item);
+      this.$store.commit("ADD_ITEM_TO_CART", item);
     },
     decrementProductQuantity(item) {
       if (item.quantity === 1) {
         return;
       }
 
-      this.$store.commit("decrementCart", item);
+      this.$store.commit("DECREMENT_CART_QUANTITY", item);
     },
     openDialog() {
       this.dialog = true;

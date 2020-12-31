@@ -1,7 +1,7 @@
 <template>
   <v-main class="grey lighten-4">
     <v-container fluid>
-      <v-data-table :headers="headers" :items="products" :items-per-page="10">
+      <v-data-table :headers="headers" :items="$store.state.products" :items-per-page="10">
         <template v-slot:top>
           <v-toolbar flat>
             <v-toolbar-title>Products</v-toolbar-title>
@@ -234,7 +234,6 @@
 export default {
   data() {
     return {
-      products: [],
       productToDelete: '',
       productToEdit: '',
       form: {
@@ -260,20 +259,20 @@ export default {
     };
   },
   methods: {
-    getProducts() {
-      axios
-        .get("api/products")
-        .then((res) => {
-          this.products = res.data.data;
-        })
-        .catch(() => {
-          console.error("There was a problem while fetching products");
-        });
-    },
+    // getProducts() {
+    //   axios
+    //     .get("api/products")
+    //     .then((res) => {
+    //       this.products = res.data.data;
+    //     })
+    //     .catch(() => {
+    //       console.error("There was a problem while fetching products");
+    //     });
+    // },
     insertProduct() {
       axios.post("api/products", this.form)
-        .then(() => {
-          this.getProducts()
+        .then(res => {
+          this.$store.commit('ADD_PRODUCT_TO_LIST', res.data[1])
           this.$toasted.show('Product created successfully', {type: 'success'})
           this.dialog = false
         })
@@ -356,7 +355,7 @@ export default {
     updateProduct(product){
         axios.put('/api/products/' + product.id, this.form)
         .then(() => {
-            this.getProducts()
+            // this.getProducts()
             this.dialogEdit = false
             this.productToEdit = ''
             this.clearForm()
@@ -368,9 +367,11 @@ export default {
         })
     },
     deleteProduct(product){
-        axios.delete('/api/products/' + product.id)
-        .then(() => {
-            this.getProducts()
+      
+      axios.delete('/api/products/' + product.id)
+        .then(res => {
+            this.$store.commit('REMOVE_PRODUCT_FROM_LIST', product)
+
             this.dialogDelete = false
             this.productToDelete = ''
             this.$toasted.show('Product deleted successfully', {type: 'success'})
@@ -385,7 +386,7 @@ export default {
     },
   },
   mounted() {
-    this.getProducts();
+    //this.getProducts();
   },
 };
 </script>

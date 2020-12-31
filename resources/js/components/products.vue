@@ -6,7 +6,7 @@
        
         <div class="d-flex flex-wrap justify-space-around">
           <v-data-iterator
-              :items="products"
+              :items="$store.state.products"
               :items-per-page.sync="itemsPerPage"
               :page="page"
               :search="search"
@@ -185,19 +185,11 @@ export default {
       types: ['hot dish', 'cold dish', 'dessert', 'drink'],
       sortBy: 'name',
       sortDesc: false,
-      products: [],
     }
   },
   methods: {
-    getProducts(){
-      axios.get('api/products').then((response) => {
-        this.$root.products = response.data.data;
-        this.products = this.$root.products;
-        console.log(this.products)
-      });
-    },
     addToCart(product){
-      this.$store.commit('addToCart', product)
+      this.$store.commit('ADD_ITEM_TO_CART', product)
       this.$toasted.show(product.name + ' added to cart', {type: 'success', action: { text: 'View cart', push: {path: 'cart'}}})
     },
     nextPage () {
@@ -210,12 +202,9 @@ export default {
       this.itemsPerPage = number
     },
   },
-  mounted() {
-    this.getProducts()
-  },
   computed:{
     numberOfPages () {
-      return Math.ceil(this.products.length / this.itemsPerPage)
+      return Math.ceil(this.$store.state.products.length / this.itemsPerPage)
     },
     filteredKeys () {
       return this.types.filter(key => key !== 'name')

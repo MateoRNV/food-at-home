@@ -10,6 +10,7 @@ export default new Vuex.Store({
     state: {
         user: null,
         users: [],
+        products: [],
         cart: cart ? JSON.parse(cart) : [],
         cartCount: cartCount ? parseInt(cartCount) : 0,
 
@@ -17,7 +18,7 @@ export default new Vuex.Store({
         orderBeingDelivered: ''
     },
     mutations: {
-        CLEAR_USER (state){
+        CLEAR_USER(state){
             state.user = null
         },
         SET_USER (state, user){
@@ -25,6 +26,22 @@ export default new Vuex.Store({
         },
         SET_USER_LIST(state, users){
             state.users = users
+        },
+        SET_PRODUCTS_LIST(state, products){
+            state.products = products
+        },
+        ADD_PRODUCT_TO_LIST(state, product){
+            state.products.push(product)
+        },
+        REMOVE_PRODUCT_FROM_LIST(state, product){
+            const index = state.products.indexOf(product)
+            console.log(index)
+            console.log('wtf')
+
+            if(index > -1){
+                console.log('inside index')
+                console.log(state.products.splice(index, 1))
+            }
         },
         ADD_ITEM_TO_CART(state, item){
             let found = state.cart.find(product => product.id == item.id)
@@ -41,9 +58,9 @@ export default new Vuex.Store({
 
             state.cartCount++
             
-            this.commit('saveCart')
+            this.commit('SAVE_CART')
         },
-        removeFromCart(state, item){
+        REMOVE_ITEM_FROM_CART(state, item){
             let index = state.cart.indexOf(item)
 
             if(index > -1){
@@ -53,9 +70,9 @@ export default new Vuex.Store({
                 state.cart.splice(index,1)
             }
 
-            this.commit('saveCart')
+            this.commit('SAVE_CART')
         },
-        decrementCart(state, item){
+        DECREMENT_CART_QUANTITY(state, item){
             item.quantity--
             item.totalPrice = item.quantity * item.price
 
@@ -65,11 +82,11 @@ export default new Vuex.Store({
 
             this.commit('saveCart')
         },
-        saveCart(state){
+        SAVE_CART(state){
             sessionStorage.setItem('cart', JSON.stringify(state.cart))
             sessionStorage.setItem('cartCount', state.cartCount)
         },
-        clearCart(state){
+        CLEAR_CART(state){
             state.cart = []
             state.cartCount = 0
 
@@ -93,9 +110,12 @@ export default new Vuex.Store({
                 context.commit('SET_USER_LIST', null)
             })
         },
-        addToCart(context){
-            console.log(`${item.name} added to cart`)
-            context.commit('ADD_ITEM_TO_CART')
+        loadProducts(context){
+            axios.get('api/products').then(res => {
+                context.commit('SET_PRODUCTS_LIST', res.data.data)
+            }).catch(e => {
+                context.commit('SET_PRODUCTS_LIST', null)
+            })
         }
     },
     getters: {

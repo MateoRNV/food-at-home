@@ -130,8 +130,8 @@ export default {
     logout(){
       axios.post('/api/logout').then(res => {
         this.$toasted.show('User has logget out', {type: 'warning'})
-        this.$store.commit('clearUser')
-        this.$store.commit('clearCart')
+        this.$store.commit('CLEAR_USER')
+        this.$store.commit('CLEAR_CART')
         this.$router.push('/login')
       }).catch(error => {
         console.log('invalid request')
@@ -145,7 +145,6 @@ export default {
             this.$store.state.user.name + '<br>' +
             this.$store.state.user.email, {type: 'info'}
           )
-          console.log(this.$store.state.user)
         }else{
           this.$toasted.show('No user logged in', {type: 'warning'})
         }

@@ -50,12 +50,12 @@ export default {
   },
   methods: {
     login(){
-      this.$store.commit('clearUser')
+      this.$store.commit('CLEAR_USER')
       this.emailErrors = ""
       this.passwordErrors = ""
       axios.get('/sanctum/csrf-cookie').then(res => {
         axios.post('/api/login', this.credentials).then( res => {
-          this.$store.commit('setUser', res.data)
+          this.$store.commit('SET_USER', res.data)
           this.$toasted.show('Welcome back', {type: 'success'})
           this.$router.push('/products')
         }).catch(e => {

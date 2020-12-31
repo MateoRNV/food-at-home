@@ -10,7 +10,7 @@
             ><v-btn
               color="primary"
               class="px-5"
-              @click.prevent=""
+              @click.prevent="completePreparing"
               >Mark as Prepared</v-btn
             >
           </v-card-actions>
@@ -34,18 +34,26 @@ export default {
     getOrders() {
       // console.log(this.$store.state.user.id);
       axios
-       // .get("api/orders/" + this.$store.state.user.id + "/P")
+        // .get("api/orders/" + this.$store.state.user.id + "/P")
         .get("api/orders/4/P")
         .then((response) => {
           this.orders = response.data.data;
           this.order = this.orders[0];
           console.log(response.data.data[0]);
-          if (this.order !== 'undefined') {
+          if (this.order !== "undefined") {
             this.isNotEmpty = true;
-          }else{
+          } else {
             this.isNotEmpty = false;
           }
-          console.log(this.isNotEmpty)
+          console.log(this.isNotEmpty);
+        });
+    },
+    completePreparing() {
+      axios
+        .post('api/orders/'+this.order.id+'/status/R')
+        .then((response) => {
+          window.location.reload();
+          console.log(response.data)
         });
     },
   },

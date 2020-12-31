@@ -10,20 +10,20 @@
 
             <v-card-text>
               <v-text-field
-                v-model="order.notes"
+                v-model="form.notes"
                 label="Add a note for your order (optional)"
                 required
               >
               </v-text-field>
             </v-card-text>
             <div class="d-flex mx-4 flex-wrap flex-row justify-space-between">
-            <div class="font-weight-bold">Price to pay</div>
+              <div class="font-weight-bold">Price to pay</div>
 
-            <div class="font-weight-bold float-right">
-               {{ totalPrice }}
+              <div class="font-weight-bold float-right">
+                {{ totalPrice }}
+              </div>
             </div>
-            </div>
-            <br>
+            <br />
 
             <v-divider></v-divider>
 
@@ -112,6 +112,7 @@ export default {
     return {
       dialog: false,
       order: "",
+      form: {},
     };
   },
 
@@ -132,9 +133,37 @@ export default {
     openDialog() {
       this.dialog = true;
     },
-    createOrder(){
-        console.log($store.state.cart)
-    }
+    createOrderItem(){
+      axios
+        .post("/api/order/item", this.form.products[0])
+        .then((res) => {
+          console.log("Succed!");
+          console.log(res.data)
+        })
+        .catch((e) => {
+          console.log("An error ocurred");
+          //this.errors = e.response.data.errors;
+          console.log(e.response.data.errors);
+        });
+    },
+    createOrder() {
+      this.form.customer_id = this.$store.state.user.id;
+      this.form.total_price = this.totalPrice;
+      this.form.products = this.$store.state.cart;
+      console.log(this.form);
+
+      axios
+        .post("/api/orders/", this.form)
+        .then((res) => {
+          console.log("Succed!");
+          console.log(res.data)
+        })
+        .catch((e) => {
+          console.log("An error ocurred");
+          //this.errors = e.response.data.errors;
+          console.log(e.response.data.errors);
+        });
+    },
   },
   computed: {
     totalPrice() {
@@ -143,7 +172,6 @@ export default {
       for (let item of this.$store.state.cart) {
         total += item.totalPrice;
       }
-
       return total.toFixed(2);
     },
   },

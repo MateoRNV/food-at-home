@@ -26,7 +26,7 @@ class UpdateCustomerRequest extends FormRequest
         return [
             'name' => ['required', 'min:3', 'regex:/^(?![\s.]+$)[a-zA-Z\s.]*$/'],
             'email' => ['required', 'email'],
-            'password' => ['nullable', 'min:3'],
+            'password' => ['sometimes', 'min:3'],
             'address' => ['required', 'min:3'],
             'phone' => ['required', 'between:9,13'],
             'nif' => ['nullable','size:9'],

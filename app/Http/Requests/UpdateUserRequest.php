@@ -27,7 +27,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['required', 'regex:/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/'],
             'email' => ['required', 'email'],
-            'password' => ['nullable', 'min:3'],
+            'password' => ['sometimes', 'min:3'],
             'type' => ['required', Rule::in(['EM', 'EC', 'ED', 'C'])]
         ];
     }

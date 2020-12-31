@@ -52,7 +52,7 @@ export default {
       axios
         .post('api/orders/'+this.order.id+'/status/R')
         .then((response) => {
-          window.location.reload();
+          this.getOrders();
           console.log(response.data)
         });
     },

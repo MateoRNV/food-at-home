@@ -12,6 +12,7 @@
                 label="Fullname"
                 :rules="nameRules"
                 v-model="user.name"
+                :error-messages="errors.name"
               ></v-text-field>
 
               <v-text-field
@@ -22,6 +23,7 @@
                 label="Password"
                 @click:append="show = !show"
                 v-model="user.password"
+                :error-messages="errors.password"
               ></v-text-field>
             </div>
             <div>
@@ -30,6 +32,7 @@
                 :rules="emailRules"
                 required
                 v-model="user.email"
+                :error-messages="errors.email"
               ></v-text-field>
             </div>
           </div>
@@ -38,6 +41,7 @@
             label="Type of user"
             v-model="user.type"
             solo
+            :error-messages="errors.type"
           ></v-select>
           <v-file-input
             show-size

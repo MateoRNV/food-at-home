@@ -79,19 +79,17 @@ class OrderController extends Controller
 
     public function create(CreateOrderRequest $request){
 
-        $orderItem = new OrderItem;
         $order = new Order;
-        
         $order->fill($request->validated());
-
         $order->save();
 
-        try{
-            $orderItem->fill($request->validated());
-            $orderItem->order_id = $order->id;
-            $orderItem->save();
-        }catch(Throwable $error){
-            $order->delete();
+        foreach ($resquest->products as $item) {
+            $orderItem = new OrderItem();
+            $orderItem->product_id = $item["Id"];
+            $orderItem->quantity = $item["quantity"];
+            $orderItem->unit_price = $item["Id"];
+            $orderItem->order_id = $item["Id"];
+
         }
         
         return response()->json(200);

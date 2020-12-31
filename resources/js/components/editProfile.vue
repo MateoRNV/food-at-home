@@ -71,7 +71,7 @@
                 ></v-file-input>
               </div>
               <v-row align="center" justify="center" class="mt-5">
-                <v-btn color="error" class="mr-4">Reset form</v-btn>
+                <v-btn color="error" to="/products" class="mr-4"> Cancel</v-btn>
                 <v-btn
                   color="grey darken-4 white--text"
                   class="mr-4"
@@ -102,14 +102,6 @@ export default {
     };
   },
   methods: {
-    getCostumer() {
-      axios.get("api/customers/" + this.$store.state.user.id).then((res) => {
-        this.form = res.data;
-        // console.log(this.form);
-        this.form.name = this.user.name;
-        this.form.email = this.user.email;
-      });
-    },
     getUser() {
       axios.get("api/user/" + this.$store.state.user.id).then((res) => {
         this.user = res.data;
@@ -215,7 +207,6 @@ export default {
     if (this.form.type == "C") {
       this.isClient = true;
       this.getUser();
-      //this.getCostumer();
     }
     console.log(this.form.name), (this.form.password = null);
   },

@@ -32,7 +32,7 @@
               <v-btn color="error" @click="dialog = false" class="mr-4"
                 >Cancel</v-btn
               >
-              <v-btn color="primary" @click="dialog = false"> Finish </v-btn>
+              <v-btn color="primary" @click="createOrder"> Finish </v-btn>
             </v-card-actions>
           </div>
         </v-card>
@@ -132,6 +132,9 @@ export default {
     openDialog() {
       this.dialog = true;
     },
+    createOrder(){
+        console.log($store.state.cart)
+    }
   },
   computed: {
     totalPrice() {

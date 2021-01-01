@@ -11,6 +11,8 @@ export default new Vuex.Store({
         user: null,
         users: [],
         products: [],
+        orders: [],
+
         cart: cart ? JSON.parse(cart) : [],
         cartCount: cartCount ? parseInt(cartCount) : 0,
 
@@ -30,17 +32,17 @@ export default new Vuex.Store({
         SET_PRODUCTS_LIST(state, products){
             state.products = products
         },
+        SET_ORDERS_LIST(state, orders){
+            state.orders = orders
+        },
         ADD_PRODUCT_TO_LIST(state, product){
             state.products.push(product)
         },
         REMOVE_PRODUCT_FROM_LIST(state, product){
             const index = state.products.indexOf(product)
-            console.log(index)
-            console.log('wtf')
 
             if(index > -1){
-                console.log('inside index')
-                console.log(state.products.splice(index, 1))
+                state.products.splice(index, 1)
             }
         },
         ADD_ITEM_TO_CART(state, item){
@@ -99,26 +101,30 @@ export default new Vuex.Store({
             axios.get('api/users/me').then(res => {
                 context.commit('SET_USER', res.data)
             })
-            .catch(e => {
+            .catch(() => {
                 context.commit('CLEAR_USER')
             })
         },
         loadUsers(context){
             axios.get('api/users').then(res => {
                 context.commit('SET_USER_LIST', res.data.data)
-            }).catch(e => {
+            }).catch(() => {
                 context.commit('SET_USER_LIST', null)
             })
         },
         loadProducts(context){
             axios.get('api/products').then(res => {
                 context.commit('SET_PRODUCTS_LIST', res.data.data)
-            }).catch(e => {
+            }).catch(() => {
                 context.commit('SET_PRODUCTS_LIST', null)
+            })
+        },
+        loadOrders(context){
+            axios.get('api/orders/').then(res => {
+                context.commit('SET_ORDERS_LIST', res.data.data)
+            }).catch(() => {
+                context.commit('SET_ORDERS_LIST', null)
             })
         }
     },
-    getters: {
-
-    }
 })

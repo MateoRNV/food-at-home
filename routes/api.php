@@ -39,6 +39,7 @@ Route::get('orders/status/{status}',       [OrderController::class, 'getStatus']
 Route::get('orders/{id}/{status}',         [OrderController::class, 'getOrdersByCook']);
 Route::post('orders/{id}/status/{status}', [OrderController::class, 'setOrderStatus']); // Change to patch
 Route::get('orders/{id}',                  [OrderController::class, 'getOrderById']);
+
 Route::post('orders',                      [OrderController::class, 'create']); // create order
 
 Route::post('order/item',                   [OrderItemController::class, 'create']); // create order
@@ -61,6 +62,7 @@ Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']
 
 Route::get('customers',              [CustomerController::class, 'index']);
 Route::get('customers/{id}',         [CustomerController::class, 'me']);
+Route::get('customers/{id}/orders',         [CustomerController::class, 'getCustomerOrders']);
 Route::post('customers',             [CustomerController::class, 'create']); // create customer
 Route::put('customers/{id}',         [CustomerController::class, 'update']);    //edit customer
 Route::post('customer/photos',       [CustomerController::class, 'uploadPhoto']);

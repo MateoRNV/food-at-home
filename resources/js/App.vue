@@ -24,19 +24,17 @@
         
       </v-btn>
 
-      <v-menu offset-y>
+      <v-menu offset-y v-if="$store.state.user">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>mdi-account</v-icon>
+          <v-btn v-bind="attrs" v-on="on">
+            <v-icon left>mdi-account</v-icon>
+            {{$store.state.user.name}}
           </v-btn>
         </template>
 
         <v-list>
-          <v-list-item to="/login" v-if="$store.state.user && $store.state.user.type === 'EM'">
-            <v-list-item-icon><v-icon>mdi-account</v-icon></v-list-item-icon>
-            <v-list-item-title>{{$store.state.user.name}}</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click.prevent="myself">
+          <v-list-item to="/me/orders">
+            <!-- @click.prevent="myself" -->
             <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
             <v-list-item-title>Orders</v-list-item-title>
           </v-list-item>
@@ -129,7 +127,7 @@ export default {
   methods: {
     logout(){
       axios.post('/api/logout').then(res => {
-        this.$toasted.show('User has logget out', {type: 'warning'})
+        this.$toasted.show('You have logged out', {type: 'success'})
         this.$store.commit('CLEAR_USER')
         this.$store.commit('CLEAR_CART')
         this.$router.push('/login')

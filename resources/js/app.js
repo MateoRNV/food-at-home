@@ -18,6 +18,7 @@ import UserComponent from './components/users'
 import CartComponent from './components/cart'
 import EditProfileComponent from './components/editProfile'
 import DeliveryDashboardComponent from './components/delivery-dashboard'
+import CustomerOrdersComponent from './components/orders'
 import App from './App.vue'
 
 Vue.use(VueRouter);
@@ -34,6 +35,7 @@ const routes = [
     { path: '/delivery/dashboard', component: DeliveryDashboardComponent },
     { path: '/manager/products', component: AdminProductComponent },
     { path: '/me/edit', component: EditProfileComponent },
+    { path: '/me/orders', component: CustomerOrdersComponent },
 ]
 
 const router = new VueRouter({
@@ -65,6 +67,7 @@ const app = new Vue({
         this.$store.dispatch('loadUserLogged')
         this.$store.dispatch('loadUsers')
         this.$store.dispatch('loadProducts')
+        this.$store.dispatch('loadOrders')
         //this.$store.dispatch('rebuildCartFromStorage')
     }
 }).$mount('#app')

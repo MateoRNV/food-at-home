@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\CreateOrderItemRequest;
 use App\Http\Resources\Order as OrderResource;
@@ -59,23 +60,29 @@ class OrderController extends Controller
 
     public function setOrderStatus($id, $status){
         $order = Order::findOrFail($id);
+        $oldStatus = $order->status;
+        $status = strtoupper($status);
 
         switch($status){
             case 'H':
             case 'P':
+                $order->prepared_by = Auth::user()->id;
+                break;
             case 'R':
             case 'T':
+                $order->delivered_by = Auth::user()->id;
+                break;
             case 'D':
             case 'C':
-                $oldStatus = $order->status;
-                $status = strtoupper($status);
-                $order->status = $status;
-                $order->save();
-                return response()->json(['Order status updated. Order went from '. $oldStatus . ' to ' . $order->status, $order], 200);
+                break;
+            default:
+                return response()->json('Status ' . $status . ' doesn\'t exist', 404);
         }
-
-        return response()->json('Status ' . $status . ' doesn\'t exist', 404);
         
+        $order->status = $status;
+        $order->save();
+            
+        return response()->json(['Order status updated. Order went from '. $oldStatus . ' to ' . $order->status, $order], 200);
     }
 
     public function create(CreateOrderRequest $request){

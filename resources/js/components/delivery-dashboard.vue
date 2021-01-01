@@ -2,33 +2,33 @@
     <v-main>
         <v-container fluid>
             <div class="h1">Delivery Dashboard</div>
-            <v-card v-if="currentOrder != ''">
+            <v-card v-if="$store.state.currentOrder != ''">
                 <v-card-title>Your current order</v-card-title>
                 <v-card-subtitle>Below you'll find information regarding your current order and it's customer. Remember to complete this order once you're done delivering it</v-card-subtitle>
                 <v-container fluid>
 
                     <v-row align="start" class="mb-5">
-                        <v-col justify="center" v-if="currentOrder.customer.photo_url != null">
+                        <v-col justify="center" v-if="$store.state.currentOrder.customer.photo_url != null">
                             <v-avatar size="100" class="ml-4 mb-2">
-                                <v-img :src="'/storage/fotos/' + currentOrder.customer.photo_url"></v-img>
+                                <v-img :src="'/storage/fotos/' + $store.state.currentOrder.customer.photo_url"></v-img>
                             </v-avatar>
                         </v-col>
                         <v-col>
                             <strong class="text-h6">Customer Information</strong>
-                            <span class="d-block">{{ currentOrder.customer.name }}</span>
-                            <span class="d-block">{{ currentOrder.customer.address }}</span>
-                            <span class="d-block">{{ currentOrder.customer.phone }}</span>
-                            <span class="d-block">{{ currentOrder.customer.email }}</span>
+                            <span class="d-block">{{ $store.state.currentOrder.customer.name }}</span>
+                            <span class="d-block">{{ $store.state.currentOrder.customer.address }}</span>
+                            <span class="d-block">{{ $store.state.currentOrder.customer.phone }}</span>
+                            <span class="d-block">{{ $store.state.currentOrder.customer.email }}</span>
                         </v-col>
                         <v-col>
                             <strong class="text-h6">Order Information</strong>
-                            <span class="d-block"><strong>Order ID: </strong> {{ currentOrder.id }}</span>
-                            <span class="d-block"><strong>Started at: </strong> {{ currentOrder.current_status_at }}</span>
+                            <span class="d-block"><strong>Order ID: </strong> {{ $store.state.currentOrder.id }}</span>
+                            <span class="d-block"><strong>Started at: </strong> {{ $store.state.currentOrder.current_status_at }}</span>
                             <span class="d-block"><strong>Time elapsed: </strong> #</span>
                         </v-col>
                         <v-col>
                             <span class="d-block"><strong>Notes:</strong></span>
-                            {{ currentOrder.notes != null ? currentOrder.notes : 'None' }}
+                            {{ $store.state.currentOrder.notes != null ? $store.state.currentOrder.notes : 'None' }}
                         </v-col>
                     </v-row>
 
@@ -43,7 +43,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="item in currentOrder.items" :key="item.id">
+                                <tr v-for="item in $store.state.currentOrder.items" :key="item.id">
                                     <td>
                                         <v-img
                                         :src="`/storage/products/${item.product_photo}`"
@@ -68,7 +68,7 @@
                                         <strong>Total</strong>
                                     </td>
                                     <td>
-                                        {{ currentOrder.total_price }}€
+                                        {{ $store.state.currentOrder.total_price }}€
                                     </td>
                                 </tr>
                             </tbody>
@@ -78,10 +78,10 @@
                 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" class="px-5" @click.prevent="markAsDelivered">Mark as delivered</v-btn>
+                    <v-btn color="primary" class="px-5" @click.prevent="markAsDelivered($store.state.currentOrder)">Mark as delivered</v-btn>
                 </v-card-actions>
             </v-card>
-            <v-simple-table v-if="!currentOrder">
+            <v-simple-table v-if="!$store.state.currentOrder && orders.length !== 0">
                 <thead>
                     <tr>
                         <th>Order ID</th>
@@ -95,10 +95,11 @@
                         <th>{{ order.id }}</th>
                         <th>{{ order.customer_name }}</th>
                         <th>{{ order.current_status_at }}</th>
-                        <th class="text-right"><v-btn color="primary" @click.prevent="startDelivery(order)" :disabled="$store.state.isDelivering">Deliver</v-btn></th>
+                        <th class="text-right"><v-btn color="primary" @click.prevent="startDelivery(order)">Deliver</v-btn></th>
                     </tr>
                 </tbody>
             </v-simple-table>
+            <div class="text-h6 text-center" v-if="orders.length === 0 && !$store.state.currentOrder">No orders right now</div>
         </v-container>
     </v-main>
 </template>
@@ -108,23 +109,26 @@ export default {
     data(){
         return {
             orders:[],
-            currentOrder: ''
         }
     },
     methods: {
         getOrders(){
             axios.get('api/orders/status/R').then(res => {
                 this.orders = res.data
+                console.log(this.orders)
             })
         },
         markAsDelivered(order){
-            axios.post('api/orders/'+order.id+'/status/D')
-            this.$toasted.show('Order delivered :D', {type: 'success'})
+            axios.post('api/orders/'+order.id+'/status/D').then(() => {
+                this.$store.commit('CLEAR_CURRENT_ORDER')
+                this.$toasted.show('Order delivered :D', {type: 'success'})
+            }).catch(() => {
+                this.$toasted.show('There was a problem processing your reques', {type: 'error'})
+            })
         },
         startDelivery(order){
             axios.get('api/orders/' + order.id).then(res => {
-                this.currentOrder = res.data.data[0]
-                this.$store.state.isDelivering = true
+                this.$store.commit('SET_CURRENT_ORDER', res.data.data[0])
 
                 axios.post('api/orders/'+order.id+'/status/T').then(() => {
                     this.$toasted.show('Order in transit', {type: 'success'})

@@ -11,7 +11,18 @@
                 <v-expansion-panel
                     v-for="order in orders" :key="order.id"
                 >
-                    <v-expansion-panel-header>Order #{{ order.id }}</v-expansion-panel-header>
+                    <v-expansion-panel-header>
+                        <v-row>
+                            <v-col>
+                                Order #{{ order.id }}
+                            </v-col>
+                            <v-col>
+                                <v-chip :color="statusColor(order.status)" class="px-5">
+                                    {{ toString(order.status) }}
+                                </v-chip>
+                            </v-col>
+                        </v-row>
+                    </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-simple-table class="w-100">
                             <thead>
@@ -41,6 +52,12 @@
                                         {{ item.sub_total_price }}€
                                     </td>
                                 </tr>
+                                <tr v-if="order.notes != null">
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>Notes:</strong></td>
+                                    <td>{{ order.notes }}</td>
+                                </tr>
                                 <tr>
                                     <td></td>
                                     <td></td>
@@ -67,7 +84,6 @@ export default {
     data(){
         return {
             orders: [],
-            user: this.$store.state.user
         }
     },
     methods : {
@@ -80,6 +96,38 @@ export default {
                     this.$toasted.show('There was a problem while fetching your orders.', {type: 'error'} )
                 })
             })
+        },
+        toString(status){
+            switch(status){
+                case 'H':
+                    return 'Holding'
+                case 'P':
+                    return 'Preparing'
+                case 'R':
+                    return 'Ready'
+                case 'T':
+                    return 'In Transit'
+                case 'D':
+                    return 'Delivered'
+                case 'C':
+                    return 'Cancelled'
+            }
+        },
+        statusColor(status){
+            switch(status){
+                case 'H':
+                    return 'grey text-light'
+                case 'P':
+                    return 'yellow lighten-1'
+                case 'R':
+                    return 'green text-light'
+                case 'T':
+                    return 'deep-purple darken-1 text-light'
+                case 'D':
+                    return 'green darken-3 text-light'
+                case 'C':
+                    return 'red text-light'
+            }
         }
     },
     mounted(){

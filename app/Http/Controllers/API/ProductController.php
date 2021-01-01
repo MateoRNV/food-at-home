@@ -44,7 +44,7 @@ class ProductController extends Controller
 
         $product->save();
 
-        return response()->json(['Product with ID '. $request->id . ' updated successfully', $product], 200);
+        return response()->json(['message' => 'Product with ID '. $request->id . ' updated successfully', 'product' => $product], 200);
 
     }
 

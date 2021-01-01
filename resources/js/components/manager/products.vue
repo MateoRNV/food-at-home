@@ -259,16 +259,6 @@ export default {
     };
   },
   methods: {
-    // getProducts() {
-    //   axios
-    //     .get("api/products")
-    //     .then((res) => {
-    //       this.products = res.data.data;
-    //     })
-    //     .catch(() => {
-    //       console.error("There was a problem while fetching products");
-    //     });
-    // },
     insertProduct() {
       axios.post("api/products", this.form)
         .then(res => {
@@ -354,8 +344,8 @@ export default {
     },
     updateProduct(product){
         axios.put('/api/products/' + product.id, this.form)
-        .then(() => {
-            // this.getProducts()
+        .then(res => {
+            this.$store.commit('UPDATE_PRODUCT_FROM_LIST', res.data.product)
             this.dialogEdit = false
             this.productToEdit = ''
             this.clearForm()
@@ -384,10 +374,7 @@ export default {
       this.photo_file = event.target.files[0]
       console.log("Yeah i changed")
     },
-  },
-  mounted() {
-    //this.getProducts();
-  },
+  }
 };
 </script>
 

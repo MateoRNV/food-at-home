@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 let cart = window.sessionStorage.getItem('cart');
 let cartCount = window.sessionStorage.getItem('cartCount');
+let currentOrder = window.sessionStorage.getItem('currentOrder')
 
 export default new Vuex.Store({
     state: {
@@ -16,8 +17,7 @@ export default new Vuex.Store({
         cart: cart ? JSON.parse(cart) : [],
         cartCount: cartCount ? parseInt(cartCount) : 0,
 
-        isDelivering: false,
-        orderBeingDelivered: ''
+        currentOrder: currentOrder ? JSON.parse(currentOrder) : ''
     },
     mutations: {
         CLEAR_USER(state){
@@ -35,6 +35,14 @@ export default new Vuex.Store({
         SET_ORDERS_LIST(state, orders){
             state.orders = orders
         },
+        SET_CURRENT_ORDER(state, order){
+            state.currentOrder = order
+            sessionStorage.setItem('currentOrder', JSON.stringify(state.currentOrder))
+        },
+        CLEAR_CURRENT_ORDER(state){
+            state.currentOrder = ''
+            sessionStorage.removeItem('currentOrder')
+        },
         ADD_PRODUCT_TO_LIST(state, product){
             state.products.push(product)
         },
@@ -43,6 +51,13 @@ export default new Vuex.Store({
 
             if(index > -1){
                 state.products.splice(index, 1)
+            }
+        },
+        UPDATE_PRODUCT_FROM_LIST(state, product){
+            const index = state.products.findIndex(item => item.id === product.id)
+
+            if(index > -1){
+                state.products.splice(index, 1, product)
             }
         },
         ADD_ITEM_TO_CART(state, item){

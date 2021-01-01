@@ -4,14 +4,14 @@
       <v-dialog v-model="dialog" width="500">
         <v-card>
           <div class="container-fluid">
-            <v-card-title> Do you want to finish your order? </v-card-title>
+            <v-card-title> Checkout </v-card-title>
 
             <v-spacer></v-spacer>
 
             <v-card-text>
               <v-text-field
                 v-model="form.notes"
-                label="Add a note for your order (optional)"
+                label="Add a note to your order (optional)"
                 required
               >
               </v-text-field>
@@ -20,7 +20,7 @@
               <div class="font-weight-bold">Price to pay</div>
 
               <div class="font-weight-bold float-right">
-                {{ totalPrice }}
+                {{ totalPrice }}€
               </div>
             </div>
             <br />
@@ -138,15 +138,15 @@ export default {
       this.form.customer_id = this.$store.state.user.id;
       this.form.total_price = this.totalPrice;
       this.form.products = this.$store.state.cart;
-      console.log(this.form.products);
       axios
         .post("/api/orders/", this.form)
         .then((res) => {
-          console.log("Succed!");
-          console.log(res.data)
+          this.$toasted.show('Order #'+res.data.id+' processed successfully', {type: 'success'})
+          this.$router.push('/me/orders')
+          this.$store.commit('CLEAR_CART')
         })
         .catch((e) => {
-          console.log("An error ocurred");
+          this.$toasted.show('There was a problem while processing your order', {type: 'error'})
           console.log(e.response.data.errors);
         });
     },

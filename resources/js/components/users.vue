@@ -6,7 +6,7 @@
         <div class="text-h2 font-weight-bold">
           Users List
           <div class="float-right">
-            <v-dialog v-model="dialogAdd" max-width="500px">
+            <v-dialog persistent v-model="dialogAdd" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="primary"
@@ -75,10 +75,10 @@
             </template>
 
             <template v-slot:item.actions="{ item }">
-              <v-icon small @click="editItemDialog(item)" class="mr-2">
+              <v-icon small v-if="item.type != 'C'" @click="editItemDialog(item)" class="mr-2">
                 mdi-pencil
               </v-icon>
-              <v-icon small @click="deleteDialog(item)"> mdi-delete </v-icon>
+              <v-icon small v-if="item.id != $store.state.user.id" @click="deleteDialog(item)"> mdi-delete </v-icon>
             </template>
           </v-data-table>
         </v-main>
@@ -132,6 +132,7 @@ export default {
     editItemDialog(item) {
       /*this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);*/
+      console.log(item)
       this.title = "Edit User";
       this.isNew = false;
       this.userEdit = item;

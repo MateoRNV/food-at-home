@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+use App\Models\Product;
+
 class Order extends JsonResource
 {
     /**
@@ -14,11 +16,27 @@ class Order extends JsonResource
      */
     public function toArray($request)
     {
+        $orderItems = $this->orderItem;
+
+        foreach($orderItems as $item){
+            $productName = Product::withTrashed()->where('id', $item->product_id)->pluck('name')->first();
+            $productPhoto = Product::withTrashed()->where('id', $item->product_id)->pluck('photo_url')->first();
+            $item->setAttribute('product_name', $productName);
+            $item->setAttribute('product_photo', $productPhoto);
+        }
+
         return [
             'id' => $this->id,
             'status' => $this->status,
-            'customer_id' => $this->customer_id,
-            'customer_name' => $this->customer->user->name,
+            'customer' => [
+                'id' => $this->customer_id,
+                'name' => $this->customer->user->name,
+                'address' => $this->customer->address,
+                'phone' => $this->customer->phone,
+                'email' => $this->customer->user->email,
+                'photo_url' => $this->customer->user->photo_url,
+            ],
+            'items' => $orderItems,
             'notes' => $this->notes,
             'total_price' => $this->total_price,
             'date' => $this->date,

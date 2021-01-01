@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Order extends Model
 {
 
+
     protected $fillable = [
         'notes', 'customer_id', 'total_price'
     ];
@@ -36,6 +37,7 @@ class Order extends Model
     }
 
     public function orderItem(){
-        return $this->hasMany('App\Models\OrderItem', 'order_id')->withTrashed();
+        return $this->hasMany('App\Models\OrderItem', 'order_id');
+        // return $this->hasMany('App\Models\OrderItem', 'order_id')->withTrashed();
     }
 }

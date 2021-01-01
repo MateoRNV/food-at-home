@@ -38,6 +38,11 @@
             <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
             <v-list-item-title>Orders</v-list-item-title>
           </v-list-item>
+          <v-list-item @click.prevent="myself">
+            <!-- @click.prevent="myself" -->
+            <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
+            <v-list-item-title>Test</v-list-item-title>
+          </v-list-item>
           <v-list-item to="/me/edit">
             <v-list-item-icon><v-icon>mdi-settings</v-icon></v-list-item-icon>
             <v-list-item-title>Settings</v-list-item-title>

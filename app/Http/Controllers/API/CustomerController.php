@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CreateCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\Customer as CustomerResource;
+use App\Http\Resources\Order as OrderResource;
 
 class CustomerController extends Controller
 {
@@ -22,13 +23,13 @@ class CustomerController extends Controller
         return CustomerResource::collection(Customer::all());
     }
 
-    public function me($id){
+    // public function me($id){
 
-        $customer = new Customer;
-        $customer = Customer::findOrFail($id);
+    //     $customer = new Customer;
+    //     $customer = Customer::findOrFail($id);
 
-        return response()->json($customer);
-    }
+    //     return response()->json($customer);
+    // }
 
     public function create(CreateCustomerRequest $request){
 
@@ -87,6 +88,14 @@ class CustomerController extends Controller
         $path = Storage::putFile('public/fotos', $request->file('photo_file'));
 
         return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()], 201);
+    }
+
+    public function getCustomerOrders($id){
+        $customer = Customer::findOrFail($id);
+
+        $orders = OrderResource::collection(Order::where('customer_id', '=', $customer->id)->get());
+
+        return response()->json(['orders' => $orders], 200);
     }
 
 }

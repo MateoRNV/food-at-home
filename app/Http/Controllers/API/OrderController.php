@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\OrderItem;
+use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Customer;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Order as OrderResource;
-use App\Http\Resources\SingleOrder as SingleOrderResource;
 use App\Http\Requests\CreateOrderRequest;
+use App\Http\Resources\Order as OrderResource;
 
 class OrderController extends Controller
 {
@@ -53,7 +53,7 @@ class OrderController extends Controller
     }
 
     public function getOrderById($id){
-        return SingleOrderResource::collection(Order::where('id', '=', $id)->get());
+        return OrderResource::collection(Order::where('id', '=', $id)->get());
     }
 
     public function setOrderStatus($id, $status){
@@ -90,8 +90,8 @@ class OrderController extends Controller
 
         $order = new Order;
 
-        $current_date = \Carbon\Carbon::now()->toDateString();
-        $current_date_time = \Carbon\Carbon::now()->toDateTimeString();
+        $current_date = Carbon::now()->toDateString();
+        $current_date_time = Carbon::now()->toDateTimeString();
 
         $order->status = 'H';
 

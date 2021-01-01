@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\OrderController;
-use App\Http\Controllers\API\OrderItemController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AuthController;
@@ -41,8 +40,6 @@ Route::post('orders/{id}/status/{status}', [OrderController::class, 'setOrderSta
 Route::get('orders/{id}',                  [OrderController::class, 'getOrderById']);
 
 Route::post('orders',                      [OrderController::class, 'create']); // create order
-
-Route::post('order/item',                   [OrderItemController::class, 'create']); // create order
 
 Route::get('products',                       [ProductController::class, 'index']);
 Route::post('products',                      [ProductController::class, 'create']);

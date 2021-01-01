@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderRequest;
+use App\Http\Requests\CreateOrderItemRequest;
 use App\Http\Resources\Order as OrderResource;
 
 class OrderController extends Controller
@@ -77,15 +78,6 @@ class OrderController extends Controller
         
     }
 
-    /*INSERT INTO `orders` 
-    (`id`, `status`, `customer_id`, `notes`, `total_price`, `date`, `prepared_by`, `delivered_by`, 
-    `opened_at`, `current_status_at`, `closed_at`, `preparation_time`, 
-    `delivery_time`, `total_time`, `created_at`, `updated_at`) 
-
-    VALUES ('1934', 'H', '22', NULL, '20', '2020-12-28', NULL, NULL, 
-    '2020-12-28 00:00:00', '2020-12-28 00:00:00', NULL, NULL, 
-    NULL, NULL, NULL, NULL);*/ 
-
     public function create(CreateOrderRequest $request){
 
         $order = new Order;
@@ -98,36 +90,41 @@ class OrderController extends Controller
         $order->date = $current_date;
         $order->opened_at = $current_date_time;
         $order->current_status_at = $current_date_time;
-
-
-        //dd($order);
         
         $order->fill($request->validated());
         
         $order->save();
 
-       /*$productsList = $request->products;
+       $productsList = $request->products;
        $size = count($productsList);
-       
-       $orderItemList = array();
 
-      //  for ($i=0; $i < $size; $i++) { 
+        for ($i=0; $i < $size; $i++) { 
             $orderItem = new OrderItem();
 
-            $orderItem->id = 10561;
-            $orderItem->order_id = 1960;
-            $orderItem->product_id = 3;//$productsList[0]["id"];
-            $orderItem->quantity = 2;//$productsList[0]["quantity"];
-            $orderItem->unit_price = 1.00;//$productsList[0]["price"];
-            $orderItem->sub_total_price = 2.00;//$productsList[0]["totalPrice"];
+            $orderItem->order_id = $order->id;
+            $orderItem->product_id = $productsList[$i]["id"];
+            $orderItem->quantity = $productsList[$i]["quantity"];
+            $orderItem->unit_price = $productsList[$i]["price"];
+            $orderItem->sub_total_price = $productsList[$i]["totalPrice"];
 
             $orderItem->save();
 
-            //array_push($orderItemList, $orderItem);
-
-       // };*/
+        };
         
-        return response()->json(200);
+        return response()->json($order);
+    }
+
+    public function createOrderItem(CreateOrderItemRequest $request){
+
+        $orderItem = new OrderItem;
+        $validated = $request->validated();
+
+        $orderItem->fill($validated);
+
+        $orderItem->save();
+       // $orderItem->id = '1';
+
+        return response()->json($orderItem);
     }
 
     /**

@@ -27,7 +27,9 @@ class CreateOrderRequest extends FormRequest
             'customer_id' => ['required', 'numeric'],
             'notes' => ['nullable'], 
             'total_price' => ['required', 'numeric'],
+            
             'products' => ['required','array'],
+
             'products.*.id' => ['required', 'numeric'],
             'products.*.price' => ['required', 'numeric'],
             'products.*.quantity' => ['required', 'integer'],
@@ -45,7 +47,7 @@ class CreateOrderRequest extends FormRequest
             'total_price.required' => "You have to provide a total price",
             'total_price.numeric' => "Total price needs to be numeric",
 
-            /*'products.required' => "You have to provide products",
+            'products.required' => "You have to provide products",
             'products.array' => "Products have to be an array",
             
             'products.*.id.required' => "The product needs an id",
@@ -58,7 +60,7 @@ class CreateOrderRequest extends FormRequest
             'products.*.quantity.integer' => "The product quantity needs to be an integer",
 
             'products.*.totalPrice.required' => "The product needs a price",
-            'products.*.totalPrice.numeric' => "The product price needs to be a number",*/
+            'products.*.totalPrice.numeric' => "The product price needs to be a number",
         ];
     }
 }

@@ -133,25 +133,12 @@ export default {
     openDialog() {
       this.dialog = true;
     },
-    createOrderItem(){
-      axios
-        .post("/api/order/item", this.form.products[0])
-        .then((res) => {
-          console.log("Succed!");
-          console.log(res.data)
-        })
-        .catch((e) => {
-          console.log("An error ocurred");
-          //this.errors = e.response.data.errors;
-          console.log(e.response.data.errors);
-        });
-    },
+
     createOrder() {
       this.form.customer_id = this.$store.state.user.id;
       this.form.total_price = this.totalPrice;
       this.form.products = this.$store.state.cart;
-      console.log(this.form);
-
+      console.log(this.form.products);
       axios
         .post("/api/orders/", this.form)
         .then((res) => {
@@ -160,7 +147,6 @@ export default {
         })
         .catch((e) => {
           console.log("An error ocurred");
-          //this.errors = e.response.data.errors;
           console.log(e.response.data.errors);
         });
     },

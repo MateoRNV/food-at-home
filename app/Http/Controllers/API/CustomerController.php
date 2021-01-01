@@ -23,13 +23,13 @@ class CustomerController extends Controller
         return CustomerResource::collection(Customer::all());
     }
 
-    // public function me($id){
+     public function me($id){
 
-    //     $customer = new Customer;
-    //     $customer = Customer::findOrFail($id);
+         $customer = new Customer;
+         $customer = Customer::findOrFail($id);
 
-    //     return response()->json($customer);
-    // }
+         return response()->json($customer);
+     }
 
     public function create(CreateCustomerRequest $request){
 

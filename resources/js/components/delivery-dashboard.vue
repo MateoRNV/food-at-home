@@ -2,7 +2,7 @@
     <v-main>
         <v-container fluid>
             <div class="h1">Delivery Dashboard</div>
-            <v-card v-if="$store.state.currentOrder != ''">
+            <v-card v-if="$store.state.currentOrder !== ''">
                 <v-card-title>Your current order</v-card-title>
                 <v-card-subtitle>Below you'll find information regarding your current order and it's customer. Remember to complete this order once you're done delivering it</v-card-subtitle>
                 <v-container fluid>
@@ -24,7 +24,7 @@
                             <strong class="text-h6">Order Information</strong>
                             <span class="d-block"><strong>Order ID: </strong> {{ $store.state.currentOrder.id }}</span>
                             <span class="d-block"><strong>Started at: </strong> {{ $store.state.currentOrder.current_status_at }}</span>
-                            <span class="d-block"><strong>Time elapsed: </strong> #</span>
+                            <!-- <span class="d-block"><strong>Time elapsed: </strong> {{ currentOrderElapsed }}</span> -->
                         </v-col>
                         <v-col>
                             <span class="d-block"><strong>Notes:</strong></span>
@@ -109,13 +109,13 @@ export default {
     data(){
         return {
             orders:[],
+            // currentOrderElapsed: ''
         }
     },
     methods: {
         getOrders(){
             axios.get('api/orders/status/R').then(res => {
                 this.orders = res.data
-                console.log(this.orders)
             })
         },
         markAsDelivered(order){
@@ -137,10 +137,16 @@ export default {
                     this.$toasted.show('There was a problem with the order', {type: 'error'})
                 })
             })
-        }
+        },
+        // setElapsedTime(order){
+        //     const event = setInterval(() => {
+        //         this.currentOrderElapsed = new Date(new Date().getTime() - new Date(order.current_status_at).getTime()).toLocaleString()
+        //     }, 1000)
+        // }
     },
     mounted(){
         this.getOrders()
+        // this.setElapsedTime(this.$store.state.currentOrder)
     }
 }
 </script>

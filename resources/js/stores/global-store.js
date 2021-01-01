@@ -140,6 +140,6 @@ export default new Vuex.Store({
             }).catch(() => {
                 context.commit('SET_ORDERS_LIST', null)
             })
-        }
+        },
     },
 })

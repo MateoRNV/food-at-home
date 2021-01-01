@@ -68,7 +68,6 @@ const app = new Vue({
         this.$store.dispatch('loadUsers')
         this.$store.dispatch('loadProducts')
         this.$store.dispatch('loadOrders')
-        //this.$store.dispatch('rebuildCartFromStorage')
     }
 }).$mount('#app')
 

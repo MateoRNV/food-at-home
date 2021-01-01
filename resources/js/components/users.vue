@@ -6,7 +6,7 @@
         <div class="text-h2 font-weight-bold">
           Users List
           <div class="float-right">
-            <v-dialog persistent v-model="dialogAdd" max-width="500px">
+            <v-dialog persistent v-model="dialogAdd" max-width="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="primary"
@@ -26,19 +26,14 @@
                 :isNew="isNew"
               ></user-addEdit>
             </v-dialog>
-            <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-dialog v-model="dialogDelete" max-width="300">
               <v-card>
-                <v-card-title class="headline"
-                  >Are you sure you want to delete this item?</v-card-title
-                >
+                <v-card-title>Are you sure?</v-card-title>
+                <v-card-text>Please confirm you want to delete {{ userDelete.name }}?</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="closeDelete"
-                    >Cancel</v-btn
-                  >
-                  <v-btn color="blue darken-1" text @click="deleteItem"
-                    >OK</v-btn
-                  >
+                  <v-btn color="red" text @click="closeDelete">Cancel</v-btn>
+                  <v-btn color="green" text @click="deleteItem">OK</v-btn>
                   <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
@@ -97,7 +92,7 @@ export default {
     return {
       dialogAdd: false,
       dialogDelete: false,
-      userDelete: null,
+      userDelete: '',
       userEdit: "",
       isNew: null,
       title: null,
@@ -132,7 +127,6 @@ export default {
     editItemDialog(item) {
       /*this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);*/
-      console.log(item)
       this.title = "Edit User";
       this.isNew = false;
       this.userEdit = item;
@@ -143,39 +137,25 @@ export default {
     },
     deleteDialog(item) {
       (this.dialogDelete = true),
-        (this.userDelete = item),
-        console.log(this.userDelete);
+        (this.userDelete = item)
     },
     closeDelete() {
       this.dialogDelete = false;
     },
     deleteItem() {
-      console.log("Item eliminado " + this.userDelete.id);
       axios
         .delete("api/users/" + this.userDelete.id)
         .then((response) => {
-          console.log("User deleted " + this.userDelete.id);
           this.dialogDelete = false;
-          this.$toasted.show("Delete succes", { type: "success" });
+          this.$toasted.show("User deleted", { type: "success" });
         })
         .catch((e) => {
-          console.log("Oh oh!");
-          this.$toasted
-            .show("There was a problem, please try again", { type: "error" })
-            .goAway(3000);
+          this.$toasted.show("There was a problem, please try again", { type: "error" })
         });
     },
   },
-  mounted() {},
 };
 </script>
 
 <style>
-.border-card {
-  border-radius: 50%;
-  min-height: 70px;
-  min-width: 70px;
-  margin-top: 5%;
-  margin-bottom: 5%;
-}
 </style>

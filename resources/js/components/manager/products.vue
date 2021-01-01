@@ -121,60 +121,60 @@
                     </v-card-title>
 
                     <v-card-text>
-                    <v-container>
-                        <v-text-field
-                        label="Name"
-                        outlined
-                        v-model="form.name"
-                        name="name"
-                        :error-messages="errors.name"
-                        >
-                        </v-text-field>
-                        <v-textarea
-                        label="Description"
-                        outlined
-                        v-model="form.description"
-                        name="description"
-                        :error-messages="errors.description"
-                        counter
-                        no-resize
-                        >
-                        </v-textarea>
-                        <v-row>
-                        <v-col>
-                            <v-select
-                            :items="['drink', 'hot dish', 'cold dish', 'dessert']"
-                            label="Type"
-                            :error-messages="errors.type"
-                            outlined
-                            v-model="form.type"
-                            >
-                            </v-select>
-                        </v-col>
-                        <v-col>
-                            <v-text-field
-                            label="Price"
-                            outlined
-                            v-model="form.price"
-                            name="price"
-                            suffix="€"
-                            type="number"
-                            :error-messages="errors.price"
-                            >
-                            </v-text-field>
-                        </v-col>
-                        </v-row>
-                        <v-file-input
-                            show-size
-                            outlined
-                            prepend-inner-icon="mdi-camera"
-                            prepend-icon=""
-                            label="Product photo"
-                            :error-messages="errors.photo_url"
-                            accept=".jpg,.png,.jpeg"
-                            @change="onFileChange"
-                        ></v-file-input>                            
-                    </v-container>
+                      <v-container>
+                          <v-text-field
+                          label="Name"
+                          outlined
+                          v-model="form.name"
+                          name="name"
+                          :error-messages="errors.name"
+                          >
+                          </v-text-field>
+                          <v-textarea
+                          label="Description"
+                          outlined
+                          v-model="form.description"
+                          name="description"
+                          :error-messages="errors.description"
+                          counter
+                          no-resize
+                          >
+                          </v-textarea>
+                          <v-row>
+                            <v-col>
+                                <v-select
+                                :items="['drink', 'hot dish', 'cold dish', 'dessert']"
+                                label="Type"
+                                :error-messages="errors.type"
+                                outlined
+                                v-model="form.type"
+                                >
+                                </v-select>
+                            </v-col>
+                            <v-col>
+                                <v-text-field
+                                label="Price"
+                                outlined
+                                v-model="form.price"
+                                name="price"
+                                suffix="€"
+                                type="number"
+                                :error-messages="errors.price"
+                                >
+                                </v-text-field>
+                            </v-col>
+                          </v-row>
+                          <v-file-input
+                              show-size
+                              outlined
+                              prepend-inner-icon="mdi-camera"
+                              prepend-icon=""
+                              label="Product photo"
+                              :error-messages="errors.photo_url"
+                              accept=".jpg,.png,.jpeg"
+                              @change="onFileChange"
+                          ></v-file-input>                            
+                      </v-container>
                     </v-card-text>
 
                     <v-card-actions class="pb-2 pr-2">

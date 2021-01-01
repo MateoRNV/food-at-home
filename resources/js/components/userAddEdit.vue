@@ -1,76 +1,96 @@
 <template>
-  <v-container fluid>
-    <v-row class="justify-center">
-      <v-col class="white">
-        <div class="text-h5 text-center mb-4 font-weight-bold">
+  
+    <v-card>
+      <v-card-title class="justify-center">
+        <span class="headline">
           {{ formTitle }}
-        </div>
-        <v-form>
-          <div class="d-flex flex-wrap flex-row justify-space-between">
-            <div>
-              <v-text-field
-                label="Fullname"
-                :rules="nameRules"
-                v-model="user.name"
-                :error-messages="errors.name"
-              ></v-text-field>
+        </span>
+      </v-card-title>
 
+      <v-card-text>
+        <v-container>
+          <v-text-field
+            label="Fullname"
+            v-model="user.name"
+            :error-messages="errors.name"
+            outlined
+          ></v-text-field>
+
+          <v-row>
+            <v-col>
               <v-text-field
                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required]"
                 :type="show ? 'text' : 'password'"
-                name="input-10-1"
                 label="Password"
+                outlined
                 @click:append="show = !show"
                 v-model="user.password"
                 :error-messages="errors.password"
               ></v-text-field>
-            </div>
-            <div>
+            </v-col>
+            <v-col>
               <v-text-field
-                label="Email"
-                :rules="emailRules"
-                required
-                v-model="user.email"
-                :error-messages="errors.email"
+                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show2 ? 'text' : 'password'"
+                name="password_confirmation"
+                label="Confirm password"
+                outlined
+                @click:append="show2 = !show2"
+                v-model="user.password_confirmation"
+                :error-messages="errors.password"
               ></v-text-field>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
+
+          <v-text-field
+            label="Email"
+            outlined
+            v-model="user.email"
+            :error-messages="errors.email"
+          ></v-text-field>
           <v-select
             :items="userTypes"
             label="Type of user"
             v-model="user.type"
-            solo
+            outlined
             :error-messages="errors.type"
           ></v-select>
           <v-file-input
             show-size
-            prepend-icon="mdi-camera"
+            outlined
+            prepend-inner-icon="mdi-camera"
+            prepend-icon=""
             label="Profile photo"
           ></v-file-input>
-          <v-row align="center" justify="center">
-            <v-btn color="error" @click.prevent="cancel" class="mr-4"
-              >Cancel</v-btn
-            >
-            <v-btn
-              v-if="isNew"
-              color="grey darken-4 white--text"
-              class="mr-4"
-              @click.prevent="registerAccount"
-              >Create account</v-btn
-            >
-            <v-btn
-              v-else
-              color="grey darken-4 white--text"
-              class="mr-4"
-              @click.prevent="updateAccount"
-              >Update</v-btn
-            >
-          </v-row>
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-container>
+        </v-container>
+      </v-card-text>
+
+      <v-card-actions class="pb-2 pr-2">
+        <v-spacer></v-spacer>
+        <v-btn color="red" 
+          @click.prevent="cancel" 
+          text
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          v-if="isNew"
+          color="green"
+          text
+          @click.prevent="registerAccount"
+        >
+          Create account
+        </v-btn>
+        <v-btn
+          v-else
+          color="green"
+          text
+          @click.prevent="updateAccount"
+          >
+            Update
+        </v-btn>
+      </v-card-actions>
+    </v-card>
 </template>
 
 
@@ -81,15 +101,8 @@ export default {
     return {
       userTypes: ["EC", "ED", "EM"],
       show: false,
-      rules: {
-        required: (value) => !!value || "Required",
-      },
+      show2: false,
       errors: [],
-      nameRules: [(v) => !!v || "Name is required"],
-      emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+/.test(v) || "E-mail invalid",
-      ],
     };
   },
   methods: {

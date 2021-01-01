@@ -48,6 +48,7 @@ class Order extends JsonResource
             'delivery_time' => $this->delivery_time,
             'total_time' => $this->total_time,
             'current_status_at' => Carbon::parse($this->current_status_at)->toTimeString(),
+            // 'current_status_at' => $this->current_status_at,
         ];
     }
 }

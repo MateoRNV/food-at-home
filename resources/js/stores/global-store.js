@@ -3,9 +3,9 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-let cart = window.sessionStorage.getItem('cart');
-let cartCount = window.sessionStorage.getItem('cartCount');
-let currentOrder = window.sessionStorage.getItem('currentOrder')
+let cart = window.localStorage.getItem('cart');
+let cartCount = window.localStorage.getItem('cartCount');
+let currentOrder = window.localStorage.getItem('currentOrder')
 
 export default new Vuex.Store({
     state: {
@@ -21,10 +21,22 @@ export default new Vuex.Store({
     },
     mutations: {
         CLEAR_USER(state){
+            if(state.user){
+                this._vm.$socket.emit('user_logged_out', state.user)
+            }
+
             state.user = null
         },
         SET_USER (state, user){
+            if(state.user !== user){
+                this._vm.$socket.emit('user_logged_out', state.user)
+            }
+
             state.user = user
+
+            if(state.user){
+                this._vm.$socket.emit('user_logged', state.user)
+            }
         },
         SET_USER_LIST(state, users){
             state.users = users
@@ -54,17 +66,17 @@ export default new Vuex.Store({
         },
         SET_CURRENT_ORDER(state, order){
             state.currentOrder = order
-            sessionStorage.setItem('currentOrder', JSON.stringify(state.currentOrder))
+            localStorage.setItem('currentOrder', JSON.stringify(state.currentOrder))
         },
         CLEAR_CURRENT_ORDER(state){
             state.currentOrder = ''
-            sessionStorage.removeItem('currentOrder')
+            localStorage.removeItem('currentOrder')
         },
         ADD_PRODUCT_TO_LIST(state, product){
             state.products.push(product)
         },
         REMOVE_PRODUCT_FROM_LIST(state, product){
-            const index = state.products.indexOf(product)
+            const index = state.products.findIndex(val => val.id === product.id)
 
             if(index > -1){
                 state.products.splice(index, 1)
@@ -117,15 +129,15 @@ export default new Vuex.Store({
             this.commit('saveCart')
         },
         SAVE_CART(state){
-            sessionStorage.setItem('cart', JSON.stringify(state.cart))
-            sessionStorage.setItem('cartCount', state.cartCount)
+            localStorage.setItem('cart', JSON.stringify(state.cart))
+            localStorage.setItem('cartCount', state.cartCount)
         },
         CLEAR_CART(state){
             state.cart = []
             state.cartCount = 0
 
-            sessionStorage.removeItem('cart')
-            sessionStorage.removeItem('cartCount')
+            localStorage.removeItem('cart')
+            localStorage.removeItem('cartCount')
         }
     },
     actions: {

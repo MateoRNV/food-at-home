@@ -67,13 +67,16 @@ class OrderController extends Controller
             case 'H':
             case 'P':
                 $order->prepared_by = Auth::user()->id;
-                break;
+                    break;
             case 'R':
             case 'T':
                 $order->delivered_by = Auth::user()->id;
-                break;
+                Auth::user()->available_at = null;
+                    break;
             case 'D':
-                break;
+                $order->delivered_by = Auth::user()->id;
+                Auth::user()->available_at = Carbon::now();
+                    break;
             case 'C':
                 if($order->status == 'R' || $order->status == 'T'){
                     $order->delivered_by = null;

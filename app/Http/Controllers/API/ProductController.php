@@ -24,7 +24,7 @@ class ProductController extends Controller
         $product->fill($validated);
         $product->save();
 
-        return response()->json(['Product created successfully', $product, 201]);
+        return response()->json(['message' => 'Product created successfully', 'product' => $product, 201]);
     }
 
     public function uploadPhoto(Request $request){
@@ -66,6 +66,6 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return response()->json(['Product with ID ' . $product->id . ' deleted successfully', $product], 200);
+        return response()->json(['message' => 'Product with ID ' . $product->id . ' deleted successfully', 'product' => $product], 200);
     }
 }

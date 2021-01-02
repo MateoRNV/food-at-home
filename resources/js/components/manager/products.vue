@@ -257,10 +257,9 @@ export default {
       axios
         .post("api/products", this.form)
         .then((res) => {
-          this.$store.commit("ADD_PRODUCT_TO_LIST", res.data[1]);
-          this.$toasted.show("Product created successfully", {
-            type: "success",
-          });
+          this.$store.commit("ADD_PRODUCT_TO_LIST", res.data.product);
+          this.$socket.emit('product_created', res.data.product)
+          this.$toasted.show("Product created successfully", { type: "success" });
           this.dialog = false;
         })
         .catch((e) => {
@@ -306,7 +305,6 @@ export default {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((res) => {
-          console.log("Photo uploaded with sucess");
           this.form.photo_url = res.data.filename;
           this.insertProduct();
         })
@@ -348,12 +346,13 @@ export default {
         .put("/api/products/" + product.id, this.form)
         .then((res) => {
           this.$store.commit("UPDATE_PRODUCT_FROM_LIST", res.data.product);
-          this.dialogEdit = false;
-          this.productToEdit = "";
-          this.clearForm();
-          this.$toasted.show("Product updated successfully", {
-            type: "success",
-          });
+          this.dialogEdit = false
+          this.productToEdit = ""
+          this.clearForm()
+          // Socket
+          this.$socket.emit('product_updated', res.data.product)
+
+          this.$toasted.show("Product updated successfully", { type: "success" });
         })
         .catch((e) => {
           this.errors = e.response.data.errors;
@@ -363,28 +362,35 @@ export default {
         });
     },
     deleteProduct(product) {
-      axios
-        .delete("/api/products/" + product.id)
-        .then((res) => {
-          this.$store.commit("REMOVE_PRODUCT_FROM_LIST", product);
-
+      axios.delete("/api/products/" + product.id).then((res) => {
+          this.$store.commit("REMOVE_PRODUCT_FROM_LIST", this.productToDelete)
+          this.$socket.emit('product_deleted', this.productToDelete)                    
+          
           this.dialogDelete = false;
           this.productToDelete = "";
-          this.$toasted.show("Product deleted successfully", {
-            type: "success",
-          });
+
+          this.$toasted.show("Product deleted successfully", { type: "success",});
         })
         .catch(() => {
-          this.$toasted.show("There was a problem deleting the product", {
-            type: "error",
-          });
+          this.$toasted.show("There was a problem deleting the product", { type: "error",});
         });
     },
     onFileChange() {
       this.photo_file = event.target.files[0];
-      console.log("Yeah i changed");
     },
   },
+  sockets: {
+    product_updated(productID_updated){
+      this.$store.commit("UPDATE_PRODUCT_FROM_LIST", productID_updated)
+    },
+    product_created(productID_added){
+      this.$store.commit("ADD_PRODUCT_TO_LIST", productID_added);
+    },
+    product_deleted(productID_deleted){
+      this.$store.commit('REMOVE_PRODUCT_FROM_LIST', productID_deleted);
+    }
+
+  }
 };
 </script>
 

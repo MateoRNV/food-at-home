@@ -3,6 +3,19 @@
       <v-container class="mw-100">
           <div class="white rounded-lg px-5 py-5 my-5">
                 <div class="text-h4 text-center mb-5">Management Dashboard</div>
+                <v-btn
+                    @click.prevent="globalNotification"
+                    color="blue"
+                >
+                    Notify all users
+                </v-btn>
+                <v-btn
+                    @click.prevent="notifyCustomers"
+                    color="green"
+                >
+                    Notify customers
+                </v-btn>
+
                 <v-row>
                     <v-col>
                         <div class="headline">Employees</div>
@@ -33,6 +46,16 @@
                                 <v-chip :color="statusColor(item)">
                                     {{ getStatus(item) }}
                                 </v-chip>
+                                <v-btn color="green text-light" @click.prevent="notifyCustomer(item)">
+                                    Notify
+                                </v-btn>
+                            </template>
+                            <template v-slot:item.actions="{ item }">
+                                <v-btn
+                                    icon
+                                >
+                                    <v-icon>mdi-eye</v-icon>
+                                </v-btn>                                 
                             </template>
                         </v-data-table>
                     </v-col>
@@ -162,6 +185,7 @@ export default {
                 {text: 'ID', value: 'id'},
                 {text: 'Status', value: 'available_at'},
                 {text: 'Started at', value: 'logged_at'},
+                {text: 'Actions', value: 'actions'},
             ],
             orderHeaders: [
                 {text: 'ID', value: 'id'},
@@ -234,9 +258,9 @@ export default {
         statusColor(item){
             if(item.logged_at === null){
                 return 'red text-light'
-            }else if(item.available_at !== null && item.type === 'EC'){
+            }else if(item.available_at === null && item.type === 'EC'){
                 return 'yellow lighten-1'
-            }else if(item.available_at !== null && item.type === 'ED'){
+            }else if(item.available_at === null && item.type === 'ED'){
                 return 'deep-purple darken-1 text-light'
             }else{
                 return 'green text-light'
@@ -245,10 +269,10 @@ export default {
         getStatus(item){
             if(item.logged_at === null){
                 return 'Offline'
-            }else if(item.available_at !== null && item.type === 'EC'){
-                return 'Preparing'
-            }else if(item.available_at !== null && item.type === 'ED'){
-                return 'Delivering'
+            }else if(item.available_at === null && item.type === 'EC'){
+                return 'Preparing order #'
+            }else if(item.available_at === null && item.type === 'ED'){
+                return 'Delivering order #'
             }else{
                 return 'Available'
             }
@@ -300,8 +324,36 @@ export default {
             if(index > -1){
                 this.activeOrders.splice(index, 1)
             }
+        },
+        globalNotification(){
+            let payload = {
+                user: this.$store.state.user,
+                message: 'Restaurant closing down in 5 minutes',
+            }
+            
+            this.$socket.emit('global_message', payload)
+        },
+        notifyCustomers(){
+            let payload = {
+                user: this.$store.state.user,
+                destination: 'C',
+                message: 'Welcome customer',
+            }
+
+            this.$socket.emit('global_message', payload)
+        },
+        notifyCustomer(user){
+            console.log(user)
+            let payload = {
+                originalUser: this.$store.state.user,
+                destinationUser: user,
+                message: 'This is a private noti'
+            }
+            console.log(payload)
+            this.$socket.emit('customer_message', payload)
         }
     },
+    
     mounted(){
         this.getEmployees()
         this.getActiveOrders()

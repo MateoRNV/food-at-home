@@ -54,6 +54,7 @@
       </v-menu>
     </v-app-bar>
 
+
     <v-navigation-drawer
       v-if="$store.state.user && $store.state.user.type !== 'C'"
       app
@@ -159,6 +160,23 @@ export default {
           this.$toasted.show('No user logged in', {type: 'warning'})
         }
       })
+    }
+  },
+  sockets: {
+    connect(){
+      if(this.$store.state.user){
+        this.$socket.emit('user_logged', this.$store.state.user)
+      }
+    },
+    global_message(payload){
+      this.$toasted.show('Attention ' + this.$store.state.user.name + ': ' + payload.message, {type: 'warning'})
+    },
+    customer_message(payload){
+      console.log(payload)
+      this.$toasted.show('Private message from ' + payload.originalUser.name + ': ' + payload.message, {type: 'success'})
+    },
+    destination_user_not_logged(payload){
+      this.$toasted.show('User ' + payload.destinationUser.name + ' not logged',{type: 'warning'})
     }
   },
 };

@@ -121,9 +121,9 @@ export default {
         markAsDelivered(order){
             axios.post('api/orders/'+order.id+'/status/D').then(() => {
                 this.$store.commit('CLEAR_CURRENT_ORDER')
-                this.$toasted.show('Order delivered :D', {type: 'success'})
+                this.$toasted.show('Order delivered', {type: 'success'})
             }).catch(() => {
-                this.$toasted.show('There was a problem processing your reques', {type: 'error'})
+                this.$toasted.show('There was a problem processing your request', {type: 'error'})
             })
         },
         startDelivery(order){

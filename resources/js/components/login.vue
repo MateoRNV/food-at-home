@@ -4,7 +4,7 @@
       <v-main>
         <v-row class="justify-center">
           <v-col md="auto" class="white rounded-lg p-5">
-            <div class="text-h4 text-center mb-4 font-weight-bold">
+            <div class="text-h4 text-center mb-5">
               Ready to order?
             </div>
             <v-form>

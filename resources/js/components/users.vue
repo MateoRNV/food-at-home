@@ -94,7 +94,7 @@
             <template v-slot:item.actions="{ item }">
               <v-icon
                 small
-                v-if="item.type != 'C'"
+                :disabled="item.type === 'C'"
                 @click="editItemDialog(item)"
                 class="mr-2"
               >

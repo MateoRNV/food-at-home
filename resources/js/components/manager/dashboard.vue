@@ -284,18 +284,14 @@ export default {
         },
         orderStatusColor(status){
             switch(status){
-                case 'H':
+                case 'Holding':
                     return 'grey text-light'
-                case 'P':
+                case 'Preparing':
                     return 'yellow lighten-1'
-                case 'R':
+                case 'Ready':
                     return 'green text-light'
-                case 'T':
+                case 'In Transit':
                     return 'deep-purple darken-1 text-light'
-                case 'D':
-                    return 'green darken-3 text-light'
-                case 'C':
-                    return 'red text-light'
             }
         },
         removeOrderFromList(order){

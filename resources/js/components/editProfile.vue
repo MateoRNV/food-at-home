@@ -4,7 +4,7 @@
       <v-main>
         <v-row class="justify-center align-center flex-column">
           <v-col md="6" class="white rounded-lg p-5">
-            <div class="text-h5 text-center mb-4 font-weight-bold">
+            <div class="text-h4 text-center mb-5">
               Update your account
             </div>
             <v-form lazy-validation>

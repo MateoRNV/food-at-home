@@ -46,4 +46,9 @@ class User extends Authenticatable
     public function customer(){
         return $this->hasOne('App\Models\Customer', 'id')->withTrashed();;
     }
+
+    public function deliveryOrder(){
+        return $this->belongsTo('App\Models\Order', 'delivered_by');
+    }
+
 }

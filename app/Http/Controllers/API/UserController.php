@@ -90,4 +90,8 @@ class UserController extends Controller
 
         return response()->json(['User unblocked successfully. ' . $user, 201]);
     }
+
+    public function getEmployees(){
+        return UserResource::collection(User::where('type', '!=', 'C')->get());
+    }
 }

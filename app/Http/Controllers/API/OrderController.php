@@ -73,7 +73,13 @@ class OrderController extends Controller
                 $order->delivered_by = Auth::user()->id;
                 break;
             case 'D':
+                break;
             case 'C':
+                if($order->status == 'R' || $order->status == 'T'){
+                    $order->delivered_by = null;
+                }else if($order->status == 'H' || $order->status == 'P'){
+                    $order->prepared_by = null;
+                }
                 break;
             default:
                 return response()->json('Status ' . $status . ' doesn\'t exist', 404);
@@ -82,7 +88,11 @@ class OrderController extends Controller
         $order->status = $status;
         $order->save();
             
-        return response()->json(['Order status updated. Order went from '. $oldStatus . ' to ' . $order->status, $order], 200);
+        return response()->json(['message' => 'Order status updated. Order went from '. $oldStatus . ' to ' . $order->status, 'order' => $order], 200);
+    }
+
+    public function getActiveOrders(){
+        return OrderResource::collection(Order::where([['status', '!=', 'D'], ['status', '!=', 'C']])->get());
     }
 
     public function create(CreateOrderRequest $request){

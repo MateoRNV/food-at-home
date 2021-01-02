@@ -34,12 +34,13 @@ Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logou
 //Route::middleware('auth:sanctum')->get('orders', [OrderController::class, 'index']);
 
 Route::get('orders',                       [OrderController::class, 'index']);
+Route::get('orders/active',                [OrderController::class, 'getActiveOrders']);
+Route::post('orders',                      [OrderController::class, 'create']); // create order
 Route::get('orders/status/{status}',       [OrderController::class, 'getStatus']);
 Route::get('orders/{id}/{status}',         [OrderController::class, 'getOrdersByCook']);
 Route::post('orders/{id}/status/{status}', [OrderController::class, 'setOrderStatus']); // Change to patch
 Route::get('orders/{id}',                  [OrderController::class, 'getOrderById']);
 
-Route::post('orders',                      [OrderController::class, 'create']); // create order
 
 Route::get('products',                       [ProductController::class, 'index']);
 Route::post('products',                      [ProductController::class, 'create']);
@@ -50,6 +51,7 @@ Route::delete('products/{id}',               [ProductController::class, 'delete'
 
 
 Route::get('users',             [UserController::class, 'index']);
+Route::get('users/employees',   [UserController::class, 'getEmployees']);
 Route::get('user/{id}',         [UserController::class, 'info']);
 Route::post('user/{id}/block',   [UserController::class, 'block']);
 Route::post('user/{id}/unblock', [UserController::class, 'unblock']);

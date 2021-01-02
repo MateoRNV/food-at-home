@@ -42,6 +42,7 @@ class Order extends JsonResource
             'date' => $this->date,
             'prepared_by' => $this->prepared_by,
             'delivered_by' => $this->delivered_by,
+            'deliveryman_name' => $this->deliveryman,
             'opened_at' => Carbon::parse($this->opened_at)->toTimeString(),
             'closed_at' => Carbon::parse($this->closed_at)->toTimeString(),
             'preparation_time' => $this->preparation_time,

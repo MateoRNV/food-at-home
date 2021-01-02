@@ -35,6 +35,13 @@
                     name="phone"
                     :error-messages="errors.phone"
                   ></v-text-field>
+                  <v-text-field
+                    v-if="isClient"
+                    label="NIF"
+                    v-model="form.nif"
+                    name="nif"
+                    :error-messages="errors.nif"
+                  ></v-text-field>
                 </div>
                 <div class="w-50 px-2">
                   <v-text-field
@@ -45,19 +52,20 @@
                   >
                   </v-text-field>
                   <v-text-field
+                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show2 ? 'text' : 'password'"
+                    name="password_confirmation"
+                    label="Confirm password"
+                    @click:append="show2 = !show2"
+                    v-model="form.password_confirmation"
+                    :error-messages="errors.password"
+                  ></v-text-field>
+                  <v-text-field
                     v-if="isClient"
                     label="Address"
                     v-model="form.address"
                     :error-messages="errors.address"
                     name="address"
-                  ></v-text-field>
-
-                  <v-text-field
-                    v-if="isClient"
-                    label="NIF"
-                    v-model="form.nif"
-                    name="nif"
-                    :error-messages="errors.nif"
                   ></v-text-field>
                 </div>
                 <v-file-input
@@ -105,7 +113,6 @@ export default {
     getUser() {
       axios.get("api/user/" + this.$store.state.user.id).then((res) => {
         this.user = res.data;
-        console.log(this.user);
         axios.get("api/customers/" + this.$store.state.user.id).then((res) => {
           this.form = res.data;
           // console.log(this.form);
@@ -120,7 +127,6 @@ export default {
         this.submitPhoto();
       }
       if (this.$store.state.user.type == "C") {
-        console.log("Is costumer");
         this.updateCustomer();
       } else {
         console.log("Employe");
@@ -128,11 +134,16 @@ export default {
       }
     },
     updateCustomer() {
+      if (typeof this.form.password === "undefined") {
+        this.form.password = null;
+        console.log("here");
+      }
       console.log(this.form.password);
       axios
         .put("/api/customers/" + this.$store.state.user.id, this.form)
-        .then(() => {
+        .then((res) => {
           console.log("Updated!");
+          console.log(res.data);
           this.$toasted.show("Updated succed", {
             type: "success",
             duration: 3000,
@@ -150,6 +161,10 @@ export default {
         });
     },
     updateEmployee() {
+      if (typeof this.form.password === "undefined") {
+        this.form.password = null;
+        console.log("here");
+      }
       axios
         .put("/api/users/" + this.$store.state.user.id, this.form)
         .then(() => {
@@ -204,11 +219,11 @@ export default {
   },
   mounted() {
     this.form = this.$store.state.user;
+    this.form.password = null
     if (this.form.type == "C") {
       this.isClient = true;
       this.getUser();
     }
-    console.log(this.form.name), (this.form.password = null);
   },
 };
 </script>

@@ -59,12 +59,20 @@ class CustomerController extends Controller
         $customer = new Customer;
 
         $user = User::findOrFail($id);
+        $userBackUp = User::findOrFail($id);
         $customer = Customer::findOrFail($id);
 
         $user->type = 'C';
 
         $user->fill($request->validated());
-        $user->password = Hash::make($request->password);
+
+        if($request->password == null){
+            $value = 0;
+            $user->password = $userBackUp->password;
+        }else{
+            $value = 1;
+            $user->password = Hash::make($request->password);
+        }
         //$user->save();
 
 
@@ -80,6 +88,7 @@ class CustomerController extends Controller
         $user->save();
 
         return response()->json(['User updated successfully. ' . $user, 201]);
+      //  return response()->json($value. "----". $user->password);
     }
 
     public function uploadPhoto(Request $request){

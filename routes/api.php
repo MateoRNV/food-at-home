@@ -51,6 +51,8 @@ Route::delete('products/{id}',               [ProductController::class, 'delete'
 
 Route::get('users',             [UserController::class, 'index']);
 Route::get('user/{id}',         [UserController::class, 'info']);
+Route::post('user/{id}/block',   [UserController::class, 'block']);
+Route::post('user/{id}/unblock', [UserController::class, 'unblock']);
 Route::post('users',            [UserController::class, 'create']); // create user
 Route::put('users/{id}',        [UserController::class, 'update']); //edit user
 Route::delete('users/{user}',   [UserController::class, 'destroy']);//delete user
@@ -59,7 +61,7 @@ Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']
 
 Route::get('customers',              [CustomerController::class, 'index']);
 Route::get('customers/{id}',         [CustomerController::class, 'me']);
-Route::get('customers/{id}/orders',         [CustomerController::class, 'getCustomerOrders']);
+Route::get('customers/{id}/orders',  [CustomerController::class, 'getCustomerOrders']);
 Route::post('customers',             [CustomerController::class, 'create']); // create customer
 Route::put('customers/{id}',         [CustomerController::class, 'update']);    //edit customer
 Route::post('customer/photos',       [CustomerController::class, 'uploadPhoto']);

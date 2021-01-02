@@ -49,8 +49,16 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $user = User::findOrFail($id);
+        $userBackUp = User::findOrFail($id);
         $user->fill($validated);
-        $user->password = Hash::make($request->password);
+
+        if($request->password == null){
+            $value = 0;
+            $user->password = $userBackUp->password;
+        }else{
+            $value = 1;
+            $user->password = Hash::make($request->password);
+        }
 
         $user->save();
 
@@ -63,5 +71,23 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return response()->json(['User deleted successfully. ' . $user, 201]);
+    }
+
+    public function block($id){
+        
+        $user = User::findOrFail($id);
+        $user->blocked = 1;
+
+        $user->save();
+
+        return response()->json(['User blocked successfully. ' . $user, 201]);
+    }
+    public function unblock($id){
+        $user = User::findOrFail($id);
+        $user->blocked = 0;
+
+        $user->save();
+
+        return response()->json(['User unblocked successfully. ' . $user, 201]);
     }
 }

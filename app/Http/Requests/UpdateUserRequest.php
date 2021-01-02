@@ -27,7 +27,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['required', 'regex:/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/'],
             'email' => ['required', 'email'],
-            'password' => ['sometimes', 'min:3'],
+            'password' => ['nullable','confirmed', 'min:3'],
             'type' => ['required', Rule::in(['EM', 'EC', 'ED', 'C'])]
         ];
     }
@@ -41,6 +41,7 @@ class UpdateUserRequest extends FormRequest
             'email.email' => "Provide a valid email",
 
             'password.min' => "The password must have at least 3 characters",
+            'password.confirmed' => "Passwords do not match",
 
             'type.required' => "You have to provide a type",
             'type.rule' => "Invalid type of type", 

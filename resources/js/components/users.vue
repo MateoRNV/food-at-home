@@ -29,7 +29,10 @@
             <v-dialog v-model="dialogDelete" max-width="300">
               <v-card>
                 <v-card-title>Are you sure?</v-card-title>
-                <v-card-text>Please confirm you want to delete {{ userDelete.name }}?</v-card-text>
+                <v-card-text
+                  >Please confirm you want to delete
+                  {{ userDelete.name }}?</v-card-text
+                >
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="red" text @click="closeDelete">Cancel</v-btn>
@@ -69,11 +72,41 @@
               ></v-img>
             </template>
 
+            <template v-slot:item.btnBlock="{ item }">
+              <v-btn
+                v-if="item.blocked == 0"
+                @click="block(item)"
+                color="primary"
+                dark
+              >
+                Block</v-btn
+              >
+              <v-btn
+                v-if="item.blocked == 1"
+                @click="unblock(item)"
+                color="primary"
+                dark
+              >
+                Unblock</v-btn
+              >
+            </template>
+
             <template v-slot:item.actions="{ item }">
-              <v-icon small v-if="item.type != 'C'" @click="editItemDialog(item)" class="mr-2">
+              <v-icon
+                small
+                v-if="item.type != 'C'"
+                @click="editItemDialog(item)"
+                class="mr-2"
+              >
                 mdi-pencil
               </v-icon>
-              <v-icon small v-if="item.id != $store.state.user.id" @click="deleteDialog(item)"> mdi-delete </v-icon>
+              <v-icon
+                small
+                v-if="item.id != $store.state.user.id"
+                @click="deleteDialog(item)"
+              >
+                mdi-delete
+              </v-icon>
             </template>
           </v-data-table>
         </v-main>
@@ -92,7 +125,7 @@ export default {
     return {
       dialogAdd: false,
       dialogDelete: false,
-      userDelete: '',
+      userDelete: "",
       userEdit: "",
       isNew: null,
       title: null,
@@ -108,6 +141,7 @@ export default {
         { text: "Name", value: "name", groupable: false },
         { text: "Email", value: "email", groupable: false },
         { text: "Type", value: "type" },
+        { text: "Disable Users", value: "btnBlock", groupable: false },
         {
           text: "Actions",
           value: "actions",
@@ -127,6 +161,7 @@ export default {
     editItemDialog(item) {
       /*this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);*/
+      console.log(this.$store.state.user);
       this.title = "Edit User";
       this.isNew = false;
       this.userEdit = item;
@@ -136,8 +171,7 @@ export default {
       this.dialogAdd = false;
     },
     deleteDialog(item) {
-      (this.dialogDelete = true),
-        (this.userDelete = item)
+      (this.dialogDelete = true), (this.userDelete = item);
     },
     closeDelete() {
       this.dialogDelete = false;
@@ -150,7 +184,37 @@ export default {
           this.$toasted.show("User deleted", { type: "success" });
         })
         .catch((e) => {
-          this.$toasted.show("There was a problem, please try again", { type: "error" })
+          this.$toasted.show("There was a problem, please try again", {
+            type: "error",
+          });
+        });
+    },
+    block(item) {
+      console.log(item.id);
+      axios
+        .post("api/user/" + item.id + "/block")
+        .then((response) => {
+          this.dialogDelete = false;
+          this.$toasted.show("User blocked", { type: "success" });
+        })
+        .catch((e) => {
+          this.$toasted.show("There was a problem, please try again", {
+            type: "error",
+          });
+        });
+    },
+    unblock(item) {
+      console.log(item.id);
+      axios
+        .post("api/user/" + item.id + "/unblock")
+        .then((response) => {
+          this.dialogDelete = false;
+          this.$toasted.show("User unblocked", { type: "success" });
+        })
+        .catch((e) => {
+          this.$toasted.show("There was a problem, please try again", {
+            type: "error",
+          });
         });
     },
   },

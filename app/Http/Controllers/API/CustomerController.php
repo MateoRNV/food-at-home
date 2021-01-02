@@ -73,7 +73,6 @@ class CustomerController extends Controller
             $value = 1;
             $user->password = Hash::make($request->password);
         }
-        //$user->save();
 
 
         try{
@@ -88,7 +87,6 @@ class CustomerController extends Controller
         $user->save();
 
         return response()->json(['User updated successfully. ' . $user, 201]);
-      //  return response()->json($value. "----". $user->password);
     }
 
     public function uploadPhoto(Request $request){

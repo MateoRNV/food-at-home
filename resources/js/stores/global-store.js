@@ -29,6 +29,23 @@ export default new Vuex.Store({
         SET_USER_LIST(state, users){
             state.users = users
         },
+        UPDATE_USER_FROM_LIST(state, user){
+            const index = state.users.findIndex(item => item.id === user.id)
+
+            if(index > -1){
+                state.users.splice(index, 1, user)
+            }
+        },
+        ADD_USER_TO_LIST(state, user){
+            state.users.push(user)
+        },
+        REMOVE_USER_FROM_LIST(state, user){
+            const index = state.users.indexOf(user)
+
+            if(index > -1){
+                state.users.splice(index, 1)
+            }
+        },
         SET_PRODUCTS_LIST(state, products){
             state.products = products
         },

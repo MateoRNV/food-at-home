@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     addUser() {
-      (this.userEdit = { name: "", email: "", password: "", type: "" }),
+      (this.userEdit = { }),
         (this.title = "Add new Employee"),
         (this.dialogAdd = false);
       this.isNew = true;
@@ -161,14 +161,15 @@ export default {
     editItemDialog(item) {
       /*this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);*/
-      console.log(this.$store.state.user);
       this.title = "Edit User";
       this.isNew = false;
-      this.userEdit = item;
+      this.userEdit = Object.assign({}, item)
+     // this.userEdit = item;
       this.dialogAdd = true;
     },
-    fecharDialog(isSuccess) {
+    fecharDialog() {
       this.dialogAdd = false;
+      //this.userEdit = {}
     },
     deleteDialog(item) {
       (this.dialogDelete = true), (this.userDelete = item);
@@ -180,6 +181,8 @@ export default {
       axios
         .delete("api/users/" + this.userDelete.id)
         .then((response) => {
+          console.log(response.data.user)
+          this.$store.commit("REMOVE_USER_FROM_LIST", this.userDelete);
           this.dialogDelete = false;
           this.$toasted.show("User deleted", { type: "success" });
         })
@@ -194,6 +197,7 @@ export default {
       axios
         .post("api/user/" + item.id + "/block")
         .then((response) => {
+          this.$store.commit("UPDATE_USER_FROM_LIST", response.data.user);
           this.dialogDelete = false;
           this.$toasted.show("User blocked", { type: "success" });
         })
@@ -208,6 +212,8 @@ export default {
       axios
         .post("api/user/" + item.id + "/unblock")
         .then((response) => {
+          
+          this.$store.commit("UPDATE_USER_FROM_LIST", response.data.user);
           this.dialogDelete = false;
           this.$toasted.show("User unblocked", { type: "success" });
         })

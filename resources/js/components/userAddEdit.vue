@@ -1,96 +1,80 @@
 <template>
-  
-    <v-card>
-      <v-card-title class="justify-center">
-        <span class="headline">
-          {{ formTitle }}
-        </span>
-      </v-card-title>
+  <v-card>
+    <v-card-title class="justify-center">
+      <span class="headline">
+        {{ formTitle }}
+      </span>
+    </v-card-title>
 
-      <v-card-text>
-        <v-container>
-          <v-text-field
-            label="Fullname"
-            v-model="user.name"
-            :error-messages="errors.name"
-            outlined
-          ></v-text-field>
+    <v-card-text>
+      <v-container>
+        <v-text-field
+          label="Fullname"
+          v-model="user.name"
+          :error-messages="errors.name"
+          outlined
+        ></v-text-field>
 
-          <v-row>
-            <v-col>
-              <v-text-field
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                :type="show ? 'text' : 'password'"
-                label="Password"
-                outlined
-                @click:append="show = !show"
-                v-model="user.password"
-                :error-messages="errors.password"
-              ></v-text-field>
-            </v-col>
-            <v-col>
-              <v-text-field
-                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                :type="show2 ? 'text' : 'password'"
-                name="password_confirmation"
-                label="Confirm password"
-                outlined
-                @click:append="show2 = !show2"
-                v-model="user.password_confirmation"
-                :error-messages="errors.password"
-              ></v-text-field>
-            </v-col>
-          </v-row>
+        <v-row>
+          <v-col>
+            <v-text-field
+              :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show ? 'text' : 'password'"
+              label="Password"
+              outlined
+              @click:append="show = !show"
+              v-model="user.password"
+              :error-messages="errors.password"
+            ></v-text-field>
+          </v-col>
+          <v-col>
+            <v-text-field
+              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show2 ? 'text' : 'password'"
+              name="password_confirmation"
+              label="Confirm password"
+              outlined
+              @click:append="show2 = !show2"
+              v-model="user.password_confirmation"
+              :error-messages="errors.password"
+            ></v-text-field>
+          </v-col>
+        </v-row>
 
-          <v-text-field
-            label="Email"
-            outlined
-            v-model="user.email"
-            :error-messages="errors.email"
-          ></v-text-field>
-          <v-select
-            :items="userTypes"
-            label="Type of user"
-            v-model="user.type"
-            outlined
-            :error-messages="errors.type"
-          ></v-select>
-          <v-file-input
-            show-size
-            outlined
-            prepend-inner-icon="mdi-camera"
-            prepend-icon=""
-            label="Profile photo"
-          ></v-file-input>
-        </v-container>
-      </v-card-text>
+        <v-text-field
+          label="Email"
+          outlined
+          v-model="user.email"
+          :error-messages="errors.email"
+        ></v-text-field>
+        <v-select
+          :items="userTypes"
+          label="Type of user"
+          v-model="user.type"
+          outlined
+          :error-messages="errors.type"
+        ></v-select>
+        <v-file-input
+          show-size
+          outlined
+          prepend-inner-icon="mdi-camera"
+          prepend-icon=""
+          label="Profile photo"
+        ></v-file-input>
+      </v-container>
+    </v-card-text>
 
-      <v-card-actions class="pb-2 pr-2">
-        <v-spacer></v-spacer>
-        <v-btn color="red" 
-          @click.prevent="cancel" 
-          text
-        >
-          Cancel
-        </v-btn>
-        <v-btn
-          v-if="isNew"
-          color="green"
-          text
-          @click.prevent="registerAccount"
-        >
-          Create account
-        </v-btn>
-        <v-btn
-          v-else
-          color="green"
-          text
-          @click.prevent="updateAccount"
-          >
-            Update
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+    <v-card-actions class="pb-2 pr-2">
+      <v-spacer></v-spacer>
+      <v-btn color="red" @click.prevent="cancel" text> Cancel </v-btn>
+      <v-btn v-if="isNew" color="green" text @click.prevent="registerAccount">
+        Create account
+      </v-btn>
+      <v-btn v-else color="green" text @click.prevent="updateAccount">
+        Update
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 
@@ -102,15 +86,18 @@ export default {
       userTypes: ["EC", "ED", "EM"],
       show: false,
       show2: false,
-      errors: [],
+      errors: []
     };
   },
   methods: {
     registerAccount() {
       axios
         .post("/api/users", this.user)
-        .then(() => {
+        .then((res) => {
           console.log("Registered!");
+          console.log("Res" + res.data.user);
+          this.$store.commit("ADD_USER_TO_LIST", res.data.user);
+          this.$store.commit("UPDATE_USER_FROM_LIST", res.data.user);
           this.$toasted.show("Created succed", {
             type: "success",
             duration: 3000,
@@ -128,12 +115,12 @@ export default {
       this.$emit("dialog", true);
     },
     updateAccount() {
-      console.log(this.user.id);
       axios
         .put("/api/users/" + this.user.id, this.user)
-        .then(() => {
+        .then((res) => {
           console.log("Updated!");
-          console.log(this.user);
+          this.$store.commit("UPDATE_USER_FROM_LIST", res.data.user);
+          console.log(res.data.user);
           this.$toasted.show("Updated succed", {
             type: "success",
             duration: 3000,
@@ -149,12 +136,12 @@ export default {
           });
         });
 
-      this.$emit("dialog", false);
+      this.$emit("dialog");
     },
     cancel() {
-      this.$emit("dialog", false);
+      this.$emit("dialog", this.user);
     },
-  },
+  }
 };
 </script>
 

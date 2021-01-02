@@ -41,7 +41,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(['User created successfully. ' . $user, 201]);
+        return response()->json(['message' => 'User created successfully.', 'user' => $user], 200);
     }
 
 
@@ -63,14 +63,21 @@ class UserController extends Controller
         $user->save();
 
 
-        return response()->json(['User updated successfully. ' . $user, 201]);
+        return response()->json(['message' => 'User updated successfully.', 'user' => $user], 200);
     }
     
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+
+        if ($user->type == 'C') {
+            $customer = Customer::findOrFail($id);
+            $customer->delete();
+        }
+        
         $user->delete();
-        return response()->json(['User deleted successfully. ' . $user, 201]);
+
+        return response()->json(['message' => 'User deleted successfully.', 'user' => $user], 200);
     }
 
     public function block($id){
@@ -80,7 +87,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(['User blocked successfully. ' . $user, 201]);
+        return response()->json(['message' => 'User blocked successfully.', 'user' => $user], 200);
     }
     public function unblock($id){
         $user = User::findOrFail($id);
@@ -88,7 +95,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(['User unblocked successfully. ' . $user, 201]);
+        return response()->json(['message' => 'User unblocked successfully.', 'user' => $user], 200);
     }
 
     public function getEmployees(){

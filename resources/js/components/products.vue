@@ -2,7 +2,7 @@
   <v-main class="grey lighten-4">
     <v-container fluid>
       <div class="white rounded-lg px-5 py-5 my-5">
-        <div class="text-h2 text-center font-weight-bold d-block mb-5">Our menu</div>
+        <div class="text-h4 text-center mb-5">Our menu</div>
        
         <div class="d-flex flex-wrap justify-space-around">
           <v-data-iterator
@@ -75,7 +75,7 @@
                     class="p-2"
                   >
                     <v-card
-                      class="my-12"
+                      class="my-12 mx-auto"
                       width="300" 
                     >
 

@@ -1,8 +1,7 @@
 <template>
   <v-app>
-
+      
     <v-app-bar app dark>
-      <v-app-bar-nav-icon @click="drawer = true" v-if="$store.state.user && $store.state.user.type === 'EM'"></v-app-bar-nav-icon>
       <v-toolbar-title>Food@Home</v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -56,13 +55,22 @@
     </v-app-bar>
 
     <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      temporary
+      v-if="$store.state.user && $store.state.user.type !== 'C'"
+      app
+      fixed
+      permanent
+      expand-on-hover
     >
-      <v-list nav dense>
+      <v-list nav>
         <v-list-item-group>
           <v-subheader>MANAGEMENT</v-subheader>
+          <v-list-item to="/manager">
+            <v-list-item-icon>
+              <v-icon>mdi-view-dashboard</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Dashboard</v-list-item-title>
+          </v-list-item>
+
           <v-list-item to="/users">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
@@ -101,7 +109,6 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-
     
     <router-view></router-view>
       

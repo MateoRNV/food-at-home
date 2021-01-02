@@ -10,7 +10,8 @@ import Toasted from 'vue-toasted'
 import store from './stores/global-store'
 import HomepageComponent from './components/homepage'
 import ProductComponent from './components/products'
-import AdminProductComponent from './components/manager/products'
+import ManagerProductComponent from './components/manager/products'
+import ManagerDashboardComponent from './components/manager/dashboard'
 import LoginComponent from './components/login'
 import RegisterComponent from './components/register'
 import CookComponent from './components/cook'
@@ -33,7 +34,8 @@ const routes = [
     { path: '/cook', component: CookComponent },
     { path: '/cart', component: CartComponent },
     { path: '/delivery/dashboard', component: DeliveryDashboardComponent },
-    { path: '/manager/products', component: AdminProductComponent },
+    { path: '/manager/', component: ManagerDashboardComponent },
+    { path: '/manager/products', component: ManagerProductComponent },
     { path: '/me/edit', component: EditProfileComponent },
     { path: '/me/orders', component: CustomerOrdersComponent },
 ]

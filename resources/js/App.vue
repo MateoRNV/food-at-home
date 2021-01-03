@@ -169,14 +169,14 @@ export default {
       }
     },
     global_message(payload){
+      // To modify
       this.$toasted.show('Attention ' + this.$store.state.user.name + ': ' + payload.message, {type: 'warning'})
     },
     customer_message(payload){
-      console.log(payload)
-      this.$toasted.show('Private message from ' + payload.originalUser.name + ': ' + payload.message, {type: 'success'})
+      this.$toasted.show(payload.message, {type: payload.messageType })
     },
     destination_user_not_logged(payload){
-      this.$toasted.show('User ' + payload.destinationUser.name + ' not logged',{type: 'warning'})
+      this.$toasted.show('User ' + payload.destinationUser.name + ' not logged', {type: 'warning'})
     }
   },
 };

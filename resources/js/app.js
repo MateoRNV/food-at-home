@@ -53,9 +53,7 @@ Vue.use(new VueSocketIO({
 
 Vue.use(Toasted, {
     position: 'bottom-right',
-    duration: 3000,
-    type: 'info',
-    singleton: true,
+    duration: 5000,
     theme: 'outline',
     router
 })

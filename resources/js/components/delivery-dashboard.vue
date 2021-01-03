@@ -109,7 +109,6 @@ export default {
     data(){
         return {
             orders:[],
-            // currentOrderElapsed: ''
         }
     },
     methods: {
@@ -119,8 +118,9 @@ export default {
             })
         },
         markAsDelivered(order){
-            axios.post('api/orders/'+order.id+'/status/D').then(() => {
+            axios.post('api/orders/'+order.id+'/status/D').then(res => {
                 this.$store.commit('CLEAR_CURRENT_ORDER')
+                this.$socket.emit('remove_order_from_list', res.data.order)
                 this.$toasted.show('Order delivered', {type: 'success'})
             }).catch(() => {
                 this.$toasted.show('There was a problem processing your request', {type: 'error'})
@@ -130,7 +130,9 @@ export default {
             axios.get('api/orders/' + order.id).then(res => {
                 this.$store.commit('SET_CURRENT_ORDER', res.data.data[0])
 
-                axios.post('api/orders/'+order.id+'/status/T').then(() => {
+                axios.post('api/orders/'+order.id+'/status/T').then(res => {
+                    this.removeOrderFromList(res.data.order)
+                    this.$socket.emit('update_orders_list', res.data.order)
                     this.$toasted.show('Order in transit', {type: 'success'})
                 })
                 .catch(e => {
@@ -138,15 +140,24 @@ export default {
                 })
             })
         },
-        // setElapsedTime(order){
-        //     const event = setInterval(() => {
-        //         this.currentOrderElapsed = new Date(new Date().getTime() - new Date(order.current_status_at).getTime()).toLocaleString()
-        //     }, 1000)
-        // }
+        removeOrderFromList(order){
+            const index = this.orders.findIndex(v => v.id === order.id)
+
+            if(index > -1){
+                this.orders.splice(index, 1)
+            }
+        }
     },
     mounted(){
         this.getOrders()
-        // this.setElapsedTime(this.$store.state.currentOrder)
+    },
+    sockets: {
+        delivery_dashboard_update(){
+            this.$store.commit('CLEAR_CURRENT_ORDER')
+        },
+        update_orders_list(orderToRemove){
+            this.removeOrderFromList(orderToRemove)
+        }
     }
 }
 </script>

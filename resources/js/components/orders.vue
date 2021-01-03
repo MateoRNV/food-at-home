@@ -88,7 +88,7 @@ export default {
     },
     methods : {
         getCustomerOrders(){
-            axios.get('api/users/me').then(user => {
+            axios.get('api/user/me').then(user => {
                 axios.get('api/customers/'+ user.data.id +'/orders').then(res => {
                     this.orders = res.data.orders
                 })

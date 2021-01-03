@@ -42,13 +42,18 @@
                                     </v-img>
                                 </v-avatar>
                             </template>
+
+                            <template v-slot:item.type="{ item }">
+                                {{ typeToStr(item.type) }}
+                            </template>
+
                             <template v-slot:item.available_at="{ item }">
                                 <v-chip :color="statusColor(item)">
                                     {{ getStatus(item) }}
                                 </v-chip>
-                                <v-btn color="green text-light" @click.prevent="notifyCustomer(item)">
-                                    Notify
-                                </v-btn>
+                            </template>
+                            <template v-slot:item.logged_at="{ item }">
+                                {{ (item.logged_at !== null) ? new Date(item.logged_at).toLocaleTimeString() : '-' }}
                             </template>
                             <template v-slot:item.actions="{ item }">
                                 <v-btn
@@ -57,6 +62,9 @@
                                     <v-icon>mdi-eye</v-icon>
                                 </v-btn>                                 
                             </template>
+                            <template v-slot:loading>
+                                Loading employees
+                            </template>
                         </v-data-table>
                     </v-col>
                     <v-col>
@@ -64,6 +72,8 @@
                         <v-data-table
                             :headers="orderHeaders"
                             :items="activeOrders"
+                            :sort-by.sync="sortOrdersBy"
+                            :sort-desc.sync="sortDesc"
                         >
                             <template v-slot:top>
                                 <v-dialog v-model="viewOrderDialog" max-width="500" persistent>
@@ -149,7 +159,7 @@
                             </template>
                             <template v-slot:item.status="{ item }">
                                 <v-chip :color="orderStatusColor(item.status)" class="px-5">
-                                    {{ item.status}}
+                                    {{ getOrderStatus(item.status) }}
                                 </v-chip>
                             </template>
                             <template v-slot:item.actions="{ item }">
@@ -166,6 +176,16 @@
                                     <v-icon>mdi-cancel</v-icon>
                                 </v-btn>
                             </template>
+                            <template v-slot:item.current_status_at="{ item }">
+                                {{ (item.current_status_at !== null) ? new Date(item.current_status_at).toLocaleTimeString() : '-' }}
+                            </template>
+
+                            <template v-slot:no-data>
+                                There's currently no orders
+                            </template>
+                            <template v-slot:loading>
+                                Loading orders
+                            </template>
                         </v-data-table>
                     </v-col>
                 </v-row>
@@ -180,21 +200,24 @@ export default {
     data(){
         return {
             employeeHeaders: [
-                {text: '', value: 'photo_url'},
-                {text: 'Name', value: 'name'},
-                {text: 'ID', value: 'id'},
+                {text: '', value: 'photo_url', sortable: false},
+                {text: 'Name', value: 'name', sortable: false},
+                {text: 'ID', value: 'id', sortable: false},
+                {text: 'Type', value: 'type'},
                 {text: 'Status', value: 'available_at'},
-                {text: 'Started at', value: 'logged_at'},
-                {text: 'Actions', value: 'actions'},
+                {text: 'Started at', value: 'logged_at', sortable: false},
+                {text: 'Actions', value: 'actions', sortable: false, },
             ],
             orderHeaders: [
-                {text: 'ID', value: 'id'},
+                {text: 'ID', value: 'id', sortable: false},
                 {text: 'Status', value: 'status'},
-                {text: 'Prepared by', value: 'prepared_by'},
-                {text: 'Delivered by', value: 'delivered_by'},
-                {text: 'Updated at', value: 'current_status_at'},
-                {text: 'Actions', value: 'actions'},
+                {text: 'Prepared by', value: 'prepared_by', sortable: false},
+                {text: 'Delivered by', value: 'delivered_by', sortable: false},
+                {text: 'Updated at', value: 'current_status_at', sortable: false},
+                {text: 'Actions', value: 'actions', sortable: false},
             ],
+            sortOrdersBy: 'current_status_at',
+            sortDesc: true,
             employees: [],
             activeOrders: [],
             viewOrderDialog: false,
@@ -207,12 +230,6 @@ export default {
         getEmployees(){
             axios.get('api/users/employees').then(res => {
                 this.employees = res.data.data
-
-                this.employees.map(employee => {
-                    if(employee.logged_at !== null){
-                        employee.logged_at = new Date(employee.logged_at).toLocaleTimeString()
-                    }
-                })
             }).catch(() => {
                 this.$toasted.show('There was a problem while fetching the active employees', {type: 'error'})
             })
@@ -220,37 +237,6 @@ export default {
         getActiveOrders(){
             axios.get('api/orders/active').then(res => {
                 this.activeOrders = res.data.data
-
-                this.activeOrders.map(order => {
-                    if(order.prepared_by === null){
-                        order.prepared_by = '-'
-                    }
-                    
-                    if(order.delivered_by === null){
-                        order.delivered_by = '-'
-                    }
-
-                    switch(order.status){
-                        case 'H':
-                            order.status = 'Holding'
-                            break
-                        case 'P':
-                            order.status = 'Preparing'
-                            break
-                        case 'R':
-                            order.status = 'Ready'
-                            break
-                        case 'T':
-                            order.status = 'In Transit'
-                            break
-                        case 'D':
-                            order.status = 'Delivered'
-                            break
-                        case 'C':
-                            order.status = 'Cancelled'
-                            break
-                    }
-                })
             }).catch(() => {
                 this.$toasted.show('There was a problem while fetching the active orders', {type: 'error'})
             })
@@ -277,6 +263,38 @@ export default {
                 return 'Available'
             }
         },
+        getOrderStatus(item){
+            switch(item){
+                case 'H':
+                    return 'Holding'
+                    break
+                case 'P':
+                    return 'Preparing'
+                    break
+                case 'R':
+                    return 'Ready'
+                    break
+                case 'T':
+                    return 'In Transit'
+                    break
+                case 'D':
+                    return 'Delivered'
+                    break
+                case 'C':
+                    return 'Cancelled'
+                    break
+            }
+        },
+        typeToStr(type){
+            switch(type){
+                case 'EC':
+                    return 'Cook'
+                case 'ED':
+                    return 'Delivery'
+                case 'EM':
+                    return 'Manager'
+            }
+        },
         viewOrder(order){
             this.getOrder(order)
             this.viewOrderDialog = true
@@ -300,21 +318,34 @@ export default {
             axios.post('api/orders/'+this.orderToCancel.id+'/status/C').then(res => {
                 this.removeOrderFromList(this.orderToCancel)
                 this.cancelOrderDialog = false
+
+                // If order is being prepared or in transit
+                if(this.orderToCancel.status === 'Preparing'){
+                    this.notifyCustomer(this.orderToCancel.prepared_by, 'The order you\'re working on has been cancelled', 'error')
+                    this.clearCurrentOrder(this.orderToCancel.prepared_by) // Narvaez, modifica acordemente si es necesario
+                }else if(this.orderToCancel.status === 'In Transit'){
+                    this.clearCurrentOrder(this.orderToCancel.delivered_by)
+                    this.notifyCustomer(this.orderToCancel.delivered_by, 'The order you\'re delivering has been cancelled', 'error')
+                }
+
+                this.$socket.emit('remove_order_from_list', res.data.order)
+
                 this.orderToCancel = ''
                 this.$toasted.show('Order canceled. Customer notified.', {type: 'success'})
-            }).catch(() => {
+            }).catch(e => {
                 this.$toasted.show('Something happened while canceling the order', {type: 'error'})
+                console.log(e)
             })
         },
         orderStatusColor(status){
             switch(status){
-                case 'Holding':
+                case 'H':
                     return 'grey text-light'
-                case 'Preparing':
+                case 'P':
                     return 'yellow lighten-1'
-                case 'Ready':
+                case 'R':
                     return 'green text-light'
-                case 'In Transit':
+                case 'T':
                     return 'deep-purple darken-1 text-light'
             }
         },
@@ -342,22 +373,69 @@ export default {
 
             this.$socket.emit('global_message', payload)
         },
-        notifyCustomer(user){
-            console.log(user)
-            let payload = {
-                originalUser: this.$store.state.user,
-                destinationUser: user,
-                message: 'This is a private noti'
+        notifyCustomer(userId, msg, msgType){
+            axios.get('api/users/'+userId).then(res => {
+                const user = res.data
+
+                let payload = {
+                    originalUser: this.$store.state.user,
+                    destinationUser: user,
+                    message: msg,
+                    messageType: msgType
+                }
+                
+                this.$socket.emit('customer_message', payload)
+            }).catch(() => {
+                console.log('Problem while getting user')
+            })
+        },
+        clearCurrentOrder(userId){
+            axios.get('api/users/' + userId).then( res => {
+                const user = res.data
+                console.log(user)
+                let payload = {
+                    destinationUser: user
+                }
+    
+                this.$socket.emit('delivery_dashboard_update', payload)
+            }).catch(() => {
+                console.log('Problem while getting delivery user')
+            })
+        },
+        refreshOrder(order){
+            let index = this.activeOrders.findIndex(v => v.id === order.id)
+            
+            if(index > -1){
+                this.activeOrders.splice(index, 1, order)
             }
-            console.log(payload)
-            this.$socket.emit('customer_message', payload)
+        },
+        removeDeletedOrder(order){
+            let index = this.activeOrders.findIndex(v => v.id === order.id)
+
+            if(index > -1){
+                this.activeOrders.splice(index, 1)
+            }
+        },
+        addOrder(order){
+            this.activeOrders.push(order)
         }
     },
-    
     mounted(){
         this.getEmployees()
         this.getActiveOrders()
+    },
+    sockets: {
+        update_orders_list(orderToUpdate){
+            this.refreshOrder(orderToUpdate)
+        },
+        remove_order_from_list(orderToRemove){
+            this.removeDeletedOrder(orderToRemove)
+        },
+        add_order_to_list(orderToAdd){
+            this.addOrder(orderToAdd)
+        }
     }
+    
 }
 </script>
 

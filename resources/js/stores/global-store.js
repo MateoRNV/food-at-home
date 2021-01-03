@@ -142,7 +142,7 @@ export default new Vuex.Store({
     },
     actions: {
         loadUserLogged(context){
-            axios.get('api/users/me').then(res => {
+            axios.get('api/user/me').then(res => {
                 context.commit('SET_USER', res.data)
             })
             .catch(() => {

@@ -52,14 +52,14 @@ Route::delete('products/{id}',               [ProductController::class, 'delete'
 
 Route::get('users',             [UserController::class, 'index']);
 Route::get('users/employees',   [UserController::class, 'getEmployees']);
-Route::get('user/{id}',         [UserController::class, 'info']);
-Route::post('user/{id}/block',   [UserController::class, 'block']);
-Route::post('user/{id}/unblock', [UserController::class, 'unblock']);
+Route::get('users/{id}',         [UserController::class, 'info']);
+Route::post('users/{id}/block',   [UserController::class, 'block']);
+Route::post('users/{id}/unblock', [UserController::class, 'unblock']);
 Route::post('users',            [UserController::class, 'create']); // create user
 Route::put('users/{id}',        [UserController::class, 'update']); //edit user
 Route::delete('users/{user}',   [UserController::class, 'destroy']);//delete user
 
-Route::middleware('auth:sanctum')->get('users/me', [UserController::class, 'me']);
+Route::middleware('auth:sanctum')->get('user/me', [UserController::class, 'me']);
 
 Route::get('customers',              [CustomerController::class, 'index']);
 Route::get('customers/{id}',         [CustomerController::class, 'me']);

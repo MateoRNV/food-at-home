@@ -141,6 +141,9 @@ export default {
       axios
         .post("/api/orders/", this.form)
         .then((res) => {
+          console.log(res.data)
+          this.$socket.emit('add_order_to_list', res.data)
+
           this.$toasted.show('Order #'+res.data.id+' processed successfully', {type: 'success'})
           this.$router.push('/me/orders')
           this.$store.commit('CLEAR_CART')

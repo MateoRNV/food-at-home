@@ -28,7 +28,8 @@ class CreateUserRequest extends FormRequest
             'name' => ['required','regex:/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/' ],
             'email' => ['required', 'email', 'unique:users'],
             'type' => ['required', Rule::in(['EM', 'EC', 'ED', 'C'])],
-            'password' => ['required', 'min:3'] 
+            'password' => ['required', 'min:3'],
+            'photo_url' => ['nullable'],
         ];
     }
 

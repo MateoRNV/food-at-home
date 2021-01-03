@@ -28,7 +28,8 @@ class UpdateUserRequest extends FormRequest
             'name' => ['required', 'regex:/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/'],
             'email' => ['required', 'email'],
             'password' => ['nullable','confirmed', 'min:3'],
-            'type' => ['required', Rule::in(['EM', 'EC', 'ED', 'C'])]
+            'type' => ['required', Rule::in(['EM', 'EC', 'ED', 'C'])],
+            'photo_url' => ['nullable'],
         ];
     }
 

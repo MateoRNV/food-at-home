@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\User as UserResource;
@@ -53,11 +54,15 @@ class UserController extends Controller
         $user->fill($validated);
 
         if($request->password == null){
-            $value = 0;
             $user->password = $userBackUp->password;
         }else{
-            $value = 1;
             $user->password = Hash::make($request->password);
+        }
+
+        if($request->photo_url == null){
+            $user->photo_url = $userBackUp->photo_url;
+        }else{
+            $user->photo_url = $request->photo_url;
         }
 
         $user->save();
@@ -100,5 +105,27 @@ class UserController extends Controller
 
     public function getEmployees(){
         return UserResource::collection(User::where('type', '!=', 'C')->get());
+    }
+    
+    public function uploadPhoto(Request $request){
+        $request->validate(['photo_file' => 'image|mimes:jpeg,png,jpg']);
+
+        $path = Storage::putFile('public/fotos', $request->file('photo_file'));
+
+        return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 
+                                 'filename' => $request->file('photo_file')->hashName()], 201);
+    }
+
+    public function updatePhoto(Request $request, $id){
+        $request->validate(['photo_file' => 'image|mimes:jpeg,png,jpg']);
+        
+        $user = User::findOrFail($id);
+
+        // Delete previous photo
+        Storage::disk('public')->delete('fotos/'.$user->photo_url);
+
+        $path = Storage::putFile('public/fotos', $request->file('photo_file'));
+
+        return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()], 201);
     }
 }

@@ -72,25 +72,6 @@
               ></v-img>
             </template>
 
-            <template v-slot:item.btnBlock="{ item }">
-              <v-btn
-                v-if="item.blocked == 0"
-                @click="block(item)"
-                color="primary"
-                dark
-              >
-                Block</v-btn
-              >
-              <v-btn
-                v-if="item.blocked == 1"
-                @click="unblock(item)"
-                color="primary"
-                dark
-              >
-                Unblock</v-btn
-              >
-            </template>
-
             <template v-slot:item.actions="{ item }">
               <v-icon
                 small
@@ -99,6 +80,22 @@
                 class="mr-2"
               >
                 mdi-pencil
+              </v-icon>
+              <v-icon
+                small
+                v-if="item.blocked == 0"
+                @click="block(item)"
+                class="mr-2"
+              >
+                mdi-lock-open-variant
+              </v-icon>
+              <v-icon
+                small
+                v-if="item.blocked == 1"
+                @click="unblock(item)"
+                class="mr-2"
+              >
+                mdi-lock
               </v-icon>
               <v-icon
                 small
@@ -141,7 +138,6 @@ export default {
         { text: "Name", value: "name", groupable: false },
         { text: "Email", value: "email", groupable: false },
         { text: "Type", value: "type" },
-        { text: "Disable Users", value: "btnBlock", groupable: false },
         {
           text: "Actions",
           value: "actions",
@@ -153,7 +149,7 @@ export default {
   },
   methods: {
     addUser() {
-      (this.userEdit = { }),
+      (this.userEdit = {}),
         (this.title = "Add new Employee"),
         (this.dialogAdd = false);
       this.isNew = true;
@@ -163,8 +159,9 @@ export default {
       this.editedItem = Object.assign({}, item);*/
       this.title = "Edit User";
       this.isNew = false;
-      this.userEdit = Object.assign({}, item)
-     // this.userEdit = item;
+      this.userEdit = Object.assign({}, item);
+      this.userEdit.password = null;
+      this.userEdit.photo_url = null
       this.dialogAdd = true;
     },
     fecharDialog() {
@@ -181,7 +178,7 @@ export default {
       axios
         .delete("api/users/" + this.userDelete.id)
         .then((response) => {
-          console.log(response.data.user)
+          console.log(response.data.user);
           this.$store.commit("REMOVE_USER_FROM_LIST", this.userDelete);
           this.dialogDelete = false;
           this.$toasted.show("User deleted", { type: "success" });
@@ -195,7 +192,7 @@ export default {
     block(item) {
       console.log(item.id);
       axios
-        .post("api/user/" + item.id + "/block")
+        .post("api/users/" + item.id + "/block")
         .then((response) => {
           this.$store.commit("UPDATE_USER_FROM_LIST", response.data.user);
           this.dialogDelete = false;
@@ -210,9 +207,8 @@ export default {
     unblock(item) {
       console.log(item.id);
       axios
-        .post("api/user/" + item.id + "/unblock")
+        .post("api/users/" + item.id + "/unblock")
         .then((response) => {
-          
           this.$store.commit("UPDATE_USER_FROM_LIST", response.data.user);
           this.dialogDelete = false;
           this.$toasted.show("User unblocked", { type: "success" });

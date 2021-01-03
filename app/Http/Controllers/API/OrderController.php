@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Carbon\Carbon;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Customer;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
@@ -118,7 +119,24 @@ class OrderController extends Controller
        $productsList = $request->products;
        $size = count($productsList);
 
+       $orderTotalPrice = 0;
+
         for ($i=0; $i < $size; $i++) { 
+
+            $product = Product::findOrFail($productsList[$i]["id"]);
+
+            if($product->price != $productsList[$i]["price"]){
+                return response()->json(['message' => 'Price of the product dont match'], 400);
+            } 
+            
+            $productTotalPrice = $product->price * $productsList[$i]["quantity"];
+
+            if ($productTotalPrice != $productsList[$i]["totalPrice"]) {
+                return response()->json(['message' => 'Price of the product dont match'], 400);
+            }
+
+            $orderTotalPrice += $productTotalPrice;
+
             $orderItem = new OrderItem();
 
             $orderItem->order_id = $order->id;
@@ -130,8 +148,15 @@ class OrderController extends Controller
             $orderItem->save();
 
         };
+
+        if ($orderTotalPrice != $order->total_price) {
+            $order->status = 'C';
+            $order->save();
+           // return response()->json(['message' => 'Price of the order dont match'], 403);
+        }
         
-        return response()->json($order);
+        
+        return response()->json($order, 200);
     }
 
     public function createOrderItem(CreateOrderItemRequest $request){

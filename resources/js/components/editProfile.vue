@@ -4,9 +4,7 @@
       <v-main>
         <v-row class="justify-center align-center flex-column">
           <v-col md="6" class="white rounded-lg p-5">
-            <div class="text-h4 text-center mb-5">
-              Update your account
-            </div>
+            <div class="text-h4 text-center mb-5">Update your account</div>
             <v-form lazy-validation>
               <!-- Image -->
               <!-- <v-img :src="photo_preview" max-width="250"></v-img> -->
@@ -111,7 +109,7 @@ export default {
   },
   methods: {
     getUser() {
-      axios.get("api/user/" + this.$store.state.user.id).then((res) => {
+      axios.get("api/users/" + this.$store.state.user.id).then((res) => {
         this.user = res.data;
         axios.get("api/customers/" + this.$store.state.user.id).then((res) => {
           this.form = res.data;
@@ -121,18 +119,66 @@ export default {
         });
       });
     },
+    onFileChange() {
+      this.photo_file = event.target.files[0];
+    },
     update() {
       // Upload the photo when the field is not empty or not
       if (this.photo_file !== "") {
-        this.submitPhoto();
+        console.log("update photo");
+        this.updatePhoto();
+      } else {
+        this.form.photo_url = null;
+        console.log("not update " + this.form.photo_url);
+        this.isCustomer();
       }
+    },
+    isCustomer() {
       if (this.$store.state.user.type == "C") {
         this.updateCustomer();
       } else {
-        console.log("Employe");
         this.updateEmployee();
       }
     },
+    submitPhoto() {
+      let formData = new FormData();
+      formData.append("photo_file", this.photo_file);
+
+      axios
+        .post("/api/customers/photos", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((res) => {
+          console.log("Photo uploaded with sucess");
+          this.form.photo_url = res.data.filename;
+          this.updateCustomer();
+        })
+        .catch(() => {
+          console.log("There was a problem while uploading the photo");
+        });
+    },
+    updatePhoto() {
+      let formData = new FormData();
+
+      formData.append("photo_file", this.photo_file);
+
+      axios
+        .post("/api/users/photos/" + this.$store.state.user.id, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((res) => {
+          console.log("Photo updated sucessfully");
+          this.form.photo_url = res.data.filename;
+          console.log(this.form.photo_url);
+          //console.log(res.data.filename);
+          // console.log(res);
+          this.isCustomer();
+        })
+        .catch((e) => {
+          console.log("There was a problem while updating the photo");
+        });
+    },
+
     updateCustomer() {
       if (typeof this.form.password === "undefined") {
         this.form.password = null;
@@ -186,26 +232,7 @@ export default {
           });
         });
     },
-    onFileChange() {
-      this.photo_file = event.target.files[0];
-    },
-    submitPhoto() {
-      let formData = new FormData();
-      formData.append("photo_file", this.photo_file);
 
-      axios
-        .post("/api/customers/photos", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-        .then((res) => {
-          console.log("Photo uploaded with sucess");
-          this.form.photo_url = res.data.filename;
-          this.updateCustomer();
-        })
-        .catch(() => {
-          console.log("There was a problem while uploading the photo");
-        });
-    },
     // preview_photo(){
     //   console.log(this.photo_preview)
     //   console.log(this.form.photo_url)
@@ -219,7 +246,7 @@ export default {
   },
   mounted() {
     this.form = this.$store.state.user;
-    this.form.password = null
+    this.form.password = null;
     if (this.form.type == "C") {
       this.isClient = true;
       this.getUser();

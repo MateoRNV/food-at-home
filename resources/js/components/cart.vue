@@ -150,7 +150,7 @@ export default {
         })
         .catch((e) => {
           this.$toasted.show('There was a problem while processing your order', {type: 'error'})
-          console.log(e.response.data.errors);
+          console.log(e);
         });
     },
   },

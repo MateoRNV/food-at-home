@@ -149,8 +149,8 @@ export default {
   methods: {
     getOrders() {
       axios
-        // .get("api/orders/" + this.$store.state.user.id + "/P")
-        .get("api/orders/4/P")
+        .get("api/orders/" + this.$store.state.user.id + "/P")
+       // .get("api/orders/4/P")
         .then((response) => {
           this.orders = response.data.data;
           this.order = this.orders[0];

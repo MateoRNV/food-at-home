@@ -3,19 +3,6 @@
       <v-container class="mw-100">
           <div class="white rounded-lg px-5 py-5 my-5">
                 <div class="text-h4 text-center mb-5">Management Dashboard</div>
-                <v-btn
-                    @click.prevent="globalNotification"
-                    color="blue"
-                >
-                    Notify all users
-                </v-btn>
-                <v-btn
-                    @click.prevent="notifyCustomers"
-                    color="green"
-                >
-                    Notify customers
-                </v-btn>
-
                 <v-row>
                     <v-col>
                         <div class="headline">Employees</div>
@@ -388,7 +375,7 @@ export default {
 
                 // If order is being prepared or in transit
                 if(this.orderToCancel.status === 'P'){
-                    this.clearCurrentOrder(this.orderToCancel.prepared_by) // Narvaez, modifica acordemente si es necesario
+                    this.clearCurrentOrder(this.orderToCancel.prepared_by)
                     this.notifyUser(this.orderToCancel.prepared_by, 'The order you\'re preparing has been cancelled', 'error')
                     this.refreshUser(this.orderToCancel.prepared_by)
                     this.$socket.emit('update_employee_list', this.orderToCancel.prepared_by)
@@ -443,23 +430,6 @@ export default {
             if(index > -1){
                 this.activeOrders.splice(index, 1)
             }
-        },
-        globalNotification(){
-            let payload = {
-                user: this.$store.state.user,
-                message: 'Restaurant closing down in 5 minutes',
-            }
-            
-            this.$socket.emit('global_message', payload)
-        },
-        notifyCustomers(){
-            let payload = {
-                user: this.$store.state.user,
-                destination: 'C',
-                message: 'Welcome customer',
-            }
-
-            this.$socket.emit('global_message', payload)
         },
         notifyUser(userId, msg, msgType){
             axios.get('api/users/'+userId).then(res => {

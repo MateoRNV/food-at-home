@@ -2,9 +2,6 @@
     <v-main>
         <v-container fluid>
             <div class="text-h4 text-center my-5">Delivery Dashboard</div>
-            <!-- <v-btn color="red" @click.prevent="$store.commit('CLEAR_CURRENT_ORDER')">
-                CLEAN
-            </v-btn> -->
             <v-card v-if="$store.state.currentOrder !== ''">
                 <v-card-title>Your current order</v-card-title>
                 <v-card-subtitle>Below you'll find information regarding your current order and it's customer. Remember to complete this order once you're done delivering it</v-card-subtitle>
@@ -27,7 +24,6 @@
                             <strong class="text-h6">Order Information</strong>
                             <span class="d-block"><strong>Order ID: </strong> {{ $store.state.currentOrder.id }}</span>
                             <span class="d-block"><strong>Started at: </strong> {{ new Date($store.state.currentOrder.current_status_at).toLocaleTimeString() }}</span>
-                            <!-- <span class="d-block"><strong>Time elapsed: </strong> {{ currentOrderElapsed }}</span> -->
                         </v-col>
                         <v-col>
                             <span class="d-block"><strong>Notes:</strong></span>
@@ -190,6 +186,7 @@ export default {
             this.removeOrderFromList(orderToRemove)
         },
         add_order_to_list(orderToAdd){
+            if(orderToAdd.status === 'R')
             this.addOrder(orderToAdd)
         }
     }

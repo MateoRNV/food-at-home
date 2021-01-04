@@ -96,10 +96,8 @@ export default {
   methods: {
     onFileChange() {
       this.photo_file = event.target.files[0];
-      console.log("Yeah i changed");
     },
     confirmUpdate() {
-      console.log("This photo file " + this.photo_file);
       if (this.photo_file !== "") {
         console.log("update photo");
         this.updatePhoto();
@@ -118,9 +116,7 @@ export default {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((res) => {
-          console.log("Photo uploaded with sucess");
           this.user.photo_url = res.data.filename;
-          // console.log(res.data.filename)
           this.registerAccount();
         })
         .catch((e) => {
@@ -138,11 +134,7 @@ export default {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((res) => {
-          console.log("Photo updated sucessfully");
           this.user.photo_url = res.data.filename;
-          console.log(this.user.photo_url);
-          //console.log(res.data.filename);
-          // console.log(res);
           this.updateAccount();
         })
         .catch((e) => {
@@ -153,21 +145,20 @@ export default {
       axios
         .post("/api/users", this.user)
         .then((res) => {
-          console.log("Registered!");
+          
           this.$store.commit("ADD_USER_TO_LIST", res.data.user);
           this.$store.commit("UPDATE_USER_FROM_LIST", res.data.user);
           this.$toasted.show("Created succed", {
             type: "success",
-            duration: 3000,
+            
           });
         })
         .catch((e) => {
-          console.log("Oh oh!");
           console.log(e.response.data.errors);
           this.errors = e.response.data.errors;
           this.$toasted.show("Created failed", {
             type: "error",
-            duration: 3000,
+            
           });
         });
       this.$emit("dialog", true);
@@ -179,21 +170,16 @@ export default {
       axios
         .put("/api/users/" + this.user.id, this.user)
         .then((res) => {
-          console.log("Updated!");
+          
           this.$store.commit("UPDATE_USER_FROM_LIST", res.data.user);
-          //console.log(res.data.user);
-          this.$toasted.show("Updated succed", {
-            type: "success",
-            duration: 3000,
-          });
+          
+          this.$toasted.show("Updated succed", {type: "success",});
         })
         .catch((e) => {
-          console.log("Oh oh!");
-          console.log(e.response.data.errors);
+          
           this.errors = e.response.data.errors;
           this.$toasted.show("Updated failed", {
             type: "error",
-            duration: 3000,
           });
         });
 

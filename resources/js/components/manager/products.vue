@@ -1,6 +1,8 @@
 <template>
-  <v-main class="grey lighten-4">
+  <v-main>
     <v-container fluid>
+      <div class="text-h4 text-center my-5">Products Management</div>
+      
       <v-data-table
         :headers="headers"
         :items="$store.state.products"
@@ -8,7 +10,6 @@
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>Products</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="500" persistent>
               <template v-slot:activator="{ on, attrs }">

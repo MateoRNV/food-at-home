@@ -100,7 +100,7 @@ class CustomerController extends Controller
     public function getCustomerOrders($id){
         $customer = Customer::findOrFail($id);
 
-        $orders = OrderResource::collection(Order::where('customer_id', '=', $customer->id)->get());
+        $orders = OrderResource::collection(Order::where('customer_id', '=', $customer->id)->get())->sortByDesc('id')->values()->all();
 
         return response()->json(['orders' => $orders], 200);
     }

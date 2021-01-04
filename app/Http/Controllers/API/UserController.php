@@ -135,6 +135,7 @@ class UserController extends Controller
         $user = User::findOrFail($user);
 
         if($user->type == 'EC'){
+            return OrderResource::collection(Order::where([['status', '=', 'P'], ['prepared_by', '=', $user->id]])->get());
         }else if($user->type == 'ED'){
             return OrderResource::collection(Order::where([['status', '=', 'T'], ['delivered_by', '=', $user->id]])->get());
         }

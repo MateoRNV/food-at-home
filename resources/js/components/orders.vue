@@ -1,13 +1,13 @@
 <template>
-  <v-main class="grey lighten-4">
+  <v-main>
       <v-container fluid>
-          <div class="white rounded-lg px-5 py-5 my-5 text-center">
-            <div class="text-h4 text-center mb-5">My orders</div>
+          <div class="px-5 py-5 my-5 text-center">
+            <div class="text-h4 text-center my-5">My Orders</div>
             <template v-if="orders === undefined || orders.length == 0">
                 <div class="text-h6 py-5">You haven't made any orders yet</div>
                 <v-btn to="/products" color="primary">Order now</v-btn>
             </template>
-            <v-expansion-panels v-else flat>
+            <v-expansion-panels v-else flat class="mt-12">
                 <v-expansion-panel
                     v-for="order in orders" :key="order.id"
                 >

@@ -1,13 +1,11 @@
 <template>
-  <v-main class="grey lighten-4">
+  <v-main>
     <v-container fluid>
       <v-main>
         <v-row class="justify-center align-center flex-column">
-          <v-col md="6" class="white rounded-lg p-5">
+          <v-col md="6" class="p-5">
             <div class="text-h4 text-center mb-5">Update your account</div>
             <v-form lazy-validation>
-              <!-- Image -->
-              <!-- <v-img :src="photo_preview" max-width="250"></v-img> -->
               <div class="d-flex flex-wrap flex-row justify-space-between">
                 <div class="w-50 px-2">
                   <v-text-field

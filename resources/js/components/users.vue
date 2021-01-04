@@ -1,51 +1,49 @@
 <template>
-  <v-main class="grey lighten-4">
-    <br />
-    <v-container fluid>
-      <div class="white rounded-lg px-5 py-5 my-5">
-        <div class="text-h2 font-weight-bold">
-          Users List
-          <div class="float-right">
-            <v-dialog persistent v-model="dialogAdd" max-width="500">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="addUser"
-                >
-                  Add User
-                </v-btn>
-              </template>
-              <user-addEdit
-                :formTitle="title"
-                @dialog="fecharDialog"
-                :user="userEdit"
-                :isNew="isNew"
-              ></user-addEdit>
-            </v-dialog>
-            <v-dialog v-model="dialogDelete" max-width="300">
-              <v-card>
-                <v-card-title>Are you sure?</v-card-title>
-                <v-card-text
-                  >Please confirm you want to delete
-                  {{ userDelete.name }}?</v-card-text
-                >
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="red" text @click="closeDelete">Cancel</v-btn>
-                  <v-btn color="green" text @click="deleteItem">OK</v-btn>
-                  <v-spacer></v-spacer>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </div>
-        </div>
+  <v-main>
+    <v-container class="mw-100 text-center">
+      <div class="px-5 py-5 my-5">
+        <div class="text-h4 text-center mb-5">User Management</div>
+        
+        <v-dialog persistent v-model="dialogAdd" max-width="500">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              class="my-3 justify-center"
+              v-bind="attrs"
+              v-on="on"
+              @click="addUser"
+            >
+              Add User
+            </v-btn>
+          </template>
+          <user-addEdit
+            :formTitle="title"
+            @dialog="fecharDialog"
+            :user="userEdit"
+            :isNew="isNew"
+          ></user-addEdit>
+        </v-dialog>
+        <v-dialog v-model="dialogDelete" max-width="300">
+          <v-card>
+            <v-card-title>Are you sure?</v-card-title>
+            <v-card-text
+              >Please confirm you want to delete
+              {{ userDelete.name }}</v-card-text
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red" text @click="closeDelete">Cancel</v-btn>
+              <v-btn color="green" text @click="deleteItem">OK</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        
         <v-main>
           <v-text-field
             v-model="search"
+            class="mb-5"
             append-icon="mdi-magnify"
             label="Search"
             single-line
@@ -57,7 +55,6 @@
             :search="search"
             show-group-by
             multi-sort
-            class="elevation-1"
           >
             <template v-slot:item.photo_url="{ item }">
               <v-img
@@ -83,6 +80,7 @@
               </v-icon>
               <v-icon
                 small
+                :disabled="item.id === $store.state.user.id"
                 v-if="item.blocked == 0"
                 @click="block(item)"
                 class="mr-2"
@@ -91,15 +89,15 @@
               </v-icon>
               <v-icon
                 small
-                v-if="item.blocked == 1"
+                v-else
                 @click="unblock(item)"
                 class="mr-2"
               >
-                mdi-lock
+                mdi-lock                
               </v-icon>
               <v-icon
                 small
-                v-if="item.id != $store.state.user.id"
+                :disabled="item.id === $store.state.user.id"
                 @click="deleteDialog(item)"
               >
                 mdi-delete
@@ -197,6 +195,13 @@ export default {
           this.$store.commit("UPDATE_USER_FROM_LIST", response.data.user);
           this.dialogDelete = false;
           this.$toasted.show("User blocked", { type: "success" });
+
+          let payload = {
+            user: item
+          }
+
+          this.$socket.emit('user_blocked', payload)
+          this.$socket.emit('update_user_list', response.data.user)
         })
         .catch((e) => {
           this.$toasted.show("There was a problem, please try again", {
@@ -212,6 +217,7 @@ export default {
           this.$store.commit("UPDATE_USER_FROM_LIST", response.data.user);
           this.dialogDelete = false;
           this.$toasted.show("User unblocked", { type: "success" });
+          this.$socket.emit('update_user_list', response.data.user)
         })
         .catch((e) => {
           this.$toasted.show("There was a problem, please try again", {
@@ -220,6 +226,11 @@ export default {
         });
     },
   },
+  sockets: {
+    update_user_list(userToUpdate){
+      this.$store.commit('UPDATE_USER_FROM_LIST', userToUpdate)
+    }
+  }
 };
 </script>
 

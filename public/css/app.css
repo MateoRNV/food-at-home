@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);#instructions-section {
-  background: #673AB7;
+  background: #6c63ff;
 }
 
 .shape-divider-bottom {
@@ -20,7 +20,7 @@
 }
 
 .shape-divider-bottom .shape-fill {
-  fill: #673AB7;
+  fill: #6c63ff;
 }
 
 .shape-divider-top {
@@ -41,7 +41,7 @@
 }
 
 .shape-divider-top .shape-fill {
-  fill: #673AB7;
+  fill: #6c63ff;
 }
 
 input::-webkit-outer-spin-button,

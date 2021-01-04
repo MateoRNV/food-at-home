@@ -39,12 +39,12 @@
       </v-dialog>
 
       <div v-if="$store.state.cartCount === 0" class="text-center">
-        <div class="text-h1 mb-5">:(</div>
-        <div class="h1">Your cart is empty</div>
+        <div class="text-h1 my-12">:(</div>
+        <div class="h1 my-12">Your cart is empty</div>
         <v-btn to="/products" color="primary">Order now</v-btn>
       </div>
       <div v-else>
-        <div class="h1 text-center">Your order summary</div>
+        <div class="text-h4 text-center mb-5">Cart</div>
         <v-simple-table>
           <tbody>
             <tr v-for="item in $store.state.cart" :key="item.id">
@@ -86,21 +86,20 @@
                 >
               </td>
             </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><strong class="text-h5">Total</strong></td>
+              <td class="text-h5">{{ totalPrice }}€</td>
+            </tr>
           </tbody>
         </v-simple-table>
-        <v-row>
-          <v-col>
-            <div class="text-h6 text-left font-weight-bold">
-              Order total: {{ totalPrice }}€
-            </div>
-          </v-col>
-          <v-col class="text-right">
-            <v-btn color="error" @click.prevent="$store.commit('CLEAR_CART')"
-              >Clear cart</v-btn
-            >
-            <v-btn @click="openDialog" color="primary">Checkout</v-btn>
-          </v-col>
-        </v-row>
+        <div class="text-right mt-5">
+            <v-btn color="error" @click.prevent="$store.commit('CLEAR_CART')">Clear cart</v-btn>
+            <v-btn color="primary" to="/products">Keep shopping</v-btn>
+            <v-btn @click="openDialog" color="black text-light">Checkout</v-btn>
+        </div>
       </div>
     </v-container>
   </v-main>

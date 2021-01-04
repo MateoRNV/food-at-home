@@ -60,7 +60,7 @@ export default {
 
           this.$socket.emit('update_employee_list', res.data.id)
           this.$toasted.show('Welcome back', {type: 'success'})
-          this.$router.push('/products')
+          this.$router.push('/menu')
         }).catch(e => {
           console.log(e.response)
 

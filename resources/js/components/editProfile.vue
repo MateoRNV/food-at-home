@@ -192,7 +192,7 @@ export default {
             type: "success",
             duration: 3000,
           });
-          this.$router.push("/products");
+          this.$router.push("/menu");
         })
         .catch((e) => {
           console.log("An error ocurred");
@@ -218,7 +218,7 @@ export default {
             type: "success",
             duration: 3000,
           });
-          this.$router.push("/products");
+          this.$router.push("/menu");
         })
         .catch((e) => {
           console.log("Oh oh!");

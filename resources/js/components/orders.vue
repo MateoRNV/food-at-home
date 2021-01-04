@@ -5,7 +5,7 @@
             <div class="text-h4 text-center my-5">My Orders</div>
             <template v-if="orders === undefined || orders.length == 0">
                 <div class="text-h6 py-5">You haven't made any orders yet</div>
-                <v-btn to="/products" color="primary">Order now</v-btn>
+                <v-btn to="/menu" color="primary">Order now</v-btn>
             </template>
             <v-expansion-panels v-else flat class="mt-12">
                 <v-expansion-panel

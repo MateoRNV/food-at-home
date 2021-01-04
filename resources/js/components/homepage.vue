@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="text-h3 pt-5">Ready to start?</div>
-            <router-link class="btn btn-light btn-lg text-dark mt-5" to="/products">Order now</router-link>
+            <router-link class="btn btn-light btn-lg text-dark mt-5" to="/menu">Order now</router-link>
         </div>
         <div class="shape-divider-top pt-5">
                 <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">

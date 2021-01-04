@@ -41,7 +41,7 @@
       <div v-if="$store.state.cartCount === 0" class="text-center">
         <div class="text-h1 my-12">:(</div>
         <div class="h1 my-12">Your cart is empty</div>
-        <v-btn to="/products" color="primary">Order now</v-btn>
+        <v-btn to="/menu" color="primary">Order now</v-btn>
       </div>
       <div v-else>
         <div class="text-h4 text-center mb-5">Cart</div>
@@ -97,7 +97,7 @@
         </v-simple-table>
         <div class="text-right mt-5">
             <v-btn color="error" @click.prevent="$store.commit('CLEAR_CART')">Clear cart</v-btn>
-            <v-btn color="primary" to="/products">Keep shopping</v-btn>
+            <v-btn color="primary" to="/menu">Keep shopping</v-btn>
             <v-btn @click="openDialog" color="black text-light">Checkout</v-btn>
         </div>
       </div>

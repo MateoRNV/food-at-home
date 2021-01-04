@@ -83,35 +83,35 @@ router.beforeEach((to, from, next) => {
     }else{
         if((to.path === '/login')){
             Vue.toasted.show('You\'re already logged in', {type: 'warning'})
-            next('/products')
+            next('/menu')
             return
         }
 
         if(store.state.user.type !== 'C'){
             if((to.path === '/cart') || (to.path === '/me/orders')){
                 Vue.toasted.show('Forbidden', {type: 'error'})
-                next('/products')
+                next('/menu')
             }
         }
 
         if(store.state.user.type !== 'EC'){
             if((to.path === '/cook/dashboard')){
                 Vue.toasted.show('Forbidden', {type: 'error'})
-                next('/products')
+                next('/menu')
             }
         }
 
         if(store.state.user.type !== 'ED'){
             if((to.path === '/delivery/dashboard')){
                 Vue.toasted.show('Forbidden', {type: 'error'})
-                next('/products')
+                next('/menu')
             }
         }
 
         if(store.state.user.type !== 'EM'){
             if((to.path === '/manager/dashboard') || (to.path === '/manager/products') || (to.path === '/manager/users')){
                 Vue.toasted.show('Forbidden', {type: 'error'})
-                next('/products')
+                next('/menu')
             }
         }
     }

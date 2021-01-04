@@ -75,7 +75,7 @@
                 ></v-file-input>
               </div>
               <v-row align="center" justify="center" class="mt-5">
-                <v-btn color="error" to="/products" class="mr-4"> Cancel</v-btn>
+                <v-btn color="error" to="/menu" class="mr-4"> Cancel</v-btn>
                 <v-btn
                   color="grey darken-4 white--text"
                   class="mr-4"

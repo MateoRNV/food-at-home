@@ -185,19 +185,6 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order created successfully.', 'order' => $order], 200);
     }
 
-    public function createOrderItem(CreateOrderItemRequest $request){
-
-        $orderItem = new OrderItem;
-        $validated = $request->validated();
-
-        $orderItem->fill($validated);
-
-        $orderItem->save();
-       // $orderItem->id = '1';
-
-        return response()->json($orderItem);
-    }
-
     /**
      * Store a newly created resource in storage.
      *

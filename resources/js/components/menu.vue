@@ -30,40 +30,6 @@
                     prepend-inner-icon="mdi-magnify"
                   >
                   </v-text-field>
-                  <template v-if="$vuetify.breakpoint.mdAndUp">
-                    <v-spacer></v-spacer>
-                    <v-select
-                      v-model="sortBy"
-                      flat
-                      solo-inverted
-                      hide-details
-                      :items="types"
-                      prepend-inner-icon="mdi-magnify"
-                      label="Sort by"
-                    ></v-select>
-                    <v-spacer></v-spacer>
-                    <v-btn-toggle
-                      v-model="sortDesc"
-                      mandatory
-                    >
-                      <v-btn
-                        large
-                        depressed
-                        color="blue"
-                        :value="false"
-                      >
-                        <v-icon>mdi-arrow-up</v-icon>
-                      </v-btn>
-                      <v-btn
-                        large
-                        depressed
-                        color="blue"
-                        :value="true"
-                      >
-                        <v-icon>mdi-arrow-down</v-icon>
-                      </v-btn>
-                    </v-btn-toggle>
-                  </template>
                 </v-toolbar>
               </template>
 

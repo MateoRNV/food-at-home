@@ -3,18 +3,6 @@
     <v-main>
       <v-container fluid>
         <div class="h1">Cook Dashboard</div>
-        <!--<v-card  elevation="4">
-          <v-card-title> Order {{ order.id }} </v-card-title>
-          <v-card-subtitle>Start to preparing at {{ order }}</v-card-subtitle>
-          <v-card-actions
-            ><v-btn
-              color="primary"
-              class="px-5"
-              @click.prevent="completePreparing"
-              >Mark as Prepared</v-btn
-            >
-          </v-card-actions>
-        </v-card>--->
 
         <v-card v-if="$store.state.currentOrder !== ''">
           <v-card-title>Your current order</v-card-title>
@@ -123,7 +111,7 @@
             <v-btn
               color="primary"
               class="px-5"
-              @click.prevent="completePreparing()"
+              @click.prevent="completePreparing($store.state.currentOrder)"
               >Mark as Ready</v-btn
             >
           </v-card-actions>
@@ -134,7 +122,7 @@
 
         <v-data-table
           :headers="headers"
-          :items="ordersHolding"
+          :items="orders"
           :search="search"
           show-group-by
           multi-sort
@@ -158,8 +146,6 @@ export default {
       orders: [],
       order: "",
       search: "",
-      isEmpty: "",
-      ordersHolding: [],
       headers: [
         { text: "Id", value: "id", groupable: false },
         { text: "Date", value: "date", groupable: false },
@@ -176,47 +162,64 @@ export default {
     };
   },
   methods: {
-    getOrder() {
-      axios
-        .get("api/orders/status/P")
-        .then((response) => {
-          this.orders = response.data.data;
-          this.order = this.orders[0];
-          if (this.orders.length == 0) {
-            this.isEmpty = true;
-            this.$store.commit("CLEAR_CURRENT_ORDER", this.order);
-          } else {
-            this.isEmpty = false;
-            this.$store.commit("SET_CURRENT_ORDER", this.order);
-          }
-          console.log("boolean " + this.isEmpty);
-        });
+    getOrders() {
+      axios.get("api/orders/status/H").then((res) => {
+        this.orders = res.data;
+      });
     },
-    getOrdersStatus() {
-      axios.get("api/orders/status/H").then((response) => {
-        this.ordersHolding = response.data;
+    completePreparing(order) {
+      axios
+        .post("api/orders/" + order.id + "/status/R")
+        .then((res) => {
+          this.$store.commit("CLEAR_CURRENT_ORDER");
 
-        console.log(response);
-      });
-    },
-    completePreparing() {
-      axios
-        .post("api/orders/" + this.order.id + "/status/R")
-        .then((response) => {
-          this.getOrder();
-          console.log(response.data);
+          /*this.$socket.emit("remove_order_from_list", res.data.order);
+          this.$socket.emit("update_orders_list", res.data.order);
+          this.$socket.emit(
+            "update_employee_list",
+            res.data.order.delivered_by
+          );*/
+
+          this.$toasted.show("Order delivered", { type: "success" });
+        })
+        .catch(() => {
+          this.$toasted.show("There was a problem processing your request", {
+            type: "error",
+          });
         });
     },
-    takeOrder(item) {
-      axios.post("api/orders/" + item.id + "/status/P").then((response) => {
-        this.getOrder();
-        console.log(response.data);
+    takeOrder(order) {
+      axios.get("api/orders/" + order.id).then((res) => {
+        this.$store.commit("SET_CURRENT_ORDER", res.data.data[0]);
+        axios
+          .post("api/orders/" + order.id + "/status/P")
+          .then((res) => {
+            this.removeOrderFromList(res.data.order);
+
+            /*    this.$socket.emit("update_orders_list", res.data.order);
+            this.$socket.emit(
+              "update_employee_list",
+              res.data.order.delivered_by
+            );*/
+            this.$toasted.show("Order take to Prepare", { type: "success" });
+          })
+          .catch((e) => {
+            this.$toasted.show("There was a problem with the order", {
+              type: "error",
+            });
+          });
       });
+    },
+    removeOrderFromList(order) {
+      const index = this.orders.findIndex((v) => v.id === order.id);
+
+      if (index > -1) {
+        this.orders.splice(index, 1);
+      }
     },
   },
   mounted() {
-    this.getOrder();
-    this.getOrdersStatus();
+    this.getOrders();
   },
 };
 </script>

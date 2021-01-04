@@ -55,6 +55,7 @@ Vue.use(Toasted, {
     position: 'bottom-right',
     duration: 5000,
     theme: 'outline',
+    singleton: true,
     router
 })
 

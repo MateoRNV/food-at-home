@@ -4,15 +4,17 @@ namespace App\Http\Controllers\API;
 
 
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\User as UserResource;
+use App\Http\Resources\Order as OrderResource;
 
 class UserController extends Controller
 {
@@ -127,5 +129,16 @@ class UserController extends Controller
         $path = Storage::putFile('public/fotos', $request->file('photo_file'));
 
         return response()->json(['location' => '/storage/fotos/'.$request->file('photo_file')->hashName(), 'filename' => $request->file('photo_file')->hashName()], 201);
+    }
+
+    public function getCurrentOrder($user){
+        $user = User::findOrFail($user);
+
+        if($user->type == 'EC'){
+        }else if($user->type == 'ED'){
+            return OrderResource::collection(Order::where([['status', '=', 'T'], ['delivered_by', '=', $user->id]])->get());
+        }
+
+        return response()->json(['message' => 'Type not found'], 404);
     }
 }

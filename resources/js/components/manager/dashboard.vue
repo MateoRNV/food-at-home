@@ -23,7 +23,64 @@
                             :headers="employeeHeaders"
                             :items="employees"
                         >
-                            
+                            <template v-slot:top>
+                                <v-dialog v-model="currentOrderDialog" max-width="500" persistent>
+                                    <v-card>
+                                        <v-card-title>Order #{{ currentOrder.id }}</v-card-title>
+                                        <v-simple-table class="w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Product</th>
+                                                    <th>Quantity</th>
+                                                    <th>Subtotal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="item in currentOrder.items" :key="item.id">
+                                                    <td>
+                                                        <v-img
+                                                        :src="`/storage/products/${item.product_photo}`"
+                                                        height="100"
+                                                        width="100"
+                                                        ></v-img>
+                                                    </td>
+                                                    <td>
+                                                        {{ item.product_name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ item.quantity }}
+                                                    </td>
+                                                    <td>
+                                                        {{ item.sub_total_price }}€
+                                                    </td>
+                                                </tr>
+                                                <tr v-if="currentOrder.notes != null">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td><strong>Notes:</strong></td>
+                                                    <td>{{ currentOrder.notes }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        <strong>Total</strong>
+                                                    </td>
+                                                    <td>
+                                                        {{ currentOrder.total_price }}€
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </v-simple-table>
+
+                                        <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn text color="red" @click.prevent="closeCurrentOrderDialog">Close</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
+                            </template>
                             <template v-slot:item.photo_url="{ item }">
                                 <v-avatar size="40">
                                     <v-img
@@ -52,18 +109,23 @@
                                     {{ getStatus(item) }}
                                 </v-chip>
                             </template>
+
                             <template v-slot:item.logged_at="{ item }">
                                 {{ (item.logged_at !== null) ? new Date(item.logged_at).toLocaleTimeString() : '-' }}
                             </template>
+
                             <template v-slot:item.actions="{ item }">
                                 <v-btn
                                     icon
+                                    :disabled="(item.logged_at === null || item.available_at !== null || (item.logged_at !== null && item.available_at !== null)) || item.type === 'EM' "
+                                    @click.prevent="viewCurrentOrder(item.id)"
                                 >
-                                    <v-icon>mdi-eye</v-icon>
-                                </v-btn>                                 
+                                    <v-icon>mdi-magnify</v-icon>
+                                </v-btn>                            
                             </template>
-                            <template v-slot:loading>
-                                Loading employees
+                            
+                            <template v-slot:no-data>
+                                No employees to show
                             </template>
                         </v-data-table>
                     </v-col>
@@ -167,7 +229,7 @@
                                     icon
                                     @click.prevent="viewOrder(item)"
                                 >
-                                    <v-icon>mdi-eye</v-icon>
+                                    <v-icon>mdi-magnify</v-icon>
                                 </v-btn>
                                 <v-btn 
                                     icon
@@ -205,7 +267,7 @@ export default {
                 {text: 'ID', value: 'id', sortable: false},
                 {text: 'Type', value: 'type'},
                 {text: 'Status', value: 'available_at'},
-                {text: 'Started at', value: 'logged_at', sortable: false},
+                {text: 'Logged at', value: 'logged_at', sortable: false},
                 {text: 'Actions', value: 'actions', sortable: false, },
             ],
             orderHeaders: [
@@ -222,8 +284,10 @@ export default {
             activeOrders: [],
             viewOrderDialog: false,
             cancelOrderDialog: false,
+            currentOrderDialog: false,
             orderToView: '',
             orderToCancel: '',
+            currentOrder: ''
         }
     },
     methods: {
@@ -256,10 +320,10 @@ export default {
             if(item.logged_at === null){
                 return 'Offline'
             }else if(item.available_at === null && item.type === 'EC'){
-                return 'Preparing order #'
+                return 'Preparing order'
             }else if(item.available_at === null && item.type === 'ED'){
-                return 'Delivering order #'
-            }else{
+                return 'Delivering order'
+            }else if(item.available_at !== null || item.logged_at !== null){
                 return 'Available'
             }
         },
@@ -320,14 +384,23 @@ export default {
                 this.cancelOrderDialog = false
 
                 // If order is being prepared or in transit
-                if(this.orderToCancel.status === 'Preparing'){
-                    this.notifyCustomer(this.orderToCancel.prepared_by, 'The order you\'re working on has been cancelled', 'error')
+                if(this.orderToCancel.status === 'P'){
                     this.clearCurrentOrder(this.orderToCancel.prepared_by) // Narvaez, modifica acordemente si es necesario
-                }else if(this.orderToCancel.status === 'In Transit'){
+                    this.notifyCustomer(this.orderToCancel.prepared_by, 'The order you\'re preparing has been cancelled', 'error')
+                    this.refreshUser(this.orderToCancel.prepared_by)
+                    this.$socket.emit('update_employee_list', this.orderToCancel.prepared_by)
+                }else if(this.orderToCancel.status === 'T'){
                     this.clearCurrentOrder(this.orderToCancel.delivered_by)
                     this.notifyCustomer(this.orderToCancel.delivered_by, 'The order you\'re delivering has been cancelled', 'error')
+                    this.refreshUser(this.orderToCancel.delivered_by)
+                    this.$socket.emit('update_employee_list', this.orderToCancel.delivered_by)
                 }
+                
+                // WHEN ORDER IS HOLDING IT RETURNS CUSTOMER.ID, WHEN IT IS ANYTHING ELSE IT IS CUSTOMER_ID
+                // NO CLUE WHY, EZ FIX
 
+                this.notifyCustomer(this.orderToCancel.customer_id, 'Order #' + this.orderToCancel.id + ' has been cancelled', 'error')
+                this.$socket.emit('update_orders_list', res.data.order)
                 this.$socket.emit('remove_order_from_list', res.data.order)
 
                 this.orderToCancel = ''
@@ -336,6 +409,21 @@ export default {
                 this.$toasted.show('Something happened while canceling the order', {type: 'error'})
                 console.log(e)
             })
+        },
+        viewCurrentOrder(userId){
+            this.currentOrderDialog = true
+            this.getCurrentOrder(userId)
+        },
+        getCurrentOrder(userId){
+            axios.get('api/users/employees/'+userId+'/current').then(res => {
+                this.currentOrder = res.data.data[0]
+            }).catch(() => {
+                this.$toasted.show('There was a problem fetching the order', {type: 'error'})
+            })
+        },
+        closeCurrentOrderDialog(){
+            this.currentOrder = ''
+            this.currentOrderDialog = false
         },
         orderStatusColor(status){
             switch(status){
@@ -392,7 +480,7 @@ export default {
         clearCurrentOrder(userId){
             axios.get('api/users/' + userId).then( res => {
                 const user = res.data
-                console.log(user)
+
                 let payload = {
                     destinationUser: user
                 }
@@ -418,6 +506,18 @@ export default {
         },
         addOrder(order){
             this.activeOrders.push(order)
+        },
+        refreshUser(userId){
+            axios.get('api/users/' + userId).then(res => {
+                
+                let index = this.employees.findIndex(v => v.id === userId)
+    
+                if(index > -1){
+                    this.employees.splice(index, 1, res.data)
+                }
+            }).catch(() => {
+                console.log('something happened when refreshing :C')
+            })
         }
     },
     mounted(){
@@ -433,6 +533,9 @@ export default {
         },
         add_order_to_list(orderToAdd){
             this.addOrder(orderToAdd)
+        },
+        update_employee_list(employeeToUpdate){
+            this.refreshUser(employeeToUpdate)
         }
     }
     

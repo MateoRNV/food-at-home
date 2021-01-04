@@ -33,41 +33,42 @@ Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logou
 // Protect a route so it's only accessible to authenticated users
 //Route::middleware('auth:sanctum')->get('orders', [OrderController::class, 'index']);
 
-Route::get('orders',                       [OrderController::class, 'index']);
-Route::get('orders/active',                [OrderController::class, 'getActiveOrders']);
-Route::post('orders',                      [OrderController::class, 'create']); // create order
-Route::get('orders/status/{status}',       [OrderController::class, 'getStatus']);
-Route::get('orders/{id}/{status}',         [OrderController::class, 'getOrdersByCook']);
-Route::post('orders/{id}/status/{status}', [OrderController::class, 'setOrderStatus']); // Change to patch
-Route::get('orders/{id}',                  [OrderController::class, 'getOrderById']);
+Route::get('orders',                                    [OrderController::class, 'index']);
+Route::get('orders/active',                             [OrderController::class, 'getActiveOrders']);
+Route::post('orders',                                   [OrderController::class, 'create']); // create order
+Route::get('orders/status/{status}',                    [OrderController::class, 'getStatus']);
+Route::get('orders/{id}/status/{status}',               [OrderController::class, 'getOrdersByCook']);
+Route::post('orders/{id}/status/{status}',              [OrderController::class, 'setOrderStatus']); // Change to patch
+Route::get('orders/{id}',                               [OrderController::class, 'getOrderById']);
 
 
-Route::get('products',                       [ProductController::class, 'index']);
-Route::post('products',                      [ProductController::class, 'create']);
-Route::post('products/photos',               [ProductController::class, 'uploadPhoto']);
-Route::post('products/photos/{id}',          [ProductController::class, 'updatePhoto']);
-Route::put('products/{id}',                  [ProductController::class, 'update']);
-Route::delete('products/{id}',               [ProductController::class, 'delete']);
+Route::get('products',                                  [ProductController::class, 'index']);
+Route::post('products',                                 [ProductController::class, 'create']);
+Route::post('products/photos',                          [ProductController::class, 'uploadPhoto']);
+Route::post('products/photos/{id}',                     [ProductController::class, 'updatePhoto']);
+Route::put('products/{id}',                             [ProductController::class, 'update']);
+Route::delete('products/{id}',                          [ProductController::class, 'delete']);
 
 
-Route::get('users',             [UserController::class, 'index']);
-Route::get('users/employees',   [UserController::class, 'getEmployees']);
-Route::get('users/{id}',         [UserController::class, 'info']);
-Route::post('users/{id}/block',   [UserController::class, 'block']);
-Route::post('users/{id}/unblock', [UserController::class, 'unblock']);
-Route::post('users',            [UserController::class, 'create']); // create user
-Route::put('users/{id}',        [UserController::class, 'update']); //edit user
-Route::delete('users/{user}',   [UserController::class, 'destroy']);//delete user
-Route::post('users/photos',     [UserController::class, 'uploadPhoto']);
-Route::post('users/photos/{id}', [UserController::class, 'updatePhoto']);
+Route::get('users',                                     [UserController::class, 'index']);
+Route::get('users/employees',                           [UserController::class, 'getEmployees']);
+Route::get('users/employees/{id}/current',              [UserController::class, 'getCurrentOrder']);
+Route::get('users/{id}',                                [UserController::class, 'info']);
+Route::post('users/{id}/block',                         [UserController::class, 'block']);
+Route::post('users/{id}/unblock',                       [UserController::class, 'unblock']);
+Route::post('users',                                    [UserController::class, 'create']); // create user
+Route::put('users/{id}',                                [UserController::class, 'update']); //edit user
+Route::delete('users/{user}',                           [UserController::class, 'destroy']);//delete user
+Route::post('users/photos',                             [UserController::class, 'uploadPhoto']);
+Route::post('users/photos/{id}',                        [UserController::class, 'updatePhoto']);
 
-Route::middleware('auth:sanctum')->get('user/me', [UserController::class, 'me']);
+Route::middleware('auth:sanctum')->get('user/me',       [UserController::class, 'me']);
 
-Route::get('customers',              [CustomerController::class, 'index']);
-Route::get('customers/{id}',         [CustomerController::class, 'me']);
-Route::get('customers/{id}/orders',  [CustomerController::class, 'getCustomerOrders']);
-Route::post('customers',             [CustomerController::class, 'create']); // create customer
-Route::put('customers/{id}',         [CustomerController::class, 'update']);    //edit customer
-Route::post('customer/photos',       [CustomerController::class, 'uploadPhoto']);
+Route::get('customers',                                 [CustomerController::class, 'index']);
+Route::get('customers/{id}',                            [CustomerController::class, 'me']);
+Route::get('customers/{id}/orders',                     [CustomerController::class, 'getCustomerOrders']);
+Route::post('customers',                                [CustomerController::class, 'create']); // create customer
+Route::put('customers/{id}',                            [CustomerController::class, 'update']);    //edit customer
+Route::post('customer/photos',                          [CustomerController::class, 'uploadPhoto']);
 
 

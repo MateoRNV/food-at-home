@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('login',            [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('logout', [AuthController::class, 'logout']);
 
+Route::get('users',                                     [UserController::class, 'index']);
+Route::get('orders',                                    [OrderController::class, 'index']);
 Route::get('products',                                      [ProductController::class, 'index']);
 Route::post('users/photos',                                 [UserController::class, 'uploadPhoto']);
 Route::get('customers',                                     [CustomerController::class, 'index']);
@@ -45,7 +47,6 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::put('customers/{id}',                            [CustomerController::class, 'update']);    //edit customer
     Route::get('users/{id}',                                [UserController::class, 'info']);
     Route::post('users/{id}/photos',                        [UserController::class, 'updatePhoto']);
-    Route::get('orders',                                    [OrderController::class, 'index']);
 });
 
 Route::middleware(['customer'])->group(function (){
@@ -66,7 +67,6 @@ Route::middleware(['admin'])->group(function (){
     Route::post('products/{id}/photos/',                    [ProductController::class, 'updatePhoto']);
     Route::put('products/{id}',                             [ProductController::class, 'update']);
     Route::delete('products/{id}',                          [ProductController::class, 'delete']);
-    Route::get('users',                                     [UserController::class, 'index']);
     Route::post('users',                                    [UserController::class, 'create']); // create user
     Route::delete('users/{user}',                           [UserController::class, 'destroy']);//delete user
     Route::post('users/{id}/block',                         [UserController::class, 'block']);

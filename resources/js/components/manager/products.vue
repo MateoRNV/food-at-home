@@ -326,7 +326,7 @@ export default {
       formData.append("photo_file", this.photo_file);
 
       axios
-        .post("/api/products/photos/" + this.productToEdit.id, formData, {
+        .post("/api/products/" + this.productToEdit.id + "/photos/" , formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((res) => {

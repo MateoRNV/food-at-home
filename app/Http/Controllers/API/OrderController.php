@@ -74,7 +74,7 @@ class OrderController extends Controller
                 Auth::user()->save();
                     break;
             case 'R':
-                $order->preparation_time = $order->current_status_at->diffInSeconds(Carbon::now());
+                $order->preparation_time = Carbon::now()->diffInSeconds($order->current_status_at);
                 Auth::user()->available_at = Carbon::now();
                 Auth::user()->save();
                     break;
@@ -84,8 +84,8 @@ class OrderController extends Controller
                 Auth::user()->save();
                     break;
             case 'D':
-                $order->delivery_time = $order->current_status_at->diffInSeconds(Carbon::now());
-                $order->total_time = $order->opened_at->diffInSeconds(Carbon::now());
+                $order->delivery_time = Carbon::now()->diffInSeconds($order->current_status_at);
+                $order->total_time = Carbon::now()->diffInSeconds($order->opened_at);
                 $order->closed_at = Carbon::now();
 
                 Auth::user()->available_at = Carbon::now();
@@ -106,7 +106,7 @@ class OrderController extends Controller
                     $order->prepared_by = null;
                 }
                 
-                $order->total_time = $order->opened_at->diffInSeconds(Carbon::now());
+                $order->total_time = Carbon::now()->diffInSeconds($order->opened_at);
                 $order->closed_at = Carbon::now();
                     break;
             default:

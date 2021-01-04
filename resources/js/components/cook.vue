@@ -126,12 +126,31 @@
               @click.prevent="completePreparing()"
               >Mark as Ready</v-btn
             >
-          </v-card-actions> </v-card
-        >
+          </v-card-actions>
+        </v-card>
         <v-card v-else>
-          <v-card-title>
-           Waiting for an order to prepare
-           </v-card-title></v-card>
+          <v-card-title> Waiting for an order to prepare </v-card-title></v-card
+        >
+
+        <v-data-table
+          :headers="headers"
+          :items="ordersHolding"
+          :search="search"
+          show-group-by
+          multi-sort
+          class="elevation-1"
+        >
+          <template v-slot:item.actions="{ item }">
+            <v-btn
+              color="primary"
+              dark
+              class="mb-2"
+              @click="takeOrder(item)"
+            >
+              Take Order
+            </v-btn>
+          </template>
+        </v-data-table>
       </v-container>
     </v-main>
   </v-app>
@@ -143,39 +162,68 @@ export default {
     return {
       orders: [],
       order: null,
+      search: "",
       isEmpty: null,
+      ordersHolding: [],
+      headers: [
+        { text: "Id", value: "id", groupable: false },
+        { text: "Date", value: "date", groupable: false },
+        { text: "Price", value: "total_price", groupable: false },
+        { text: "Status", value: "status", groupable: false },
+        { text: "Client", value: "customer.id", groupable: false },
+        {
+          text: "Actions",
+          value: "actions",
+          groupable: false,
+          sortable: false,
+        },
+      ],
     };
   },
   methods: {
-    getOrders() {
+    getOrder() {
       axios
         .get("api/orders/" + this.$store.state.user.id + "/P")
-       // .get("api/orders/4/P")
         .then((response) => {
           this.orders = response.data.data;
           this.order = this.orders[0];
           if (this.orders.length == 0) {
             this.isEmpty = true;
-            this.$store.commit('CLEAR_CURRENT_ORDER', this.order)
+            this.$store.commit("CLEAR_CURRENT_ORDER", this.order);
           } else {
             this.isEmpty = false;
-            this.$store.commit('SET_CURRENT_ORDER', this.order)
-            
+            this.$store.commit("SET_CURRENT_ORDER", this.order);
           }
-          console.log("boolean "+this.isEmpty);
+          console.log("boolean " + this.isEmpty);
         });
+    },
+    getOrdersStatus() {
+      axios.get("api/orders/status/H").then((response) => {
+        this.ordersHolding = response.data;
+
+        console.log(response);
+      });
     },
     completePreparing() {
       axios
         .post("api/orders/" + this.order.id + "/status/R")
         .then((response) => {
-          this.getOrders();
+          this.getOrder();
           console.log(response.data);
-        });
+      });
     },
+    takeOrder(item){
+      axios
+        .post("api/orders/" + item.id + "/status/P")
+        .then((response) => {
+          this.getOrder();
+          console.log(response.data);
+      });
+    }
   },
   mounted() {
-    this.getOrders();
+    this.getOrder();
+    this.getOrdersStatus();
   },
 };
 </script>

@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CreateOrderRequest;
-use App\Http\Requests\CreateOrderItemRequest;
 use App\Http\Resources\Order as OrderResource;
 
 class OrderController extends Controller
@@ -149,27 +148,15 @@ class OrderController extends Controller
 
         };
 
-        if ($orderTotalPrice != $order->total_price) {
+        $orderTotalPrice = round($orderTotalPrice, 2);
+
+        if ($orderTotalPrice != (float)$order->total_price) {
             $order->status = 'C';
             $order->save();
-           // return response()->json(['message' => 'Price of the order dont match'], 403);
+            return response()->json(['message' => 'Price of the order dont match'], 403);
         }
         
-        
-        return response()->json($order, 200);
-    }
-
-    public function createOrderItem(CreateOrderItemRequest $request){
-
-        $orderItem = new OrderItem;
-        $validated = $request->validated();
-
-        $orderItem->fill($validated);
-
-        $orderItem->save();
-       // $orderItem->id = '1';
-
-        return response()->json($orderItem);
+        return response()->json(['message' => 'Order created successfully.', 'order' => $order], 200);
     }
 
     /**

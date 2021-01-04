@@ -46,7 +46,8 @@ class CreateUserRequest extends FormRequest
             'type.rule' => "Invalid type of type", 
 
             'password.required' => "You have to provide a password",
-            'password.min' => "The password must have at least 3 characters"
+            'password.min' => "The password must have at least 3 characters",
+            'password.confirmed' => "Passwords do not match",
         ];
     }
 }

@@ -1,10 +1,10 @@
 <template>
     <v-main>
         <v-container fluid>
-            <div class="h1">Delivery Dashboard</div>
-            <v-btn color="red" @click.prevent="$store.commit('CLEAR_CURRENT_ORDER')">
+            <div class="text-h4 text-center my-5">Delivery Dashboard</div>
+            <!-- <v-btn color="red" @click.prevent="$store.commit('CLEAR_CURRENT_ORDER')">
                 CLEAN
-            </v-btn>
+            </v-btn> -->
             <v-card v-if="$store.state.currentOrder !== ''">
                 <v-card-title>Your current order</v-card-title>
                 <v-card-subtitle>Below you'll find information regarding your current order and it's customer. Remember to complete this order once you're done delivering it</v-card-subtitle>
@@ -150,6 +150,9 @@ export default {
                 })
             })
         },
+        addOrder(order){
+            this.orders.push(order)
+        },
         removeOrderFromList(order){
             const index = this.orders.findIndex(v => v.id === order.id)
 
@@ -167,6 +170,9 @@ export default {
         },
         update_orders_list(orderToRemove){
             this.removeOrderFromList(orderToRemove)
+        },
+        add_order_to_list(orderToAdd){
+            this.addOrder(orderToAdd)
         }
     }
 }

@@ -87,12 +87,7 @@
             </v-list-item-icon>
             <v-list-item-title>Products</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/orders">
-            <v-list-item-icon>
-              <v-icon>mdi-receipt</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Orders</v-list-item-title>
-          </v-list-item>
+
         </v-list-item-group>
         <v-list-item-group>
           <v-subheader>DELIVERY</v-subheader>

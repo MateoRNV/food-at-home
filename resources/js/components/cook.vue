@@ -2,8 +2,8 @@
   <v-app>
     <v-main>
       <v-container fluid>
-        <div class="h1">Cook Dashboard</div>
-
+        <div class="text-h4 text-center my-5">Cook Dashboard</div>
+      
         <v-card v-if="$store.state.currentOrder !== ''">
           <v-card-title>Your current order</v-card-title>
           <v-card-subtitle
@@ -116,9 +116,6 @@
             >
           </v-card-actions>
         </v-card>
-        <v-card v-else>
-          <v-card-title> Waiting for an order to prepare </v-card-title></v-card
-        >
 
         <v-data-table
           :headers="headers"
@@ -126,11 +123,10 @@
           :search="search"
           show-group-by
           multi-sort
-          class="elevation-1"
         >
           <template v-slot:item.actions="{ item }">
-            <v-btn color="primary" dark class="mb-2" @click="takeOrder(item)">
-              Take Order
+            <v-btn color="primary" dark @click="takeOrder(item)">
+              Prepare
             </v-btn>
           </template>
         </v-data-table>
@@ -147,17 +143,10 @@ export default {
       order: "",
       search: "",
       headers: [
-        { text: "Id", value: "id", groupable: false },
+        { text: "Order ID", value: "id", groupable: false },
         { text: "Date", value: "date", groupable: false },
-        { text: "Price", value: "total_price", groupable: false },
-        { text: "Status", value: "status", groupable: false },
-        { text: "Client", value: "customer.id", groupable: false },
-        {
-          text: "Actions",
-          value: "actions",
-          groupable: false,
-          sortable: false,
-        },
+        { text: "Customer", value: "customer.name", groupable: false },
+        { value: "actions", groupable: false, sortable: false },
       ],
     };
   },
@@ -168,47 +157,37 @@ export default {
       });
     },
     completePreparing(order) {
-      axios
-        .post("api/orders/" + order.id + "/status/R")
-        .then((res) => {
+      axios.post("api/orders/" + order.id + "/status/R").then((res) => {
           this.$store.commit("CLEAR_CURRENT_ORDER");
+          console.log(res.data.order.prepared_by)
 
-          /*this.$socket.emit("remove_order_from_list", res.data.order);
+          this.$socket.emit("remove_order_from_list", res.data.order);
           this.$socket.emit("update_orders_list", res.data.order);
-          this.$socket.emit(
-            "update_employee_list",
-            res.data.order.delivered_by
-          );*/
+          this.$socket.emit("add_order_to_list", res.data.order)
+          this.$socket.emit("update_employee_list", res.data.order.prepared_by);
 
-          this.$toasted.show("Order delivered", { type: "success" });
+          this.$toasted.show("Order finished", { type: "success" });
+        }).catch(() => {
+          this.$toasted.show("There was a problem processing your request", { type: "error" });
         })
-        .catch(() => {
-          this.$toasted.show("There was a problem processing your request", {
-            type: "error",
-          });
-        });
     },
     takeOrder(order) {
       axios.get("api/orders/" + order.id).then((res) => {
         this.$store.commit("SET_CURRENT_ORDER", res.data.data[0]);
-        axios
-          .post("api/orders/" + order.id + "/status/P")
-          .then((res) => {
+        
+        axios.post("api/orders/" + order.id + "/status/P").then((res) => {
             this.removeOrderFromList(res.data.order);
 
-            /*    this.$socket.emit("update_orders_list", res.data.order);
-            this.$socket.emit(
-              "update_employee_list",
-              res.data.order.delivered_by
-            );*/
-            this.$toasted.show("Order take to Prepare", { type: "success" });
-          })
-          .catch((e) => {
-            this.$toasted.show("There was a problem with the order", {
-              type: "error",
-            });
+            this.$socket.emit("update_orders_list", res.data.order);
+            this.$socket.emit("update_employee_list", res.data.order.prepared_by);
+            this.$toasted.show("Order began preparation", { type: "success" });
+          }).catch((e) => {
+            this.$toasted.show("There was a problem with the order", {type: "error"});
           });
       });
+    },
+    addOrderToList(order){
+      this.orders.push(order)
     },
     removeOrderFromList(order) {
       const index = this.orders.findIndex((v) => v.id === order.id);
@@ -221,7 +200,15 @@ export default {
   mounted() {
     this.getOrders();
   },
-};
+  sockets: {
+    add_order_to_list(orderToAdd){
+      this.addOrderToList(orderToAdd)
+    },
+    update_orders_list(orderToRemove){
+      this.removeOrderFromList(orderToRemove)
+    }
+  }
+}
 </script>
 
 <style>

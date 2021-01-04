@@ -37,7 +37,7 @@ Route::get('orders',                                    [OrderController::class,
 Route::get('orders/active',                             [OrderController::class, 'getActiveOrders']);
 Route::post('orders',                                   [OrderController::class, 'create']); // create order
 Route::get('orders/status/{status}',                    [OrderController::class, 'getStatus']);
-Route::get('orders/{id}/status/{status}',               [OrderController::class, 'getOrdersByCook']);
+//Route::get('orders/{id}/status/{status}',               [OrderController::class, 'getOrdersByCook']);
 Route::post('orders/{id}/status/{status}',              [OrderController::class, 'setOrderStatus']); // Change to patch
 Route::get('orders/{id}',                               [OrderController::class, 'getOrderById']);
 

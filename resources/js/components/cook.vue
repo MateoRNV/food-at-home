@@ -16,7 +16,7 @@
           </v-card-actions>
         </v-card>--->
 
-        <v-card v-if="!isEmpty">
+        <v-card v-if="$store.state.currentOrder !== ''">
           <v-card-title>Your current order</v-card-title>
           <v-card-subtitle
             >Below you'll find information regarding your current order and it's
@@ -141,12 +141,7 @@
           class="elevation-1"
         >
           <template v-slot:item.actions="{ item }">
-            <v-btn
-              color="primary"
-              dark
-              class="mb-2"
-              @click="takeOrder(item)"
-            >
+            <v-btn color="primary" dark class="mb-2" @click="takeOrder(item)">
               Take Order
             </v-btn>
           </template>
@@ -161,9 +156,9 @@ export default {
   data: function () {
     return {
       orders: [],
-      order: null,
+      order: "",
       search: "",
-      isEmpty: null,
+      isEmpty: "",
       ordersHolding: [],
       headers: [
         { text: "Id", value: "id", groupable: false },
@@ -183,7 +178,7 @@ export default {
   methods: {
     getOrder() {
       axios
-        .get("api/orders/" + this.$store.state.user.id + "/status/P")
+        .get("api/orders/status/P")
         .then((response) => {
           this.orders = response.data.data;
           this.order = this.orders[0];
@@ -210,16 +205,14 @@ export default {
         .then((response) => {
           this.getOrder();
           console.log(response.data);
+        });
+    },
+    takeOrder(item) {
+      axios.post("api/orders/" + item.id + "/status/P").then((response) => {
+        this.getOrder();
+        console.log(response.data);
       });
     },
-    takeOrder(item){
-      axios
-        .post("api/orders/" + item.id + "/status/P")
-        .then((response) => {
-          this.getOrder();
-          console.log(response.data);
-      });
-    }
   },
   mounted() {
     this.getOrder();

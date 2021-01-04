@@ -40,20 +40,20 @@ class OrderController extends Controller
         return response()->json(['message' => 'The status ' . strtoupper($status) . ' does not exist'], 404);
     }
 
-    public function getOrdersByCook($id, $status){
-        switch(strtoupper($status)){
-            case 'H':
-            case 'P':
-            case 'R':
-            case 'T':
-            case 'D':
-            case 'C':
+    // public function getOrdersByCook($id, $status){
+    //     switch(strtoupper($status)){
+    //         case 'H':
+    //         case 'P':
+    //         case 'R':
+    //         case 'T':
+    //         case 'D':
+    //         case 'C':
 
-                return OrderResource::collection(Order::where('status', '=', $status)->where('prepared_by','=',$id)->get());
-        }
+    //             return OrderResource::collection(Order::where('status', '=', $status)->where('prepared_by','=',$id)->get());
+    //     }
         
-        return response()->json(['message' => 'The id of the cook ' . $id. ' or the status '. strtoupper($status) . ' does not exist'], 404);
-    }
+    //     return response()->json(['message' => 'The id of the cook ' . $id. ' or the status '. strtoupper($status) . ' does not exist'], 404);
+    // }
 
     public function getOrderById($id){
         return OrderResource::collection(Order::where('id', '=', $id)->get());

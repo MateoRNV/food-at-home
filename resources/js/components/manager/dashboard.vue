@@ -383,23 +383,23 @@ export default {
                 this.removeOrderFromList(this.orderToCancel)
                 this.cancelOrderDialog = false
 
+                console.log(res)
+                console.log(this.orderToCancel)
+
                 // If order is being prepared or in transit
                 if(this.orderToCancel.status === 'P'){
                     this.clearCurrentOrder(this.orderToCancel.prepared_by) // Narvaez, modifica acordemente si es necesario
-                    this.notifyCustomer(this.orderToCancel.prepared_by, 'The order you\'re preparing has been cancelled', 'error')
+                    this.notifyUser(this.orderToCancel.prepared_by, 'The order you\'re preparing has been cancelled', 'error')
                     this.refreshUser(this.orderToCancel.prepared_by)
                     this.$socket.emit('update_employee_list', this.orderToCancel.prepared_by)
                 }else if(this.orderToCancel.status === 'T'){
                     this.clearCurrentOrder(this.orderToCancel.delivered_by)
-                    this.notifyCustomer(this.orderToCancel.delivered_by, 'The order you\'re delivering has been cancelled', 'error')
+                    this.notifyUser(this.orderToCancel.delivered_by, 'The order you\'re delivering has been cancelled', 'error')
                     this.refreshUser(this.orderToCancel.delivered_by)
                     this.$socket.emit('update_employee_list', this.orderToCancel.delivered_by)
                 }
                 
-                // WHEN ORDER IS HOLDING IT RETURNS CUSTOMER.ID, WHEN IT IS ANYTHING ELSE IT IS CUSTOMER_ID
-                // NO CLUE WHY, EZ FIX
-
-                this.notifyCustomer(this.orderToCancel.customer_id, 'Order #' + this.orderToCancel.id + ' has been cancelled', 'error')
+                this.notifyUser(res.data.order.customer.id, 'Order #' + this.orderToCancel.id + ' has been cancelled', 'error')
                 this.$socket.emit('update_orders_list', res.data.order)
                 this.$socket.emit('remove_order_from_list', res.data.order)
 
@@ -461,7 +461,7 @@ export default {
 
             this.$socket.emit('global_message', payload)
         },
-        notifyCustomer(userId, msg, msgType){
+        notifyUser(userId, msg, msgType){
             axios.get('api/users/'+userId).then(res => {
                 const user = res.data
 
@@ -485,7 +485,7 @@ export default {
                     destinationUser: user
                 }
     
-                this.$socket.emit('delivery_dashboard_update', payload)
+                this.$socket.emit('staff_dashboard_update', payload)
             }).catch(() => {
                 console.log('Problem while getting delivery user')
             })

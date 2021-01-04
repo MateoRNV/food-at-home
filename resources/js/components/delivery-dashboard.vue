@@ -127,6 +127,7 @@ export default {
                 this.$socket.emit('remove_order_from_list', res.data.order)
                 this.$socket.emit('update_orders_list', res.data.order)
                 this.$socket.emit('update_employee_list', res.data.order.delivered_by)
+                this.notifyUser(res.data.order.customer.id, 'Order #' + res.data.order.id + ' has been delivered', 'success')
                 
                 this.$toasted.show('Order delivered', {type: 'success'})
             }).catch(() => {
@@ -142,6 +143,7 @@ export default {
 
                     this.$socket.emit('update_orders_list', res.data.order)
                     this.$socket.emit('update_employee_list', res.data.order.delivered_by)
+                    this.notifyUser(res.data.order.customer.id, 'Order #' + res.data.order.id + ' is in transit', 'success')
                     this.$toasted.show('Order in transit', {type: 'success'})
 
                 })
@@ -159,13 +161,29 @@ export default {
             if(index > -1){
                 this.orders.splice(index, 1)
             }
-        }
+        },
+        notifyUser(userId, msg, msgType){
+            axios.get('api/users/'+userId).then(res => {
+                const user = res.data
+
+                let payload = {
+                    originalUser: this.$store.state.user,
+                    destinationUser: user,
+                    message: msg,
+                    messageType: msgType
+                }
+                    
+                this.$socket.emit('customer_message', payload)
+            }).catch(() => {
+                console.log('Problem while getting user')
+            })
+        },
     },
     mounted(){
         this.getOrders()
     },
     sockets: {
-        delivery_dashboard_update(){
+        staff_dashboard_update(){
             this.$store.commit('CLEAR_CURRENT_ORDER')
         },
         update_orders_list(orderToRemove){

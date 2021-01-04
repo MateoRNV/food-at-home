@@ -128,10 +128,22 @@ export default {
                 case 'C':
                     return 'red text-light'
             }
+        },
+        refreshOrder(order){
+            let index = this.orders.findIndex(item => item.id === order.id)
+            console.log(order)
+            if(index > -1){
+                this.orders.splice(index, 1, order)
+            }
         }
     },
     mounted(){
         this.getCustomerOrders()
+    },
+    sockets: {
+        update_orders_list(orderToUpdate){
+            this.refreshOrder(orderToUpdate)
+        }
     }
 }
 </script>

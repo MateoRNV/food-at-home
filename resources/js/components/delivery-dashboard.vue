@@ -23,7 +23,7 @@
                         <v-col>
                             <strong class="text-h6">Order Information</strong>
                             <span class="d-block"><strong>Order ID: </strong> {{ $store.state.currentOrder.id }}</span>
-                            <span class="d-block"><strong>Started at: </strong> {{ $store.state.currentOrder.current_status_at }}</span>
+                            <span class="d-block"><strong>Started at: </strong> {{ new Date($store.state.currentOrder.current_status_at).toLocaleTimeString() }}</span>
                             <!-- <span class="d-block"><strong>Time elapsed: </strong> {{ currentOrderElapsed }}</span> -->
                         </v-col>
                         <v-col>
@@ -93,8 +93,8 @@
                 <tbody>
                     <tr v-for="order in orders" :key="order.id">
                         <th>{{ order.id }}</th>
-                        <th>{{ order.customer_name }}</th>
-                        <th>{{ order.current_status_at }}</th>
+                        <th>{{ order.customer.name }}</th>
+                        <th>{{ new Date(order.current_status_at).toLocaleTimeString() }}</th>
                         <th class="text-right"><v-btn color="primary" @click.prevent="startDelivery(order)">Deliver</v-btn></th>
                     </tr>
                 </tbody>
@@ -120,7 +120,11 @@ export default {
         markAsDelivered(order){
             axios.post('api/orders/'+order.id+'/status/D').then(res => {
                 this.$store.commit('CLEAR_CURRENT_ORDER')
+
                 this.$socket.emit('remove_order_from_list', res.data.order)
+                this.$socket.emit('update_orders_list', res.data.order)
+                this.$socket.emit('update_employee_list', res.data.order.delivered_by)
+                
                 this.$toasted.show('Order delivered', {type: 'success'})
             }).catch(() => {
                 this.$toasted.show('There was a problem processing your request', {type: 'error'})
@@ -132,8 +136,11 @@ export default {
 
                 axios.post('api/orders/'+order.id+'/status/T').then(res => {
                     this.removeOrderFromList(res.data.order)
+
                     this.$socket.emit('update_orders_list', res.data.order)
+                    this.$socket.emit('update_employee_list', res.data.order.delivered_by)
                     this.$toasted.show('Order in transit', {type: 'success'})
+
                 })
                 .catch(e => {
                     this.$toasted.show('There was a problem with the order', {type: 'error'})

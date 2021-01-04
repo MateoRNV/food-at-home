@@ -57,6 +57,8 @@ export default {
         axios.post('/api/login', this.credentials).then( res => {
           this.$store.commit('SET_USER', res.data)
           console.log(res.data)
+
+          this.$socket.emit('update_employee_list', res.data.id)
           this.$toasted.show('Welcome back', {type: 'success'})
           this.$router.push('/products')
         }).catch(e => {

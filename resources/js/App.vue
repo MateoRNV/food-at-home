@@ -27,7 +27,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on">
             <v-icon left>mdi-account</v-icon>
-            {{$store.state.user.name}}
+            {{ (($store.state.user.name).split(" "))[0] }}
           </v-btn>
         </template>
 
@@ -36,11 +36,6 @@
             <!-- @click.prevent="myself" -->
             <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
             <v-list-item-title>Orders</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click.prevent="myself">
-            <!-- @click.prevent="myself" -->
-            <v-list-item-icon><v-icon>mdi-bookmark</v-icon></v-list-item-icon>
-            <v-list-item-title>Test</v-list-item-title>
           </v-list-item>
           <v-list-item to="/me/edit">
             <v-list-item-icon><v-icon>mdi-settings</v-icon></v-list-item-icon>
@@ -141,6 +136,9 @@ export default {
     logout(){
       axios.post('/api/logout').then(res => {
         this.$toasted.show('You have logged out', {type: 'success'})
+
+        this.$socket.emit('update_employee_list', this.$store.state.user.id)
+
         this.$store.commit('CLEAR_USER')
         this.$store.commit('CLEAR_CART')
         this.$router.push('/login')
@@ -168,6 +166,9 @@ export default {
         this.$socket.emit('user_logged', this.$store.state.user)
       }
     },
+    disconnect(){
+      this.$socket.emit('update_employee_list', this.$store.state.user)
+    },
     global_message(payload){
       // To modify
       this.$toasted.show('Attention ' + this.$store.state.user.name + ': ' + payload.message, {type: 'warning'})
@@ -176,7 +177,7 @@ export default {
       this.$toasted.show(payload.message, {type: payload.messageType })
     },
     destination_user_not_logged(payload){
-      this.$toasted.show('User ' + payload.destinationUser.name + ' not logged', {type: 'warning'})
+      this.$toasted.show(payload.destinationUser.name + ' is not currently online', {type: 'warning'})
     }
   },
 };

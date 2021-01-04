@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Customer;
@@ -66,29 +67,54 @@ class OrderController extends Controller
 
         switch($status){
             case 'H':
+                $order->opened_at = Carbon::now();
+                break;
             case 'P':
                 $order->prepared_by = Auth::user()->id;
+                Auth::user()->available_at = null;
+                Auth::user()->save();
                     break;
             case 'R':
+                $order->preparation_time = $order->current_status_at->diffInSeconds(Carbon::now());
+                Auth::user()->available_at = Carbon::now();
+                Auth::user()->save();
+                    break;
             case 'T':
                 $order->delivered_by = Auth::user()->id;
                 Auth::user()->available_at = null;
+                Auth::user()->save();
                     break;
             case 'D':
-                $order->delivered_by = Auth::user()->id;
+                $order->delivery_time = $order->current_status_at->diffInSeconds(Carbon::now());
+                $order->total_time = $order->opened_at->diffInSeconds(Carbon::now());
+                $order->closed_at = Carbon::now();
+
                 Auth::user()->available_at = Carbon::now();
+                Auth::user()->save();
                     break;
             case 'C':
-                if($order->status == 'R' || $order->status == 'T'){
+                if($order->status == 'T'){
+                    $user = User::findOrFail($order->delivered_by);
+                    $user->available_at = Carbon::now();
+                    $user->save();
+                    
                     $order->delivered_by = null;
-                }else if($order->status == 'H' || $order->status == 'P'){
+                }else if($order->status == 'P'){
+                    $user = User::findOrFail($order->prepared_by);
+                    $user->available_at = Carbon::now();
+                    $user->save();
+
                     $order->prepared_by = null;
                 }
-                break;
+                
+                $order->total_time = $order->opened_at->diffInSeconds(Carbon::now());
+                $order->closed_at = Carbon::now();
+                    break;
             default:
                 return response()->json('Status ' . $status . ' doesn\'t exist', 404);
         }
-        
+
+        $order->current_status_at = Carbon::now();
         $order->status = $status;
         $order->save();
             
@@ -167,54 +193,8 @@ class OrderController extends Controller
         $orderItem->fill($validated);
 
         $orderItem->save();
-       // $orderItem->id = '1';
 
         return response()->json($orderItem);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
 }

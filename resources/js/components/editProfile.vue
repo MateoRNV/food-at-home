@@ -145,7 +145,7 @@ export default {
       formData.append("photo_file", this.photo_file);
 
       axios
-        .post("/api/customers/photos", formData, {
+        .post("/api/users/photos", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((res) => {
@@ -163,7 +163,7 @@ export default {
       formData.append("photo_file", this.photo_file);
 
       axios
-        .post("/api/users/photos/" + this.$store.state.user.id, formData, {
+        .post("/api/users/" + this.$store.state.user.id+"/photos", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((res) => {

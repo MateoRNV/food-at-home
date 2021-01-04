@@ -143,7 +143,7 @@ export default {
       let formData = new FormData()
       formData.append('photo_file', this.photo_file)
 
-      axios.post('/api/customers/photos', formData, { headers: { 'Content-Type': 'multipart/form-data'}})
+      axios.post('/api/users/photos', formData, { headers: { 'Content-Type': 'multipart/form-data'}})
       .then(res => {
         console.log('Photo uploaded with sucess')
         this.form.photo_url = res.data.filename

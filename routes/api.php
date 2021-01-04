@@ -59,7 +59,7 @@ Route::post('users',                                    [UserController::class, 
 Route::put('users/{id}',                                [UserController::class, 'update']); //edit user
 Route::delete('users/{user}',                           [UserController::class, 'destroy']);//delete user
 Route::post('users/photos',                             [UserController::class, 'uploadPhoto']);
-Route::post('users/photos/{id}',                        [UserController::class, 'updatePhoto']);
+Route::post('users/{id}/photos',                        [UserController::class, 'updatePhoto']);
 
 Route::middleware('auth:sanctum')->get('user/me',       [UserController::class, 'me']);
 
